@@ -28,7 +28,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 56px;
+            height: 60px;
             max-width: 1400px;
             margin: 0 auto;
         }
@@ -39,12 +39,29 @@
             font-size: 1.1rem;
             font-weight: 700;
         }
-        .logo-icon {
-            width: 32px; height: 32px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1rem;
+        /* LOGO GAMBAR SVG */
+        .logo-img {
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            display: block;
+        }
+        .logo-text-wrap {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+        .logo-text-main {
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+        .logo-text-sub {
+            font-size: 0.62rem;
+            color: #6b7280;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
         .header-status {
             display: flex; align-items: center; gap: 6px;
@@ -56,7 +73,9 @@
         .status-dot {
             width: 6px; height: 6px; border-radius: 50%;
             background: #ef4444;
+            animation: pulse 2s infinite;
         }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
         .header-actions { display: flex; align-items: center; gap: 8px; }
         .search-btn {
             display: flex; align-items: center; gap: 8px;
@@ -92,6 +111,20 @@
             border-radius: 10px;
             overflow: hidden;
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .ticker-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: white;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
         .ticker {
             display: flex;
@@ -129,10 +162,21 @@
             border-radius: 10px;
             padding: 16px;
             transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
         }
-        .stat-card:hover {
-            border-color: #3b82f6;
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, #3b82f6, transparent);
+            opacity: 0;
+            transition: opacity 0.2s;
         }
+        .stat-card:hover { border-color: #3b82f6; }
+        .stat-card:hover::after { opacity: 1; }
         .stat-card-header {
             display: flex;
             align-items: center;
@@ -140,14 +184,14 @@
             margin-bottom: 10px;
         }
         .stat-card-title {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: #9ca3af;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             font-weight: 600;
         }
         .stat-card-icon {
-            width: 32px; height: 32px;
+            width: 34px; height: 34px;
             border-radius: 8px;
             display: flex; align-items: center; justify-content: center;
             font-size: 0.9rem;
@@ -157,6 +201,7 @@
         .stat-card-icon.blue { background: rgba(59,130,246,0.15); color: #3b82f6; }
         .stat-card-icon.gold { background: rgba(245,158,11,0.15); color: #f59e0b; }
         .stat-card-icon.purple { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+        .stat-card-icon.cyan { background: rgba(6,182,212,0.15); color: #06b6d4; }
 
         .stat-card-value {
             font-size: 1.7rem;
@@ -164,14 +209,15 @@
             margin-bottom: 3px;
         }
         .stat-card-label {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         /* ============ SECTION ============ */
-        .section {
-            margin-bottom: 20px;
-        }
+        .section { margin-bottom: 20px; }
         .section-header {
             display: flex;
             align-items: center;
@@ -185,7 +231,7 @@
             align-items: center;
             gap: 8px;
         }
-        .section-title i { color: #3b82f6; }
+        .section-title i { color: #3b82f6; font-size: 0.95rem; }
 
         /* ============ SENTIMENT ============ */
         .sentiment-card {
@@ -211,6 +257,11 @@
             font-size: 0.75rem;
             color: #9ca3af;
         }
+        .sentiment-labels span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
 
         /* ============ SECTOR ============ */
         .sector-grid {
@@ -225,6 +276,7 @@
             padding: 12px;
             transition: all 0.2s;
             cursor: pointer;
+            position: relative;
         }
         .sector-item:hover {
             border-color: #3b82f6;
@@ -238,6 +290,10 @@
             align-items: center;
             gap: 5px;
         }
+        .sector-name i {
+            font-size: 0.7rem;
+            color: #3b82f6;
+        }
         .sector-value {
             font-size: 1rem;
             font-weight: 700;
@@ -248,6 +304,12 @@
             font-size: 0.65rem;
             color: #6b7280;
             margin-top: 3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .sector-detail i {
+            font-size: 0.55rem;
         }
 
         /* ============ MOVERS ============ */
@@ -279,10 +341,18 @@
             font-size: 0.65rem;
             font-weight: 700;
             background: #1a2332;
+            color: #3b82f6;
+            border: 1px solid #2d3748;
         }
         .mover-symbol { font-weight: 700; font-size: 0.85rem; }
         .mover-name { font-size: 0.7rem; color: #6b7280; }
-        .mover-change { font-weight: 700; font-size: 0.85rem; }
+        .mover-change {
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
         .mover-change.up { color: #10b981; }
         .mover-change.down { color: #ef4444; }
 
@@ -307,6 +377,10 @@
             border-bottom: 1px solid #2d3748;
             font-weight: 600;
         }
+        .stock-table th i {
+            margin-right: 4px;
+            font-size: 0.65rem;
+        }
         .stock-table td {
             padding: 11px 14px;
             border-bottom: 1px solid #2d3748;
@@ -317,7 +391,8 @@
             transition: background 0.2s;
         }
         .stock-table tr:hover { background: #243044; }
-        .stock-symbol { font-weight: 700; }
+        .stock-symbol { font-weight: 700; display: flex; align-items: center; gap: 6px; }
+        .stock-symbol i { font-size: 0.6rem; color: #3b82f6; }
         .stock-name { font-size: 0.7rem; color: #6b7280; }
 
         .badge {
@@ -329,6 +404,7 @@
             font-size: 0.65rem;
             font-weight: 700;
         }
+        .badge i { font-size: 0.55rem; }
         .badge.bullish { background: rgba(16,185,129,0.15); color: #10b981; }
         .badge.bearish { background: rgba(239,68,68,0.15); color: #ef4444; }
         .badge.neutral { background: rgba(107,114,128,0.15); color: #9ca3af; }
@@ -361,6 +437,9 @@
             font-size: 0.75rem;
             cursor: pointer;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         .filter-btn:hover, .filter-btn.active {
             background: #3b82f6;
@@ -463,7 +542,7 @@
         .toast-title { font-size: 0.8rem; font-weight: 700; }
         .toast-message { font-size: 0.7rem; color: #9ca3af; }
 
-        /* ============ PREMIUM SECTION ============ */
+        /* ============ PREMIUM ============ */
         .premium-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -490,13 +569,14 @@
             background: linear-gradient(90deg, #f59e0b, #8b5cf6);
         }
         .premium-icon {
-            width: 40px; height: 40px;
+            width: 44px; height: 44px;
             border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             margin-bottom: 12px;
         }
-        .premium-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
+        .premium-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .premium-title i { color: #f59e0b; font-size: 0.8rem; }
         .premium-desc {
             font-size: 0.75rem;
             color: #9ca3af;
@@ -549,13 +629,17 @@
         .signal-icon.sell { background: rgba(239,68,68,0.15); color: #ef4444; }
         .signal-icon.hold { background: rgba(245,158,11,0.15); color: #f59e0b; }
         .signal-info { flex: 1; }
-        .signal-title { font-weight: 700; font-size: 0.85rem; }
+        .signal-title { font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+        .signal-title i { font-size: 0.7rem; }
         .signal-desc { font-size: 0.7rem; color: #6b7280; }
         .signal-action {
             padding: 5px 12px;
             border-radius: 16px;
             font-size: 0.65rem;
             font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
         .signal-action.buy { background: rgba(16,185,129,0.15); color: #10b981; }
         .signal-action.sell { background: rgba(239,68,68,0.15); color: #ef4444; }
@@ -576,7 +660,13 @@
         .portfolio-lots { font-size: 0.7rem; color: #6b7280; }
         .portfolio-value { text-align: right; }
         .portfolio-price { font-weight: 700; font-size: 0.85rem; }
-        .portfolio-pnl { font-size: 0.7rem; }
+        .portfolio-pnl {
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            justify-content: flex-end;
+        }
         .portfolio-pnl.up { color: #10b981; }
         .portfolio-pnl.down { color: #ef4444; }
 
@@ -591,7 +681,14 @@
             margin-bottom: 6px;
             border-left: 3px solid #f59e0b;
         }
-        .alert-symbol { font-weight: 700; font-size: 0.85rem; }
+        .alert-symbol {
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .alert-symbol i { color: #f59e0b; font-size: 0.7rem; }
         .alert-condition { font-size: 0.7rem; color: #6b7280; }
         .alert-status {
             font-size: 0.65rem;
@@ -600,6 +697,9 @@
             background: rgba(16,185,129,0.15);
             color: #10b981;
             font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         /* ============ CALCULATOR ============ */
@@ -618,6 +718,9 @@
             font-size: 0.75rem;
             cursor: pointer;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         .calc-tab.active {
             background: #3b82f6;
@@ -637,7 +740,11 @@
             font-size: 0.75rem;
             color: #9ca3af;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
+        .form-group label i { color: #3b82f6; font-size: 0.7rem; }
         .form-group input, .form-group select {
             padding: 9px 12px;
             background: #111827;
@@ -663,6 +770,10 @@
             font-size: 0.75rem;
             color: #6b7280;
             margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
         }
         .calc-result-value {
             font-size: 1.5rem;
@@ -700,6 +811,7 @@
             background: #1a2332;
             color: #f3f4f6;
         }
+        .tab-btn i { font-size: 0.8rem; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
@@ -728,1258 +840,40 @@
 <header class="header">
     <div class="header-inner">
         <div class="logo">
-            <div class="logo-icon">📈</div>
-            <span>Saham Indonesia</span>
+            <!-- LOGO GAMBAR SVG - BUKAN EMOJI -->
+            <svg class="logo-img" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <rect width="64" height="64" rx="14" fill="url(#logoGrad)"/>
+                <!-- Candlestick chart -->
+                <rect x="12" y="30" width="4" height="18" fill="#ffffff" opacity="0.9"/>
+                <rect x="10" y="26" width="8" height="4" fill="#ffffff"/>
+                <rect x="24" y="22" width="4" height="22" fill="#10b981"/>
+                <rect x="22" y="20" width="8" height="4" fill="#10b981"/>
+                <rect x="36" y="34" width="4" height="14" fill="#ef4444"/>
+                <rect x="34" y="32" width="8" height="4" fill="#ef4444"/>
+                <rect x="48" y="18" width="4" height="26" fill="#10b981"/>
+                <rect x="46" y="14" width="8" height="4" fill="#10b981"/>
+                <!-- Trend line -->
+                <polyline points="14,40 26,32 38,36 50,24" 
+                          fill="none" stroke="#fbbf24" stroke-width="2" 
+                          stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="50" cy="24" r="3" fill="#fbbf24"/>
+            </svg>
+            <div class="logo-text-wrap">
+                <span class="logo-text-main">Saham Indonesia</span>
+                <span class="logo-text-sub">Premium Dashboard</span>
+            </div>
         </div>
         <div class="header-status">
             <span class="status-dot"></span>
+            <i class="fas fa-circle" style="font-size:0.4rem"></i>
             <span>CLOSED · WEEKEND</span>
         </div>
         <div class="header-actions">
             <button class="search-btn" onclick="openCommandPalette()">
-                <i class="fas fa-search"></i>
-                <span>Cari...</span>
-                <kbd>Ctrl+K</kbd>
-            </button>
-        </div>
-    </div>
-</header>
-
-<!-- ============ COMMAND PALETTE ============ -->
-<div class="command-palette" id="commandPalette">
-    <div class="command-box">
-        <input type="text" class="command-input" id="commandInput" placeholder="Ketik perintah atau nama saham..." autofocus>
-        <div class="command-results" id="commandResults">
-            <div class="command-item" onclick="executeCommand('dashboard')">
-                <i class="fas fa-chart-line"></i><span>Dashboard</span><kbd>D</kbd>
-            </div>
-            <div class="command-item" onclick="executeCommand('signals')">
-                <i class="fas fa-brain"></i><span>AI Signals</span><kbd>S</kbd>
-            </div>
-            <div class="command-item" onclick="executeCommand('portfolio')">
-                <i class="fas fa-briefcase"></i><span>Portfolio Saya</span><kbd>P</kbd>
-            </div>
-            <div class="command-item" onclick="executeCommand('alerts')">
-                <i class="fas fa-bell"></i><span>Price Alerts</span><kbd>A</kbd>
-            </div>
-            <div class="command-item" onclick="executeCommand('screener')">
-                <i class="fas fa-filter"></i><span>Screener Saham</span><kbd>F</kbd>
-            </div>
-            <div class="command-item" onclick="executeCommand('calculator')">
-                <i class="fas fa-calculator"></i><span>Kalkulator Investasi</span><kbd>C</kbd>
-            </div>
-            <div class="command-item" onclick="executeCommand('premium')">
-                <i class="fas fa-crown"></i><span>Fitur Premium</span><kbd>X</kbd>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ============ TOAST ============ -->
-<div class="toast-container" id="toastContainer"></div>
-
-<!-- ============ MAIN ============ -->
-<main class="main">
-
-    <!-- TICKER -->
-    <div class="ticker-wrap">
-        <div class="ticker" id="ticker"></div>
-    </div>
-
-    <!-- TAB NAV -->
-    <div class="tab-nav">
-        <button class="tab-btn active" onclick="switchTab('dashboard', this)">
-            <i class="fas fa-chart-line"></i> Dashboard
-        </button>
-        <button class="tab-btn" onclick="switchTab('signals', this)">
-            <i class="fas fa-brain"></i> AI Signals
-        </button>
-        <button class="tab-btn" onclick="switchTab('portfolio', this)">
-            <i class="fas fa-briefcase"></i> Portfolio
-        </button>
-        <button class="tab-btn" onclick="switchTab('alerts', this)">
-            <i class="fas fa-bell"></i> Alerts
-        </button>
-        <button class="tab-btn" onclick="switchTab('screener', this)">
-            <i class="fas fa-filter"></i> Screener
-        </button>
-        <button class="tab-btn" onclick="switchTab('calculator', this)">
-            <i class="fas fa-calculator"></i> Kalkulator
-        </button>
-        <button class="tab-btn" onclick="switchTab('premium', this)">
-            <i class="fas fa-crown"></i> Premium
-        </button>
-    </div>
-
-    <!-- ============ DASHBOARD ============ -->
-    <div class="tab-content active" id="tab-dashboard">
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-card-title">Total Saham</span>
-                    <div class="stat-card-icon blue"><i class="fas fa-database"></i></div>
-                </div>
-                <div class="stat-card-value" id="totalStocks">239</div>
-                <div class="stat-card-label">Saham terdaftar di IDX</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-card-title">Bullish</span>
-                    <div class="stat-card-icon green"><i class="fas fa-arrow-trend-up"></i></div>
-                </div>
-                <div class="stat-card-value" style="color:#10b981" id="bullishCount">75</div>
-                <div class="stat-card-label">Sinyal naik</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-card-title">Bearish</span>
-                    <div class="stat-card-icon red"><i class="fas fa-arrow-trend-down"></i></div>
-                </div>
-                <div class="stat-card-value" style="color:#ef4444" id="bearishCount">116</div>
-                <div class="stat-card-label">Sinyal turun</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-card-title">Alert Aktif</span>
-                    <div class="stat-card-icon gold"><i class="fas fa-bell"></i></div>
-                </div>
-                <div class="stat-card-value" style="color:#f59e0b" id="alertCount">50</div>
-                <div class="stat-card-label">Price alert</div>
-            </div>
-        </div>
-
-        <!-- SENTIMENT -->
-        <div class="section">
-            <div class="sentiment-card">
-                <div class="section-header" style="margin-bottom:10px">
-                    <span class="section-title" style="font-size:0.9rem">Market Sentiment</span>
-                    <span class="badge bearish" id="sentimentBadge">BEARISH BIAS</span>
-                </div>
-                <div class="sentiment-bar">
-                    <div class="sentiment-fill sentiment-bull" style="width:39%" id="bullFill"></div>
-                    <div class="sentiment-fill sentiment-bear" style="width:61%" id="bearFill"></div>
-                </div>
-                <div class="sentiment-labels">
-                    <span>🐂 Bull <strong id="bullLabel">75</strong></span>
-                    <span>🐻 Bear <strong id="bearLabel">116</strong></span>
-                </div>
-            </div>
-        </div>
-
-        <!-- SECTOR -->
-        <div class="section">
-            <div class="section-header">
-                <span class="section-title"><i class="fas fa-th"></i> Performa Sektor</span>
-            </div>
-            <div class="sector-grid" id="sectorGrid"></div>
-        </div>
-
-        <!-- MOVERS -->
-        <div class="section">
-            <div class="section-header">
-                <span class="section-title"><i class="fas fa-fire"></i> Top Movers</span>
-            </div>
-            <div class="movers-grid">
-                <div>
-                    <div style="font-size:0.75rem;color:#10b981;font-weight:700;margin-bottom:8px">🚀 Top Naik</div>
-                    <div id="topGainers"></div>
-                </div>
-                <div>
-                    <div style="font-size:0.75rem;color:#ef4444;font-weight:700;margin-bottom:8px">📉 Top Turun</div>
-                    <div id="topLosers"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- STOCK TABLE -->
-        <div class="section">
-            <div class="section-header">
-                <span class="section-title"><i class="fas fa-list"></i> Semua Saham</span>
-                <span class="badge neutral" id="stockCountBadge">239 / 239</span>
-            </div>
-            <div class="filters">
-                <button class="filter-btn active" onclick="filterStocks('all', this)">Semua</button>
-                <button class="filter-btn" onclick="filterStocks('bullish', this)">Bullish</button>
-                <button class="filter-btn" onclick="filterStocks('bearish', this)">Bearish</button>
-                <button class="filter-btn" onclick="filterStocks('neutral', this)">Netral</button>
-            </div>
-            <div class="stock-table-wrap">
-                <table class="stock-table">
-                    <thead>
-                        <tr>
-                            <th>Saham</th>
-                            <th>Sektor</th>
-                            <th>Harga</th>
-                            <th>Sinyal</th>
-                            <th>Confidence</th>
-                            <th>RSI</th>
-                        </tr>
-                    </thead>
-                    <tbody id="stockTableBody"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============ AI SIGNALS ============ -->
-    <div class="tab-content" id="tab-signals">
-        <div class="stats-grid" style="margin-bottom:16px">
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-card-title">Akurasi Sinyal</span>
-                    <div class="stat-card-icon purple"><i class="fas fa-bullseye"></i></div>
-                </div>
-                <div class="stat-card-value" style="color:#8b5cf6">87.3%</div>
-                <div class="stat-card-label">30 hari terakhir</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-card-title">Sinyal Hari Ini</span>
-                    <div class="stat-card-icon blue"><i class="fas fa-signal"></i></div>
-                </div>
-                <div class="stat-card-value" style="color:#3b82f6">12</div>
-                <div class="stat-card-label">3 Buy · 5 Sell · 4 Hold</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-card-title">Win Rate</span>
-                    <div class="stat-card-icon green"><i class="fas fa-trophy"></i></div>
-                </div>
-                <div class="stat-card-value" style="color:#10b981">72%</div>
-                <div class="stat-card-label">50 sinyal terakhir</div>
-            </div>
-        </div>
-        <div class="section">
-            <div class="section-header">
-                <span class="section-title"><i class="fas fa-brain"></i> Trading Signals AI</span>
-            </div>
-            <div id="signalList"></div>
-        </div>
-    </div>
-
-    <!-- ============ PORTFOLIO ============ -->
-    <div class="tab-content" id="tab-portfolio">
-        <div class="stats-grid" style="margin-bottom:16px">
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-card-title">Total Nilai</span>
-                    <div class="stat-card-icon blue"><i class="fas fa-wallet"></i></div>
-                </div>
-                <div class="stat-card-value">Rp 45.2jt</div>
-                <div class="stat-card-label" style="color:#10b981">+12.5%</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-card-title">Profit / Loss</span>
-                    <div class="stat-card-icon green"><i class="fas fa-chart-pie"></i></div>
-                </div>
-                <div class="stat-card-value" style="color:#10b981">+Rp 5jt</div>
-                <div class="stat-card-label">Sejak awal</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-card-title">Jumlah Saham</span>
-                    <div class="stat-card-icon purple"><i class="fas fa-layer-group"></i></div>
-                </div>
-                <div class="stat-card-value">8</div>
-                <div class="stat-card-label">Emiten</div>
-            </div>
-        </div>
-        <div class="section">
-            <div class="section-header">
-                <span class="section-title"><i class="fas fa-briefcase"></i> Daftar Kepemilikan</span>
-            </div>
-            <div id="portfolioList"></div>
-        </div>
-    </div>
-
-    <!-- ============ ALERTS ============ -->
-    <div class="tab-content" id="tab-alerts">
-        <div class="section">
-            <div class="section-header">
-                <span class="section-title"><i class="fas fa-bell"></i> Price Alerts</span>
-            </div>
-            <div id="alertList"></div>
-        </div>
-    </div>
-
-    <!-- ============ SCREENER ============ -->
-    <div class="tab-content" id="tab-screener">
-        <div class="section">
-            <div class="section-header">
-                <span class="section-title"><i class="fas fa-filter"></i> Screener Saham</span>
-            </div>
-            <div class="stat-card" style="margin-bottom:14px">
-                <div class="calc-form">
-                    <div class="form-group">
-                        <label>RSI Maksimal</label>
-                        <input type="number" value="70" id="screenerRsi">
-                    </div>
-                    <div class="form-group">
-                        <label>Sinyal</label>
-                        <select id="screenerSignal">
-                            <option>Semua</option>
-                            <option>Bullish</option>
-                            <option>Bearish</option>
-                            <option>Netral</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Harga Maksimal</label>
-                        <input type="number" value="5000" id="screenerPrice">
-                    </div>
-                    <div class="form-group">
-                        <label>Confidence Minimal</label>
-                        <select id="screenerConfidence">
-                            <option>Semua</option>
-                            <option>20%</option>
-                            <option>40%</option>
-                            <option>80%</option>
-                        </select>
-                    </div>
-                </div>
-                <button class="premium-btn" style="margin-top:14px" onclick="runScreener()">
-                    <i class="fas fa-search"></i> Jalankan Screener
-                </button>
-            </div>
-            <div id="screenerResults"></div>
-        </div>
-    </div>
-
-    <!-- ============ CALCULATOR ============ -->
-    <div class="tab-content" id="tab-calculator">
-        <div class="section">
-            <div class="section-header">
-                <span class="section-title"><i class="fas fa-calculator"></i> Kalkulator Investasi</span>
-            </div>
-            <div class="calc-tabs">
-                <button class="calc-tab active" onclick="switchCalc('compound', this)">💰 Compound</button>
-                <button class="calc-tab" onclick="switchCalc('averagedown', this)">📉 Average Down</button>
-                <button class="calc-tab" onclick="switchCalc('position', this)">🎯 Position Sizing</button>
-                <button class="calc-tab" onclick="switchCalc('target', this)">💵 Target Profit</button>
-            </div>
-            <div class="stat-card">
-                <div id="calcCompound">
-                    <div class="calc-form">
-                        <div class="form-group">
-                            <label>Modal Awal (Rp)</label>
-                            <input type="number" value="10000000" id="ciPrincipal">
-                        </div>
-                        <div class="form-group">
-                            <label>Setoran Bulanan (Rp)</label>
-                            <input type="number" value="1000000" id="ciMonthly">
-                        </div>
-                        <div class="form-group">
-                            <label>Return Tahunan (%)</label>
-                            <input type="number" value="15" id="ciRate">
-                        </div>
-                        <div class="form-group">
-                            <label>Jangka Waktu (Tahun)</label>
-                            <input type="number" value="10" id="ciYears">
-                        </div>
-                    </div>
-                    <button class="premium-btn" style="margin-top:14px" onclick="calcCompound()">
-                        <i class="fas fa-calculator"></i> Hitung
-                    </button>
-                    <div class="calc-result">
-                        <div class="calc-result-label">Hasil Akhir</div>
-                        <div class="calc-result-value" id="ciResult">Rp 0</div>
-                    </div>
-                </div>
-
-                <div id="calcAveragedown" style="display:none">
-                    <div class="calc-form">
-                        <div class="form-group">
-                            <label>Harga Beli Awal (Rp)</label>
-                            <input type="number" value="5000" id="adBuy1">
-                        </div>
-                        <div class="form-group">
-                            <label>Jumlah Lot Awal</label>
-                            <input type="number" value="10" id="adLot1">
-                        </div>
-                        <div class="form-group">
-                            <label>Harga Beli Kedua (Rp)</label>
-                            <input type="number" value="4000" id="adBuy2">
-                        </div>
-                        <div class="form-group">
-                            <label>Jumlah Lot Kedua</label>
-                            <input type="number" value="10" id="adLot2">
-                        </div>
-                    </div>
-                    <button class="premium-btn" style="margin-top:14px" onclick="calcAvgDown()">
-                        <i class="fas fa-calculator"></i> Hitung
-                    </button>
-                    <div class="calc-result">
-                        <div class="calc-result-label">Harga Rata-rata Baru</div>
-                        <div class="calc-result-value" id="adResult">Rp 0</div>
-                    </div>
-                </div>
-
-                <div id="calcPosition" style="display:none">
-                    <div class="calc-form">
-                        <div class="form-group">
-                            <label>Modal Total (Rp)</label>
-                            <input type="number" value="50000000" id="psCapital">
-                        </div>
-                        <div class="form-group">
-                            <label>Risiko per Trade (%)</label>
-                            <input type="number" value="2" id="psRisk">
-                        </div>
-                        <div class="form-group">
-                            <label>Harga Entry (Rp)</label>
-                            <input type="number" value="1000" id="psEntry">
-                        </div>
-                        <div class="form-group">
-                            <label>Stop Loss (Rp)</label>
-                            <input type="number" value="950" id="psStop">
-                        </div>
-                    </div>
-                    <button class="premium-btn" style="margin-top:14px" onclick="calcPosition()">
-                        <i class="fas fa-calculator"></i> Hitung
-                    </button>
-                    <div class="calc-result">
-                        <div class="calc-result-label">Ukuran Posisi</div>
-                        <div class="calc-result-value" id="psResult">0 lot</div>
-                    </div>
-                </div>
-
-                <div id="calcTarget" style="display:none">
-                    <div class="calc-form">
-                        <div class="form-group">
-                            <label>Harga Beli (Rp)</label>
-                            <input type="number" value="1000" id="tpBuy">
-                        </div>
-                        <div class="form-group">
-                            <label>Jumlah Lot</label>
-                            <input type="number" value="10" id="tpLot">
-                        </div>
-                        <div class="form-group">
-                            <label>Target Profit (%)</label>
-                            <input type="number" value="20" id="tpPercent">
-                        </div>
-                        <div class="form-group">
-                            <label>Biaya Fee (%)</label>
-                            <input type="number" value="0.3" id="tpFee">
-                        </div>
-                    </div>
-                    <button class="premium-btn" style="margin-top:14px" onclick="calcTarget()">
-                        <i class="fas fa-calculator"></i> Hitung
-                    </button>
-                    <div class="calc-result">
-                        <div class="calc-result-label">Target Harga Jual</div>
-                        <div class="calc-result-value" id="tpResult">Rp 0</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============ PREMIUM ============ -->
-    <div class="tab-content" id="tab-premium">
-        <div class="section">
-            <div class="section-header">
-                <span class="section-title"><i class="fas fa-crown"></i> Fitur Premium</span>
-            </div>
-            <div class="premium-grid">
-                <div class="premium-card">
-                    <div class="premium-icon" style="background:rgba(16,185,129,0.15);color:#10b981">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <div class="premium-title">Trading Signals AI</div>
-                    <div class="premium-desc">Sinyal beli/jual otomatis dengan analisis teknikal dan fundamental.</div>
-                    <button class="premium-btn" onclick="showToast('Premium','Fitur AI Signals aktif!','success')">
-                        <i class="fas fa-unlock"></i> Aktifkan
-                    </button>
-                </div>
-                <div class="premium-card">
-                    <div class="premium-icon" style="background:rgba(59,130,246,0.15);color:#3b82f6">
-                        <i class="fas fa-shield-halved"></i>
-                    </div>
-                    <div class="premium-title">Risk Assessment</div>
-                    <div class="premium-desc">Analisis risiko portofolio dengan VaR dan rasio Sharpe.</div>
-                    <button class="premium-btn outline" onclick="showToast('Premium','Fitur Risk Assessment aktif!','success')">
-                        <i class="fas fa-lock"></i> Buka
-                    </button>
-                </div>
-                <div class="premium-card">
-                    <div class="premium-icon" style="background:rgba(245,158,11,0.15);color:#f59e0b">
-                        <i class="fas fa-arrows-spin"></i>
-                    </div>
-                    <div class="premium-title">Sector Rotation</div>
-                    <div class="premium-desc">Deteksi rotasi sektor untuk optimasi alokasi aset.</div>
-                    <button class="premium-btn outline" onclick="showToast('Premium','Fitur Sector Rotation aktif!','success')">
-                        <i class="fas fa-lock"></i> Buka
-                    </button>
-                </div>
-                <div class="premium-card">
-                    <div class="premium-icon" style="background:rgba(139,92,246,0.15);color:#8b5cf6">
-                        <i class="fas fa-filter"></i>
-                    </div>
-                    <div class="premium-title">Advanced Screener</div>
-                    <div class="premium-desc">Filter fundamental + teknikal dengan 50+ kriteria.</div>
-                    <button class="premium-btn outline" onclick="showToast('Premium','Fitur Advanced Screener aktif!','success')">
-                        <i class="fas fa-lock"></i> Buka
-                    </button>
-                </div>
-                <div class="premium-card">
-                    <div class="premium-icon" style="background:rgba(6,182,212,0.15);color:#06b6d4">
-                        <i class="fas fa-calendar"></i>
-                    </div>
-                    <div class="premium-title">Earnings Calendar</div>
-                    <div class="premium-desc">Jadwal rilis laporan keuangan emiten IDX.</div>
-                    <button class="premium-btn outline" onclick="showToast('Premium','Fitur Earnings Calendar aktif!','success')">
-                        <i class="fas fa-lock"></i> Buka
-                    </button>
-                </div>
-                <div class="premium-card">
-                    <div class="premium-icon" style="background:rgba(16,185,129,0.15);color:#10b981">
-                        <i class="fas fa-coins"></i>
-                    </div>
-                    <div class="premium-title">Dividend Tracker</div>
-                    <div class="premium-desc">Pelacak dividen dan yield historis emiten.</div>
-                    <button class="premium-btn outline" onclick="showToast('Premium','Fitur Dividend Tracker aktif!','success')">
-                        <i class="fas fa-lock"></i> Buka
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</main>
-
-<script>
-// ============================================================
-// DATA SAHAM
-// ============================================================
-const stockData = [
-    {symbol:"MAYA", name:"MAYA", price:198, change:0, sector:"Perbankan", signal:"BULLISH", confidence:40, ma20:201, ma50:200, rsi:26.9},
-    {symbol:"ABDA", name:"ABDA", price:4880, change:0, sector:"Asuransi", signal:"BULLISH", confidence:40, ma20:4932, ma50:4366, rsi:7.1},
-    {symbol:"MTEL", name:"MTEL", price:450, change:0.45, sector:"Telekomunikasi", signal:"BULLISH", confidence:40, ma20:468, ma50:462, rsi:27.7},
-    {symbol:"LSIP", name:"LSIP", price:1485, change:1.71, sector:"Agrikultur", signal:"BULLISH", confidence:40, ma20:1558, ma50:1528, rsi:26.6},
-    {symbol:"PTRO", name:"PTRO", price:4750, change:0, sector:"Tambang", signal:"BULLISH", confidence:40, ma20:5201, ma50:5165, rsi:19},
-    {symbol:"FIRE", name:"FIRE", price:107, change:0, sector:"Tambang", signal:"BULLISH", confidence:40, ma20:114, ma50:114, rsi:30},
-    {symbol:"ACST", name:"ACST", price:74, change:-9.76, sector:"Infrastruktur", signal:"BULLISH", confidence:40, ma20:95, ma50:92, rsi:25.4},
-    {symbol:"RANC", name:"RANC", price:535, change:-0.93, sector:"Ritel", signal:"BULLISH", confidence:40, ma20:546, ma50:536, rsi:28.6},
-    {symbol:"BAJA", name:"BAJA", price:282, change:-5.37, sector:"Industri", signal:"BULLISH", confidence:40, ma20:326, ma50:313, rsi:15.3},
-    {symbol:"NICK", name:"NICK", price:2720, change:-1.45, sector:"Perbankan", signal:"BULLISH", confidence:40, ma20:2772, ma50:2156, rsi:0},
-    {symbol:"BBRI", name:"BBRI", price:3100, change:2.31, sector:"Perbankan", signal:"CENDERUNG NAIK", confidence:20, ma20:3189, ma50:3188, rsi:32.8},
-    {symbol:"BNGA", name:"BNGA", price:1695, change:0.59, sector:"Perbankan", signal:"CENDERUNG NAIK", confidence:20, ma20:1724, ma50:1697, rsi:35.7},
-    {symbol:"BNBA", name:"BNBA", price:810, change:0.62, sector:"Perbankan", signal:"CENDERUNG NAIK", confidence:20, ma20:815, ma50:777, rsi:52.2},
-    {symbol:"NOBU", name:"NOBU", price:496, change:0, sector:"Perbankan", signal:"CENDERUNG NAIK", confidence:20, ma20:519, ma50:512, rsi:34.9},
-    {symbol:"BFIN", name:"BFIN", price:935, change:-1.06, sector:"Multifinance", signal:"CENDERUNG NAIK", confidence:20, ma20:946, ma50:937, rsi:46.2},
-    {symbol:"CFIN", name:"CFIN", price:356, change:0, sector:"Multifinance", signal:"CENDERUNG NAIK", confidence:20, ma20:361, ma50:358, rsi:35.3},
-    {symbol:"WOMF", name:"WOMF", price:278, change:-0.71, sector:"Multifinance", signal:"CENDERUNG NAIK", confidence:20, ma20:277, ma50:275, rsi:42.9},
-    {symbol:"LIFE", name:"LIFE", price:10850, change:19.89, sector:"Asuransi", signal:"CENDERUNG NAIK", confidence:20, ma20:10756, ma50:9187, rsi:46.6},
-    {symbol:"AUTO", name:"AUTO", price:3370, change:0.6, sector:"Otomotif", signal:"CENDERUNG NAIK", confidence:20, ma20:3357, ma50:3181, rsi:50},
-    {symbol:"ULTJ", name:"ULTJ", price:2120, change:-1.4, sector:"Konsumer", signal:"CENDERUNG NAIK", confidence:20, ma20:2022, ma50:1708, rsi:51.9},
-    {symbol:"AALI", name:"AALI", price:8400, change:2.54, sector:"Agrikultur", signal:"CENDERUNG NAIK", confidence:20, ma20:8014, ma50:7745, rsi:57.1},
-    {symbol:"DSNG", name:"DSNG", price:1500, change:0, sector:"Agrikultur", signal:"CENDERUNG NAIK", confidence:20, ma20:1572, ma50:1515, rsi:35},
-    {symbol:"ANJT", name:"ANJT", price:1485, change:-0.67, sector:"Agrikultur", signal:"CENDERUNG NAIK", confidence:20, ma20:1557, ma50:1551, rsi:33.3},
-    {symbol:"SSMS", name:"SSMS", price:1070, change:2.88, sector:"Agrikultur", signal:"CENDERUNG NAIK", confidence:20, ma20:1077, ma50:1031, rsi:42.9},
-    {symbol:"BWPT", name:"BWPT", price:105, change:0.96, sector:"Agrikultur", signal:"CENDERUNG NAIK", confidence:20, ma20:112, ma50:108, rsi:31.9},
-    {symbol:"PEHA", name:"PEHA", price:288, change:0.7, sector:"Kesehatan", signal:"CENDERUNG NAIK", confidence:20, ma20:287, ma50:286, rsi:44},
-    {symbol:"SDPC", name:"SDPC", price:196, change:-0.51, sector:"Kesehatan", signal:"CENDERUNG NAIK", confidence:20, ma20:194, ma50:192, rsi:52.8},
-    {symbol:"ANTM", name:"ANTM", price:3180, change:0.95, sector:"Tambang", signal:"CENDERUNG NAIK", confidence:20, ma20:3211, ma50:3139, rsi:46.2},
-    {symbol:"PTBA", name:"PTBA", price:3300, change:-0.6, sector:"Tambang", signal:"CENDERUNG NAIK", confidence:20, ma20:3146, ma50:2793, rsi:63.1},
-    {symbol:"TINS", name:"TINS", price:4450, change:-2.41, sector:"Tambang", signal:"CENDERUNG NAIK", confidence:20, ma20:4669, ma50:4293, rsi:33.6},
-    {symbol:"ITMG", name:"ITMG", price:25375, change:0.2, sector:"Tambang", signal:"CENDERUNG NAIK", confidence:20, ma20:25640, ma50:25488, rsi:43},
-    {symbol:"BSSR", name:"BSSR", price:5150, change:0.98, sector:"Tambang", signal:"CENDERUNG NAIK", confidence:20, ma20:4918, ma50:4489, rsi:67.2},
-    {symbol:"MBAP", name:"MBAP", price:1685, change:0, sector:"Tambang", signal:"CENDERUNG NAIK", confidence:20, ma20:1688, ma50:1602, rsi:53.2},
-    {symbol:"SGER", name:"SGER", price:775, change:1.97, sector:"Tambang", signal:"CENDERUNG NAIK", confidence:20, ma20:731, ma50:625, rsi:69},
-    {symbol:"INDY", name:"INDY", price:2790, change:6.08, sector:"Tambang", signal:"CENDERUNG NAIK", confidence:20, ma20:2690, ma50:2685, rsi:52.6},
-    {symbol:"KKGI", name:"KKGI", price:298, change:2.05, sector:"Tambang", signal:"CENDERUNG NAIK", confidence:20, ma20:296, ma50:279, rsi:41.6},
-    {symbol:"CITA", name:"CITA", price:3350, change:1.82, sector:"Tambang", signal:"CENDERUNG NAIK", confidence:20, ma20:3418, ma50:3353, rsi:36},
-    {symbol:"DKFT", name:"DKFT", price:675, change:0.75, sector:"Tambang", signal:"CENDERUNG NAIK", confidence:20, ma20:660, ma50:653, rsi:48.6},
-    {symbol:"ARNA", name:"ARNA", price:510, change:-0.97, sector:"Semen", signal:"CENDERUNG NAIK", confidence:20, ma20:516, ma50:506, rsi:50},
-    {symbol:"TOTO", name:"TOTO", price:242, change:0.83, sector:"Semen", signal:"CENDERUNG NAIK", confidence:20, ma20:241, ma50:238, rsi:50},
-    {symbol:"KREN", name:"KREN", price:19, change:0, sector:"Teknologi", signal:"CENDERUNG NAIK", confidence:20, ma20:16, ma50:15, rsi:62.5},
-    {symbol:"MEDC", name:"MEDC", price:1430, change:-1.04, sector:"Energi", signal:"CENDERUNG NAIK", confidence:20, ma20:1466, ma50:1421, rsi:43.7},
-    {symbol:"AKRA", name:"AKRA", price:1485, change:2.41, sector:"Energi", signal:"CENDERUNG NAIK", confidence:20, ma20:1472, ma50:1443, rsi:55.2},
-    {symbol:"PSAB", name:"PSAB", price:540, change:5.88, sector:"Energi", signal:"CENDERUNG NAIK", confidence:20, ma20:535, ma50:522, rsi:50},
-    {symbol:"POWR", name:"POWR", price:955, change:-1.55, sector:"Energi", signal:"CENDERUNG NAIK", confidence:20, ma20:968, ma50:896, rsi:44.4},
-    {symbol:"SURE", name:"SURE", price:2900, change:0, sector:"Energi", signal:"CENDERUNG NAIK", confidence:20, ma20:3010, ma50:2868, rsi:49.4},
-    {symbol:"KIJA", name:"KIJA", price:151, change:-2.58, sector:"Properti", signal:"CENDERUNG NAIK", confidence:20, ma20:170, ma50:169, rsi:32.9},
-    {symbol:"DMAS", name:"DMAS", price:184, change:-2.13, sector:"Properti", signal:"CENDERUNG NAIK", confidence:20, ma20:188, ma50:178, rsi:45.6},
-    {symbol:"BEST", name:"BEST", price:118, change:-0.84, sector:"Properti", signal:"CENDERUNG NAIK", confidence:20, ma20:122, ma50:122, rsi:46.9},
-    {symbol:"PPRO", name:"PPRO", price:18, change:-5.26, sector:"Properti", signal:"CENDERUNG NAIK", confidence:20, ma20:18, ma50:17, rsi:56.2},
-    {symbol:"BAPI", name:"BAPI", price:21, change:0, sector:"Properti", signal:"CENDERUNG NAIK", confidence:20, ma20:21, ma50:20, rsi:50},
-    {symbol:"TOTL", name:"TOTL", price:1510, change:3.78, sector:"Infrastruktur", signal:"CENDERUNG NAIK", confidence:20, ma20:1545, ma50:1460, rsi:40.2},
-    {symbol:"SMDR", name:"SMDR", price:416, change:1.46, sector:"Logistik", signal:"CENDERUNG NAIK", confidence:20, ma20:399, ma50:352, rsi:56},
-    {symbol:"WEHA", name:"WEHA", price:104, change:0, sector:"Logistik", signal:"CENDERUNG NAIK", confidence:20, ma20:109, ma50:109, rsi:35.3},
-    {symbol:"SAFE", name:"SAFE", price:1020, change:12.71, sector:"Logistik", signal:"CENDERUNG NAIK", confidence:20, ma20:817, ma50:674, rsi:49},
-    {symbol:"ERAA", name:"ERAA", price:615, change:1.65, sector:"Ritel", signal:"CENDERUNG NAIK", confidence:20, ma20:608, ma50:540, rsi:45.8},
-    {symbol:"DPUM", name:"DPUM", price:123, change:-1.6, sector:"Ritel", signal:"CENDERUNG NAIK", confidence:20, ma20:130, ma50:113, rsi:31.2},
-    {symbol:"GGRP", name:"GGRP", price:366, change:-1.08, sector:"Industri", signal:"CENDERUNG NAIK", confidence:20, ma20:349, ma50:324, rsi:66},
-    {symbol:"KBLI", name:"KBLI", price:368, change:-0.54, sector:"Industri", signal:"CENDERUNG NAIK", confidence:20, ma20:362, ma50:342, rsi:52.9},
-    {symbol:"KBLM", name:"KBLM", price:368, change:3.95, sector:"Industri", signal:"CENDERUNG NAIK", confidence:20, ma20:359, ma50:331, rsi:50},
-    {symbol:"PICO", name:"PICO", price:170, change:0.59, sector:"Industri", signal:"CENDERUNG NAIK", confidence:20, ma20:167, ma50:162, rsi:44.4},
-    {symbol:"SCCO", name:"SCCO", price:2760, change:0.73, sector:"Industri", signal:"CENDERUNG NAIK", confidence:20, ma20:2695, ma50:2504, rsi:65.9},
-    {symbol:"ALKA", name:"ALKA", price:7125, change:-12.58, sector:"Industri", signal:"CENDERUNG NAIK", confidence:20, ma20:6961, ma50:4825, rsi:48.2},
-    {symbol:"BMSR", name:"BMSR", price:312, change:-1.27, sector:"Industri", signal:"CENDERUNG NAIK", confidence:20, ma20:338, ma50:322, rsi:34.7},
-    {symbol:"IKAI", name:"IKAI", price:25, change:8.7, sector:"Industri", signal:"CENDERUNG NAIK", confidence:20, ma20:21, ma50:21, rsi:64.7},
-    {symbol:"TRIS", name:"TRIS", price:170, change:-0.58, sector:"Tekstil", signal:"CENDERUNG NAIK", confidence:20, ma20:171, ma50:171, rsi:42.9},
-    {symbol:"ARGO", name:"ARGO", price:1190, change:2.15, sector:"Tekstil", signal:"CENDERUNG NAIK", confidence:20, ma20:1186, ma50:1174, rsi:52.8},
-    {symbol:"PRIM", name:"PRIM", price:131, change:0, sector:"Kesehatan", signal:"CENDERUNG NAIK", confidence:20, ma20:124, ma50:118, rsi:66.7},
-    {symbol:"BMHS", name:"BMHS", price:197, change:-0.51, sector:"Kesehatan", signal:"CENDERUNG NAIK", confidence:20, ma20:199, ma50:195, rsi:37.5},
-    {symbol:"RSGK", name:"RSGK", price:1050, change:3.45, sector:"Kesehatan", signal:"CENDERUNG NAIK", confidence:20, ma20:1044, ma50:992, rsi:54.8},
-    {symbol:"BCIC", name:"BCIC", price:129, change:0.78, sector:"Perbankan", signal:"CENDERUNG NAIK", confidence:20, ma20:133, ma50:131, rsi:32.3},
-    {symbol:"BBMD", name:"BBMD", price:2040, change:0, sector:"Perbankan", signal:"CENDERUNG NAIK", confidence:20, ma20:2006, ma50:1997, rsi:62.8},
-    {symbol:"BSIM", name:"BSIM", price:945, change:1.07, sector:"Perbankan", signal:"CENDERUNG NAIK", confidence:20, ma20:977, ma50:898, rsi:39.6},
-    {symbol:"VRNA", name:"VRNA", price:78, change:0, sector:"Perbankan", signal:"CENDERUNG NAIK", confidence:20, ma20:81, ma50:80, rsi:34.8},
-    {symbol:"BEKS", name:"BEKS", price:33, change:0, sector:"Perbankan", signal:"CENDERUNG NAIK", confidence:20, ma20:26, ma50:24, rsi:66.7},
-    {symbol:"ARTO", name:"ARTO", price:785, change:0, sector:"Perbankan", signal:"NETRAL", confidence:0, ma20:849, ma50:1010, rsi:26.1},
-    {symbol:"BRIS", name:"BRIS", price:1355, change:1.5, sector:"Perbankan", signal:"NETRAL", confidence:0, ma20:1520, ma50:1679, rsi:18.3},
-    {symbol:"BBNI", name:"BBNI", price:3430, change:0.59, sector:"Perbankan", signal:"NETRAL", confidence:0, ma20:3543, ma50:3640, rsi:26.8},
-    {symbol:"BDMN", name:"BDMN", price:4980, change:1.43, sector:"Perbankan", signal:"NETRAL", confidence:0, ma20:4554, ma50:4412, rsi:76.2},
-    {symbol:"NISP", name:"NISP", price:1225, change:-0.81, sector:"Perbankan", signal:"NETRAL", confidence:0, ma20:1253, ma50:1258, rsi:26.7},
-    {symbol:"BBTN", name:"BBTN", price:1055, change:0, sector:"Perbankan", signal:"NETRAL", confidence:0, ma20:1112, ma50:1177, rsi:23.7},
-    {symbol:"PNBN", name:"PNBN", price:830, change:0, sector:"Perbankan", signal:"NETRAL", confidence:0, ma20:852, ma50:883, rsi:28.6},
-    {symbol:"BACA", name:"BACA", price:109, change:-0.91, sector:"Perbankan", signal:"NETRAL", confidence:0, ma20:113, ma50:116, rsi:23.1},
-    {symbol:"BCAP", name:"BCAP", price:31, change:0, sector:"Perbankan", signal:"NETRAL", confidence:0, ma20:41, ma50:47, rsi:8.7},
-    {symbol:"BBYB", name:"BBYB", price:199, change:1.53, sector:"Perbankan", signal:"NETRAL", confidence:0, ma20:214, ma50:240, rsi:27.3},
-    {symbol:"BTPN", name:"BTPN", price:2500, change:1.63, sector:"Perbankan", signal:"NETRAL", confidence:0, ma20:2380, ma50:2299, rsi:75},
-    {symbol:"TLKM", name:"TLKM", price:2320, change:2.65, sector:"Telekomunikasi", signal:"NETRAL", confidence:0, ma20:2421, ma50:2547, rsi:29.5},
-    {symbol:"MYOR", name:"MYOR", price:1375, change:0, sector:"Konsumer", signal:"NETRAL", confidence:0, ma20:1436, ma50:1549, rsi:22.4},
-    {symbol:"JPFA", name:"JPFA", price:2040, change:2, sector:"Konsumer", signal:"NETRAL", confidence:0, ma20:2141, ma50:2204, rsi:26},
-    {symbol:"ROTI", name:"ROTI", price:555, change:-0.89, sector:"Konsumer", signal:"NETRAL", confidence:0, ma20:573, ma50:581, rsi:25},
-    {symbol:"CAMP", name:"CAMP", price:162, change:1.25, sector:"Konsumer", signal:"NETRAL", confidence:0, ma20:168, ma50:170, rsi:20.8},
-    {symbol:"AISA", name:"AISA", price:114, change:0.88, sector:"Konsumer", signal:"NETRAL", confidence:0, ma20:118, ma50:118, rsi:24.3},
-    {symbol:"STTP", name:"STTP", price:8600, change:-1.71, sector:"Konsumer", signal:"NETRAL", confidence:0, ma20:9112, ma50:9378, rsi:23.7},
-    {symbol:"SIMP", name:"SIMP", price:560, change:0, sector:"Agrikultur", signal:"NETRAL", confidence:0, ma20:588, ma50:602, rsi:26.1},
-    {symbol:"HEAL", name:"HEAL", price:600, change:0, sector:"Kesehatan", signal:"NETRAL", confidence:0, ma20:631, ma50:681, rsi:29.6},
-    {symbol:"PRDA", name:"PRDA", price:3080, change:2.33, sector:"Kesehatan", signal:"NETRAL", confidence:0, ma20:2864, ma50:2668, rsi:77.1},
-    {symbol:"INCO", name:"INCO", price:4270, change:0.23, sector:"Tambang", signal:"NETRAL", confidence:0, ma20:4497, ma50:4887, rsi:27.9},
-    {symbol:"GEMS", name:"GEMS", price:7900, change:-3.22, sector:"Tambang", signal:"NETRAL", confidence:0, ma20:7182, ma50:6718, rsi:73},
-    {symbol:"NICL", name:"NICL", price:362, change:0.56, sector:"Tambang", signal:"NETRAL", confidence:0, ma20:401, ma50:445, rsi:26.9},
-    {symbol:"IFSH", name:"IFSH", price:2020, change:-11.01, sector:"Tambang", signal:"NETRAL", confidence:0, ma20:1378, ma50:1214, rsi:73.4},
-    {symbol:"BUKA", name:"BUKA", price:100, change:0, sector:"Teknologi", signal:"NETRAL", confidence:0, ma20:104, ma50:110, rsi:26.7},
-    {symbol:"EMTK", name:"EMTK", price:386, change:1.58, sector:"Teknologi", signal:"NETRAL", confidence:0, ma20:429, ma50:483, rsi:23.3},
-    {symbol:"MLPT", name:"MLPT", price:915, change:3.98, sector:"Teknologi", signal:"NETRAL", confidence:0, ma20:1035, ma50:1261, rsi:21.1},
-    {symbol:"GOTO", name:"GOTO", price:30, change:0, sector:"Teknologi", signal:"NETRAL", confidence:0, ma20:41, ma50:46, rsi:14.3},
-    {symbol:"DMMX", name:"DMMX", price:165, change:-4.07, sector:"Teknologi", signal:"NETRAL", confidence:0, ma20:178, ma50:184, rsi:27.7},
-    {symbol:"WIFI", name:"WIFI", price:1405, change:0.36, sector:"Teknologi", signal:"NETRAL", confidence:0, ma20:1698, ma50:1896, rsi:10.6},
-    {symbol:"BRPT", name:"BRPT", price:1405, change:1.08, sector:"Energi", signal:"NETRAL", confidence:0, ma20:1515, ma50:1702, rsi:29.7},
-    {symbol:"BULL", name:"BULL", price:344, change:0, sector:"Energi", signal:"NETRAL", confidence:0, ma20:374, ma50:414, rsi:27.3},
-    {symbol:"TPIA", name:"TPIA", price:1675, change:0.3, sector:"Energi", signal:"NETRAL", confidence:0, ma20:1777, ma50:1923, rsi:29.3},
-    {symbol:"PSSI", name:"PSSI", price:392, change:4.81, sector:"Energi", signal:"NETRAL", confidence:0, ma20:360, ma50:345, rsi:73.5},
-    {symbol:"SMRA", name:"SMRA", price:238, change:0.85, sector:"Properti", signal:"NETRAL", confidence:0, ma20:259, ma50:299, rsi:25.8},
-    {symbol:"BSDE", name:"BSDE", price:540, change:0, sector:"Properti", signal:"NETRAL", confidence:0, ma20:574, ma50:603, rsi:23.8},
-    {symbol:"RDTX", name:"RDTX", price:12225, change:-2.4, sector:"Properti", signal:"NETRAL", confidence:0, ma20:13110, ma50:13378, rsi:26.4},
-    {symbol:"KOTA", name:"KOTA", price:128, change:-3.03, sector:"Properti", signal:"NETRAL", confidence:0, ma20:170, ma50:177, rsi:19.8},
-    {symbol:"MTLA", name:"MTLA", price:695, change:-0.71, sector:"Properti", signal:"NETRAL", confidence:0, ma20:608, ma50:558, rsi:78.7},
-    {symbol:"PTPP", name:"PTPP", price:161, change:0, sector:"Infrastruktur", signal:"NETRAL", confidence:0, ma20:181, ma50:195, rsi:0},
-    {symbol:"LION", name:"LION", price:284, change:1.43, sector:"Industri", signal:"NETRAL", confidence:0, ma20:332, ma50:348, rsi:13.8},
-    {symbol:"INAI", name:"INAI", price:159, change:-0.62, sector:"Industri", signal:"NETRAL", confidence:0, ma20:165, ma50:172, rsi:29.5},
-    {symbol:"LUCY", name:"LUCY", price:170, change:-9.57, sector:"Ritel", signal:"NETRAL", confidence:0, ma20:286, ma50:321, rsi:10.7},
-    {symbol:"BABP", name:"BABP", price:31, change:10.71, sector:"Perbankan", signal:"NETRAL", confidence:0, ma20:41, ma50:46, rsi:17.2},
-    {symbol:"BSWD", name:"BSWD", price:3600, change:0, sector:"Perbankan", signal:"NETRAL", confidence:0, ma20:2326, ma50:1724, rsi:99.3},
-    {symbol:"PNBS", name:"PNBS", price:43, change:2.38, sector:"Perbankan", signal:"NETRAL", confidence:0, ma20:46, ma50:48, rsi:29.4},
-    {symbol:"MASB", name:"MASB", price:3120, change:0, sector:"Perbankan", signal:"NETRAL", confidence:0, ma20:3240, ma50:3329, rsi:25.9},
-    {symbol:"BBCA", name:"BBCA", price:6050, change:0.83, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:6200, ma50:6338, rsi:40},
-    {symbol:"BMRI", name:"BMRI", price:4040, change:1, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:4133, ma50:4162, rsi:34.6},
-    {symbol:"BTPS", name:"BTPS", price:975, change:1.56, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:973, ma50:989, rsi:44.4},
-    {symbol:"BJBR", name:"BJBR", price:755, change:0, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:766, ma50:781, rsi:40},
-    {symbol:"BJTM", name:"BJTM", price:515, change:0.98, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:515, ma50:518, rsi:50},
-    {symbol:"AGRO", name:"AGRO", price:134, change:-0.74, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:140, ma50:146, rsi:32},
-    {symbol:"MEGA", name:"MEGA", price:1955, change:-0.51, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:1950, ma50:1967, rsi:48.8},
-    {symbol:"BNII", name:"BNII", price:189, change:0, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:190, ma50:192, rsi:38.5},
-    {symbol:"BVIC", name:"BVIC", price:89, change:0, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:90, ma50:92, rsi:37.5},
-    {symbol:"MCOR", name:"MCOR", price:66, change:1.54, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:67, ma50:68, rsi:40},
-    {symbol:"BBKP", name:"BBKP", price:44, change:2.33, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:46, ma50:51, rsi:33.3},
-    {symbol:"BBHI", name:"BBHI", price:795, change:2.58, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:839, ma50:878, rsi:32.2},
-    {symbol:"BKSW", name:"BKSW", price:48, change:-2.04, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:50, ma50:52, rsi:36.4},
-    {symbol:"BMAS", name:"BMAS", price:478, change:0, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:494, ma50:500, rsi:30.5},
-    {symbol:"ADMF", name:"ADMF", price:8450, change:0.9, sector:"Multifinance", signal:"CENDERUNG TURUN", confidence:20, ma20:8546, ma50:8632, rsi:35.6},
-    {symbol:"PNIN", name:"PNIN", price:675, change:0, sector:"Asuransi", signal:"CENDERUNG TURUN", confidence:20, ma20:692, ma50:709, rsi:33.3},
-    {symbol:"ASBI", name:"ASBI", price:394, change:0, sector:"Asuransi", signal:"CENDERUNG TURUN", confidence:20, ma20:394, ma50:405, rsi:42.9},
-    {symbol:"AMAG", name:"AMAG", price:386, change:-0.52, sector:"Asuransi", signal:"CENDERUNG TURUN", confidence:20, ma20:387, ma50:388, rsi:50},
-    {symbol:"ISAT", name:"ISAT", price:2120, change:-0.93, sector:"Telekomunikasi", signal:"CENDERUNG TURUN", confidence:20, ma20:2300, ma50:2329, rsi:32.1},
-    {symbol:"EXCL", name:"EXCL", price:2340, change:0, sector:"Telekomunikasi", signal:"CENDERUNG TURUN", confidence:20, ma20:2416, ma50:2568, rsi:41.7},
-    {symbol:"TOWR", name:"TOWR", price:458, change:5.53, sector:"Telekomunikasi", signal:"CENDERUNG TURUN", confidence:20, ma20:418, ma50:425, rsi:67.7},
-    {symbol:"ASII", name:"ASII", price:4820, change:0.42, sector:"Otomotif", signal:"CENDERUNG TURUN", confidence:20, ma20:4766, ma50:4846, rsi:50},
-    {symbol:"SMSM", name:"SMSM", price:1690, change:0.3, sector:"Otomotif", signal:"CENDERUNG TURUN", confidence:20, ma20:1694, ma50:1717, rsi:46.9},
-    {symbol:"INDS", name:"INDS", price:254, change:4.1, sector:"Otomotif", signal:"CENDERUNG TURUN", confidence:20, ma20:247, ma50:261, rsi:51.4},
-    {symbol:"IMAS", name:"IMAS", price:850, change:0.59, sector:"Otomotif", signal:"CENDERUNG TURUN", confidence:20, ma20:861, ma50:874, rsi:35.7},
-    {symbol:"BIRD", name:"BIRD", price:1560, change:-0.32, sector:"Otomotif", signal:"CENDERUNG TURUN", confidence:20, ma20:1578, ma50:1606, rsi:33.3},
-    {symbol:"GJTL", name:"GJTL", price:1280, change:0.39, sector:"Otomotif", signal:"CENDERUNG TURUN", confidence:20, ma20:1287, ma50:1321, rsi:43.2},
-    {symbol:"UNVR", name:"UNVR", price:1595, change:0.95, sector:"Konsumer", signal:"CENDERUNG TURUN", confidence:20, ma20:1615, ma50:1695, rsi:41.9},
-    {symbol:"ICBP", name:"ICBP", price:6950, change:2.58, sector:"Konsumer", signal:"CENDERUNG TURUN", confidence:20, ma20:6818, ma50:7204, rsi:55.8},
-    {symbol:"INDF", name:"INDF", price:6950, change:0.72, sector:"Konsumer", signal:"CENDERUNG TURUN", confidence:20, ma20:6932, ma50:7150, rsi:46.9},
-    {symbol:"GGRM", name:"GGRM", price:18000, change:6.04, sector:"Konsumer", signal:"CENDERUNG TURUN", confidence:20, ma20:17401, ma50:19025, rsi:55.4},
-    {symbol:"HMSP", name:"HMSP", price:635, change:2.42, sector:"Konsumer", signal:"CENDERUNG TURUN", confidence:20, ma20:639, ma50:702, rsi:43.8},
-    {symbol:"CPIN", name:"CPIN", price:2960, change:1.02, sector:"Konsumer", signal:"CENDERUNG TURUN", confidence:20, ma20:3018, ma50:3080, rsi:30.8},
-    {symbol:"WIIM", name:"WIIM", price:1550, change:2.31, sector:"Konsumer", signal:"CENDERUNG TURUN", confidence:20, ma20:1500, ma50:1623, rsi:59.1},
-    {symbol:"MAIN", name:"MAIN", price:615, change:2.5, sector:"Konsumer", signal:"CENDERUNG TURUN", confidence:20, ma20:645, ma50:664, rsi:34.4},
-    {symbol:"SIDO", name:"SIDO", price:354, change:0.57, sector:"Konsumer", signal:"CENDERUNG TURUN", confidence:20, ma20:351, ma50:352, rsi:46.2},
-    {symbol:"DLTA", name:"DLTA", price:1765, change:0.28, sector:"Konsumer", signal:"CENDERUNG TURUN", confidence:20, ma20:1778, ma50:1783, rsi:35.7},
-    {symbol:"MLBI", name:"MLBI", price:6850, change:0, sector:"Konsumer", signal:"CENDERUNG TURUN", confidence:20, ma20:6835, ma50:6864, rsi:53.3},
-    {symbol:"TBLA", name:"TBLA", price:610, change:0.83, sector:"Konsumer", signal:"CENDERUNG TURUN", confidence:20, ma20:611, ma50:621, rsi:40},
-    {symbol:"SGRO", name:"SGRO", price:4310, change:1.17, sector:"Agrikultur", signal:"CENDERUNG TURUN", confidence:20, ma20:4473, ma50:4552, rsi:39.8},
-    {symbol:"KLBF", name:"KLBF", price:785, change:1.29, sector:"Kesehatan", signal:"CENDERUNG TURUN", confidence:20, ma20:748, ma50:766, rsi:64},
-    {symbol:"KAEF", name:"KAEF", price:436, change:1.4, sector:"Kesehatan", signal:"CENDERUNG TURUN", confidence:20, ma20:428, ma50:441, rsi:48.3},
-    {symbol:"MIKA", name:"MIKA", price:1745, change:0, sector:"Kesehatan", signal:"CENDERUNG TURUN", confidence:20, ma20:1730, ma50:1796, rsi:51.2},
-    {symbol:"SAME", name:"SAME", price:292, change:2.1, sector:"Kesehatan", signal:"CENDERUNG TURUN", confidence:20, ma20:292, ma50:299, rsi:50},
-    {symbol:"SILO", name:"SILO", price:1905, change:0, sector:"Kesehatan", signal:"CENDERUNG TURUN", confidence:20, ma20:1993, ma50:2135, rsi:33},
-    {symbol:"IRRA", name:"IRRA", price:376, change:-1.05, sector:"Kesehatan", signal:"CENDERUNG TURUN", confidence:20, ma20:364, ma50:370, rsi:60.6},
-    {symbol:"TSPC", name:"TSPC", price:2630, change:1.15, sector:"Kesehatan", signal:"CENDERUNG TURUN", confidence:20, ma20:2684, ma50:2740, rsi:31.2},
-    {symbol:"DVLA", name:"DVLA", price:1585, change:0, sector:"Kesehatan", signal:"CENDERUNG TURUN", confidence:20, ma20:1584, ma50:1586, rsi:66.7},
-    {symbol:"ADRO", name:"ADRO", price:2580, change:1.18, sector:"Tambang", signal:"CENDERUNG TURUN", confidence:20, ma20:2572, ma50:2591, rsi:46.4},
-    {symbol:"BUMI", name:"BUMI", price:180, change:3.45, sector:"Tambang", signal:"CENDERUNG TURUN", confidence:20, ma20:186, ma50:189, rsi:41.4},
-    {symbol:"HRUM", name:"HRUM", price:850, change:2.41, sector:"Tambang", signal:"CENDERUNG TURUN", confidence:20, ma20:867, ma50:883, rsi:39.5},
-    {symbol:"BYAN", name:"BYAN", price:11775, change:-4.07, sector:"Tambang", signal:"CENDERUNG TURUN", confidence:20, ma20:12056, ma50:12981, rsi:38.8},
-    {symbol:"TOBA", name:"TOBA", price:462, change:0.43, sector:"Tambang", signal:"CENDERUNG TURUN", confidence:20, ma20:494, ma50:523, rsi:35.2},
-    {symbol:"DOID", name:"DOID", price:222, change:4.72, sector:"Tambang", signal:"CENDERUNG TURUN", confidence:20, ma20:224, ma50:226, rsi:49.1},
-    {symbol:"ZINC", name:"ZINC", price:30, change:0, sector:"Tambang", signal:"CENDERUNG TURUN", confidence:20, ma20:30, ma50:30, rsi:50},
-    {symbol:"MYOH", name:"MYOH", price:1015, change:2.01, sector:"Tambang", signal:"CENDERUNG TURUN", confidence:20, ma20:1023, ma50:1070, rsi:43.3},
-    {symbol:"INTP", name:"INTP", price:5050, change:2.02, sector:"Semen", signal:"CENDERUNG TURUN", confidence:20, ma20:5075, ma50:5236, rsi:41.6},
-    {symbol:"WSBP", name:"WSBP", price:14, change:0, sector:"Semen", signal:"CENDERUNG TURUN", confidence:20, ma20:14, ma50:14, rsi:50},
-    {symbol:"SMBR", name:"SMBR", price:151, change:0, sector:"Semen", signal:"CENDERUNG TURUN", confidence:20, ma20:159, ma50:166, rsi:30.6},
-    {symbol:"SMGR", name:"SMGR", price:1580, change:0.64, sector:"Semen", signal:"CENDERUNG TURUN", confidence:20, ma20:1556, ma50:1580, rsi:52.3},
-    {symbol:"SMCB", name:"SMCB", price:775, change:0, sector:"Semen", signal:"CENDERUNG TURUN", confidence:20, ma20:775, ma50:775, rsi:50},
-    {symbol:"DCII", name:"DCII", price:199475, change:0, sector:"Teknologi", signal:"CENDERUNG TURUN", confidence:20, ma20:198370, ma50:199761, rsi:46.5},
-    {symbol:"MTDL", name:"MTDL", price:505, change:1, sector:"Teknologi", signal:"CENDERUNG TURUN", confidence:20, ma20:501, ma50:507, rsi:60.9},
-    {symbol:"PGAS", name:"PGAS", price:1420, change:-1.39, sector:"Energi", signal:"CENDERUNG TURUN", confidence:20, ma20:1448, ma50:1489, rsi:32.6},
-    {symbol:"ESSA", name:"ESSA", price:585, change:0.86, sector:"Energi", signal:"CENDERUNG TURUN", confidence:20, ma20:594, ma50:631, rsi:44},
-    {symbol:"RAJA", name:"RAJA", price:665, change:0, sector:"Energi", signal:"CENDERUNG TURUN", confidence:20, ma20:698, ma50:785, rsi:32.4},
-    {symbol:"ELSA", name:"ELSA", price:630, change:-0.79, sector:"Energi", signal:"CENDERUNG TURUN", confidence:20, ma20:670, ma50:693, rsi:30.3},
-    {symbol:"ENRG", name:"ENRG", price:995, change:-0.5, sector:"Energi", signal:"CENDERUNG TURUN", confidence:20, ma20:1175, ma50:1242, rsi:31.6},
-    {symbol:"ARTI", name:"ARTI", price:2, change:0, sector:"Energi", signal:"CENDERUNG TURUN", confidence:20, ma20:2, ma50:2, rsi:50},
-    {symbol:"KEEN", name:"KEEN", price:830, change:0.61, sector:"Energi", signal:"CENDERUNG TURUN", confidence:20, ma20:855, ma50:882, rsi:39.1},
-    {symbol:"TGRA", name:"TGRA", price:27, change:0, sector:"Energi", signal:"CENDERUNG TURUN", confidence:20, ma20:27, ma50:27, rsi:50},
-    {symbol:"PWON", name:"PWON", price:268, change:0.75, sector:"Properti", signal:"CENDERUNG TURUN", confidence:20, ma20:265, ma50:266, rsi:51.5},
-    {symbol:"CTRA", name:"CTRA", price:545, change:0.93, sector:"Properti", signal:"CENDERUNG TURUN", confidence:20, ma20:561, ma50:594, rsi:42.1},
-    {symbol:"LPKR", name:"LPKR", price:47, change:2.17, sector:"Properti", signal:"CENDERUNG TURUN", confidence:20, ma20:50, ma50:58, rsi:39.1},
-    {symbol:"ASRI", name:"ASRI", price:116, change:0.87, sector:"Properti", signal:"CENDERUNG TURUN", confidence:20, ma20:121, ma50:123, rsi:38.5},
-    {symbol:"APLN", name:"APLN", price:107, change:1.9, sector:"Properti", signal:"CENDERUNG TURUN", confidence:20, ma20:115, ma50:125, rsi:33.3},
-    {symbol:"MDLN", name:"MDLN", price:43, change:-2.27, sector:"Properti", signal:"CENDERUNG TURUN", confidence:20, ma20:45, ma50:48, rsi:37},
-    {symbol:"BKSL", name:"BKSL", price:56, change:1.82, sector:"Properti", signal:"CENDERUNG TURUN", confidence:20, ma20:62, ma50:69, rsi:31.2},
-    {symbol:"DILD", name:"DILD", price:109, change:0, sector:"Properti", signal:"CENDERUNG TURUN", confidence:20, ma20:112, ma50:116, rsi:31.6},
-    {symbol:"JSMR", name:"JSMR", price:2640, change:0.76, sector:"Infrastruktur", signal:"CENDERUNG TURUN", confidence:20, ma20:2718, ma50:2791, rsi:32.6},
-    {symbol:"WIKA", name:"WIKA", price:204, change:0, sector:"Infrastruktur", signal:"CENDERUNG TURUN", confidence:20, ma20:204, ma50:204, rsi:50},
-    {symbol:"ADHI", name:"ADHI", price:133, change:0, sector:"Infrastruktur", signal:"CENDERUNG TURUN", confidence:20, ma20:133, ma50:138, rsi:50},
-    {symbol:"IPCM", name:"IPCM", price:282, change:-0.7, sector:"Infrastruktur", signal:"CENDERUNG TURUN", confidence:20, ma20:286, ma50:295, rsi:40.9},
-    {symbol:"ASSA", name:"ASSA", price:595, change:1.71, sector:"Logistik", signal:"CENDERUNG TURUN", confidence:20, ma20:589, ma50:614, rsi:48.4},
-    {symbol:"HITS", name:"HITS", price:116, change:0, sector:"Logistik", signal:"CENDERUNG TURUN", confidence:20, ma20:116, ma50:116, rsi:50},
-    {symbol:"LEAD", name:"LEAD", price:97, change:6.59, sector:"Logistik", signal:"CENDERUNG TURUN", confidence:20, ma20:99, ma50:106, rsi:41.7},
-    {symbol:"MAPI", name:"MAPI", price:1550, change:0, sector:"Ritel", signal:"CENDERUNG TURUN", confidence:20, ma20:1494, ma50:1506, rsi:64.1},
-    {symbol:"LPPF", name:"LPPF", price:1595, change:0.63, sector:"Ritel", signal:"CENDERUNG TURUN", confidence:20, ma20:1586, ma50:1597, rsi:55.2},
-    {symbol:"AMRT", name:"AMRT", price:1240, change:-0.8, sector:"Ritel", signal:"CENDERUNG TURUN", confidence:20, ma20:1289, ma50:1328, rsi:34},
-    {symbol:"CSAP", name:"CSAP", price:280, change:-0.71, sector:"Ritel", signal:"CENDERUNG TURUN", confidence:20, ma20:287, ma50:290, rsi:39.3},
-    {symbol:"MIDI", name:"MIDI", price:266, change:3.1, sector:"Ritel", signal:"CENDERUNG TURUN", confidence:20, ma20:261, ma50:270, rsi:50},
-    {symbol:"HERO", name:"HERO", price:316, change:0.64, sector:"Ritel", signal:"CENDERUNG TURUN", confidence:20, ma20:326, ma50:333, rsi:35.7},
-    {symbol:"ACES", name:"ACES", price:326, change:-0.61, sector:"Ritel", signal:"CENDERUNG TURUN", confidence:20, ma20:339, ma50:349, rsi:30.8},
-    {symbol:"KRAS", name:"KRAS", price:230, change:0.88, sector:"Industri", signal:"CENDERUNG TURUN", confidence:20, ma20:226, ma50:230, rsi:48.8},
-    {symbol:"ISSP", name:"ISSP", price:426, change:1.43, sector:"Industri", signal:"CENDERUNG TURUN", confidence:20, ma20:412, ma50:426, rsi:62.2},
-    {symbol:"LMSH", name:"LMSH", price:256, change:0, sector:"Industri", signal:"CENDERUNG TURUN", confidence:20, ma20:256, ma50:256, rsi:50},
-    {symbol:"INTA", name:"INTA", price:61, change:0, sector:"Industri", signal:"CENDERUNG TURUN", confidence:20, ma20:61, ma50:61, rsi:50},
-    {symbol:"TIRT", name:"TIRT", price:590, change:0, sector:"Industri", signal:"CENDERUNG TURUN", confidence:20, ma20:590, ma50:590, rsi:50},
-    {symbol:"RICY", name:"RICY", price:71, change:1.43, sector:"Tekstil", signal:"CENDERUNG TURUN", confidence:20, ma20:72, ma50:76, rsi:39.4},
-    {symbol:"ESTI", name:"ESTI", price:159, change:-3.05, sector:"Tekstil", signal:"CENDERUNG TURUN", confidence:20, ma20:157, ma50:163, rsi:49.4},
-    {symbol:"POLY", name:"POLY", price:32, change:0, sector:"Tekstil", signal:"CENDERUNG TURUN", confidence:20, ma20:32, ma50:32, rsi:50},
-    {symbol:"ITIC", name:"ITIC", price:204, change:2.51, sector:"Konsumer", signal:"CENDERUNG TURUN", confidence:20, ma20:204, ma50:217, rsi:47.2},
-    {symbol:"ASDM", name:"ASDM", price:510, change:0, sector:"Konsumer", signal:"CENDERUNG TURUN", confidence:20, ma20:511, ma50:513, rsi:33.3},
-    {symbol:"SRAJ", name:"SRAJ", price:13000, change:0, sector:"Kesehatan", signal:"CENDERUNG TURUN", confidence:20, ma20:13114, ma50:13366, rsi:50},
-    {symbol:"SOTS", name:"SOTS", price:575, change:-2.54, sector:"Ritel", signal:"CENDERUNG TURUN", confidence:20, ma20:568, ma50:601, rsi:48},
-    {symbol:"INOV", name:"INOV", price:139, change:1.46, sector:"Teknologi", signal:"CENDERUNG TURUN", confidence:20, ma20:136, ma50:140, rsi:56},
-    {symbol:"BINA", name:"BINA", price:4000, change:0.76, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:4063, ma50:4116, rsi:47.3},
-    {symbol:"BGTG", name:"BGTG", price:107, change:0.94, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:112, ma50:114, rsi:39.1},
-    {symbol:"DNAR", name:"DNAR", price:124, change:-2.36, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:126, ma50:127, rsi:39.1},
-    {symbol:"YELO", name:"YELO", price:78, change:0, sector:"Perbankan", signal:"CENDERUNG TURUN", confidence:20, ma20:83, ma50:89, rsi:36.2},
-    {symbol:"TBIG", name:"TBIG", price:1400, change:0, sector:"Telekomunikasi", signal:"SANGAT BEARISH", confidence:80, ma20:1444, ma50:1445, rsi:33.3},
-    {symbol:"MDKA", name:"MDKA", price:2940, change:1.73, sector:"Tambang", signal:"SANGAT BEARISH", confidence:80, ma20:2912, ma50:2920, rsi:54.1},
-    {symbol:"NRCA", name:"NRCA", price:530, change:0, sector:"Infrastruktur", signal:"SANGAT BEARISH", confidence:80, ma20:548, ma50:549, rsi:40.6},
-    {symbol:"TMAS", name:"TMAS", price:128, change:-0.78, sector:"Logistik", signal:"SANGAT BEARISH", confidence:80, ma20:134, ma50:134, rsi:32.7},
-    {symbol:"RALS", name:"RALS", price:376, change:-0.53, sector:"Ritel", signal:"SANGAT BEARISH", confidence:80, ma20:382, ma50:382, rsi:30.8},
-    {symbol:"INPC", name:"INPC", price:148, change:-0.67, sector:"Perbankan", signal:"SANGAT BEARISH", confidence:80, ma20:149, ma50:149, rsi:45.2}
-];
-
-// ============================================================
-// SECTOR DATA
-// ============================================================
-const sectorData = [
-    {name:"Asuransi", icon:"🛡️", change:3.87, up:2, down:3},
-    {name:"Logistik", icon:"🚚", change:3.1, up:3, down:4},
-    {name:"Telekomunikasi", icon:"📡", change:1.28, up:1, down:4},
-    {name:"Konsumer", icon:"🛒", change:1.09, up:1, down:14},
-    {name:"Agrikultur", icon:"🌾", change:1.07, up:6, down:1},
-    {name:"Otomotif", icon:"🚗", change:0.87, up:1, down:6},
-    {name:"Kesehatan", icon:"💊", change:0.65, up:5, down:9},
-    {name:"Perbankan", icon:"🏦", change:0.63, up:11, down:19},
-    {name:"Energi", icon:"⚡", change:0.63, up:5, down:8},
-    {name:"Teknologi", icon:"💻", change:0.43, up:1, down:3},
-    {name:"Tambang", icon:"⛏️", change:0.39, up:13, down:9},
-    {name:"Semen", icon:"🏗️", change:0.36, up:2, down:5},
-    {name:"Tekstil", icon:"🧵", change:-0.01, up:2, down:3},
-    {name:"Multifinance", icon:"💳", change:-0.22, up:3, down:1},
-    {name:"Industri", icon:"🏭", change:-0.23, up:9, down:5},
-    {name:"Properti", icon:"🏠", change:-0.55, up:5, down:8},
-    {name:"Infrastruktur", icon:"🌉", change:-0.74, up:2, down:5},
-    {name:"Ritel", icon:"🛍️", change:-0.87, up:3, down:9}
-];
-
-// ============================================================
-// INIT
-// ============================================================
-document.addEventListener('DOMContentLoaded', () => {
-    initTicker();
-    initSectorGrid();
-    initMovers();
-    initStockTable();
-    initSignals();
-    initPortfolio();
-    initAlerts();
-    initCommandPalette();
-    updateStats();
-    updateSentiment();
-});
-
-function initTicker() {
-    const ticker = document.getElementById('ticker');
-    const items = stockData.slice(0, 50).map(s => `
-        <div class="ticker-item">
-            <span class="ticker-symbol">${s.symbol}</span>
-            <span class="ticker-price">${formatPrice(s.price)}</span>
-            <span class="ticker-change ${s.change >= 0 ? 'up' : 'down'}">
-                ${s.change >= 0 ? '▲' : '▼'} ${Math.abs(s.change).toFixed(2)}%
-            </span>
-        </div>
-    `).join('');
-    ticker.innerHTML = items + items;
-}
-
-function initSectorGrid() {
-    document.getElementById('sectorGrid').innerHTML = sectorData.map(s => `
-        <div class="sector-item" onclick="showToast('Sektor','${s.name}: ${s.change >= 0 ? '+' : ''}${s.change}%','${s.change >= 0 ? 'success' : 'error'}')">
-            <div class="sector-name">${s.icon} ${s.name}</div>
-            <div class="sector-value ${s.change >= 0 ? 'up' : 'down'}">
-                ${s.change >= 0 ? '+' : ''}${s.change}%
-            </div>
-            <div class="sector-detail">${s.up}↑ ${s.down}↓</div>
-        </div>
-    `).join('');
-}
-
-function initMovers() {
-    const sorted = [...stockData].sort((a,b) => b.change - a.change);
-    const gainers = sorted.slice(0, 5);
-    const losers = sorted.slice(-5).reverse();
-
-    document.getElementById('topGainers').innerHTML = gainers.map(s => `
-        <div class="mover-item" onclick="showStockDetail('${s.symbol}')">
-            <div class="mover-info">
-                <div class="mover-avatar">${s.symbol.slice(0,2)}</div>
-                <div>
-                    <div class="mover-symbol">${s.symbol}</div>
-                    <div class="mover-name">${s.name}</div>
-                </div>
-            </div>
-            <div class="mover-change up">+${s.change.toFixed(2)}%</div>
-        </div>
-    `).join('');
-
-    document.getElementById('topLosers').innerHTML = losers.map(s => `
-        <div class="mover-item" onclick="showStockDetail('${s.symbol}')">
-            <div class="mover-info">
-                <div class="mover-avatar">${s.symbol.slice(0,2)}</div>
-                <div>
-                    <div class="mover-symbol">${s.symbol}</div>
-                    <div class="mover-name">${s.name}</div>
-                </div>
-            </div>
-            <div class="mover-change down">${s.change.toFixed(2)}%</div>
-        </div>
-    `).join('');
-}
-
-function initStockTable() {
-    const tbody = document.getElementById('stockTableBody');
-    tbody.innerHTML = stockData.slice(0, 60).map(s => {
-        const signalClass = getSignalClass(s.signal);
-        const confClass = s.confidence >= 80 ? 'high' : s.confidence >= 40 ? 'medium' : 'low';
-        return `
-            <tr onclick="showStockDetail('${s.symbol}')">
-                <td>
-                    <div class="stock-symbol">${s.symbol}</div>
-                    <div class="stock-name">${s.name}</div>
-                </td>
-                <td><span style="font-size:0.7rem;color:#6b7280">${s.sector}</span></td>
-                <td>
-                    <div style="font-weight:600">Rp ${formatPrice(s.price)}</div>
-                    <div style="font-size:0.7rem;color:${s.change >= 0 ? '#10b981' : '#ef4444'}">
-                        ${s.change >= 0 ? '▲' : '▼'} ${Math.abs(s.change).toFixed(2)}%
-                    </div>
-                </td>
-                <td><span class="badge ${signalClass}">${s.signal}</span></td>
-                <td>
-                    <div style="display:flex;align-items:center;gap:6px">
-                        <div class="confidence-bar">
-                            <div class="confidence-fill ${confClass}" style="width:${s.confidence}%"></div>
-                        </div>
-                        <span style="font-size:0.7rem;color:#6b7280">${s.confidence}%</span>
-                    </div>
-                </td>
-                <td>
-                    <span style="font-weight:600;color:${s.rsi < 30 ? '#10b981' : s.rsi > 70 ? '#ef4444' : '#f3f4f6'}">
-                        ${s.rsi.toFixed(1)}
-                    </span>
-                </td>
-            </tr>
-        `;
-    }).join('');
-}
-
-function filterStocks(filter, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    
-    let filtered = stockData;
-    if (filter === 'bullish') {
-        filtered = stockData.filter(s => s.signal.includes('BULLISH') || s.signal.includes('NAIK'));
-    } else if (filter === 'bearish') {
-        filtered = stockData.filter(s => s.signal.includes('BEARISH') || s.signal.includes('TURUN'));
-    } else if (filter === 'neutral') {
-        filtered = stockData.filter(s => s.signal === 'NETRAL');
-    }
-    
-    const tbody = document.getElementById('stockTableBody');
-    tbody.innerHTML = filtered.slice(0, 60).map(s => {
-        const signalClass = getSignalClass(s.signal);
-        const confClass = s.confidence >= 80 ? 'high' : s.confidence >= 40 ? 'medium' : 'low';
-        return `
-            <tr onclick="showStockDetail('${s.symbol}')">
-                <td><div class="stock-symbol">${s.symbol}</div><div class="stock-name">${s.name}</div></td>
-                <td><span style="font-size:0.7rem;color:#6b7280">${s.sector}</span></td>
-                <td>
-                    <div style="font-weight:600">Rp ${formatPrice(s.price)}</div>
-                    <div style="font-size:0.7rem;color:${s.change >= 0 ? '#10b981' : '#ef4444'}">
-                        ${s.change >= 0 ? '▲' : '▼'} ${Math.abs(s.change).toFixed(2)}%
-                    </div>
-                </td>
-                <td><span class="badge ${signalClass}">${s.signal}</span></td>
-                <td>
-                    <div style="display:flex;align-items:center;gap:6px">
-                        <div class="confidence-bar">
-                            <div class="confidence-fill ${confClass}" style="width:${s.confidence}%"></div>
-                        </div>
-                        <span style="font-size:0.7rem;color:#6b7280">${s.confidence}%</span>
-                    </div>
-                </td>
-                <td>
-                    <span style="font-weight:600;color:${s.rsi < 30 ? '#10b981' : s.rsi > 70 ? '#ef4444' : '#f3f4f6'}">
-                        ${s.rsi.toFixed(1)}
-                    </span>
-                </td>
-            </tr>
-        `;
-    }).join('');
-    
-    document.getElementById('stockCountBadge').textContent = `${filtered.length} / ${stockData.length}`;
-}
-
-function initSignals() {
-    const signals = [
-        {type:'buy', symbol:'BBRI', title:'BBRI — Buy Signal', desc:'RSI oversold + MA20 support', action:'BUY'},
-        {type:'sell', symbol:'GOTO', title:'GOTO — Sell Signal', desc:'RSI overbought + volume turun', action:'SELL'},
-        {type:'buy', symbol:'TLKM', title:'TLKM — Buy Signal', desc:'Golden cross MA20/MA50', action:'BUY'},
-        {type:'hold', symbol:'ASII', title:'ASII — Hold Signal', desc:'Konsolidasi di area support', action:'HOLD'},
-        {type:'sell', symbol:'UNVR', title:'UNVR — Sell Signal', desc:'Death cross + RSI turun', action:'SELL'},
-        {type:'buy', symbol:'ANTM', title:'ANTM — Buy Signal', desc:'Bullish divergence RSI', action:'BUY'},
-        {type:'hold', symbol:'ICBP', title:'ICBP — Hold Signal', desc:'Sideways, tunggu breakout', action:'HOLD'},
-        {type:'buy', symbol:'PTBA', title:'PTBA — Buy Signal', desc:'Volume spike + MA50 support', action:'BUY'}
-    ];
-
-    document.getElementById('signalList').innerHTML = signals.map(s => `
-        <div class="signal-card">
-            <div class="signal-icon ${s.type}">
-                <i class="fas fa-${s.type === 'buy' ? 'arrow-up' : s.type === 'sell' ? 'arrow-down' : 'minus'}"></i>
-            </div>
-            <div class="signal-info">
-                <div class="signal-title">${s.title}</div>
-                <div class="signal-desc">${s.desc}</div>
-            </div>
-            <div class="signal-action ${s.type}">${s.action}</div>
-        </div>
-    `).join('');
-}
-
-function initPortfolio() {
-    const portfolio = [
-        {symbol:'BBRI', lots:10, buyPrice:4500, currentPrice:3100},
-        {symbol:'TLKM', lots:20, buyPrice:2800, currentPrice:2320},
-        {symbol:'ASII', lots:5, buyPrice:5000, currentPrice:4820},
-        {symbol:'ANTM', lots:15, buyPrice:2500, currentPrice:3180},
-        {symbol:'PTBA', lots:8, buyPrice:2800, currentPrice:3300},
-        {symbol:'ICBP', lots:3, buyPrice:8000, currentPrice:6950},
-        {symbol:'UNVR', lots:12, buyPrice:2000, currentPrice:1595},
-        {symbol:'GOTO', lots:100, buyPrice:50, currentPrice:30}
-    ];
-
-    document.getElementById('portfolioList').innerHTML = portfolio.map(p => {
-        const pnl = ((p.currentPrice - p.buyPrice) / p.buyPrice * 100);
-        return `
-            <div class="portfolio-item">
-                <div class="portfolio-info">
-                    <div class="mover-avatar">${p.symbol.slice(0,2)}</div>
-                    <div>
-                        <div class="portfolio-symbol">${p.symbol}</div>
-                        <div class="portfolio-lots">${p.lots} lot · Beli Rp ${formatPrice(p.buyPrice)}</div>
-                    </div>
-                </div>
-                <div class="portfolio-value">
-                    <div class="portfolio-price">Rp ${formatPrice(p.currentPrice)}</div>
-                    <div class="portfolio-pnl ${pnl >= 0 ? 'up' : 'down'}">
-                        ${pnl >= 0 ? '+' : ''}${pnl.toFixed(2)}%
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-function initAlerts() {
-    const alerts = [
-        {symbol:'BBRI', condition:'Harga > Rp 3.200', status:'Aktif'},
-        {symbol:'TLKM', condition:'Harga < Rp 2.300', status:'Aktif'},
-        {symbol:'ANTM', condition:'RSI < 30', status:'Aktif'},
-        {symbol:'GOTO', condition:'Harga > Rp 35', status:'Aktif'},
-        {symbol:'PTBA', condition:'Harga > Rp 3.400', status:'Aktif'}
-    ];
-
-    document.getElementById('alertList').innerHTML = alerts.map(a => `
-        <div class="alert-item">
-            <div>
-                <div class="alert-symbol">${a.symbol}</div>
-                <div class="alert-condition">${a.condition}</div>
-            </div>
-            <div class="alert-status">${a.status}</div>
-        </div>
-    `).join('');
-}
-
-function updateStats() {
-    const total = stockData.length;
-    const bullish = stockData.filter(s => s.signal.includes('BULLISH') || s.signal.includes('NAIK')).length;
-    const bearish = stockData.filter(s => s.signal.includes('BEARISH') || s.signal.includes('TURUN')).length;
-    
-    document.getElementById('totalStocks').textContent = total;
-    document.getElementById('bullishCount').textContent = bullish;
-    document.getElementById('bearishCount').textContent = bearish;
-    document.getElementById('stockCountBadge').textContent = `${total} / ${total}`;
-}
-
-function updateSentiment() {
-    const bullish = stockData.filter(s => s.signal.includes('BULLISH') || s.signal.includes('NAIK')).length;
-    const bearish = stockData.filter(s => s.signal.includes('BEARISH') || s.signal.includes('TURUN')).length;
-    const total = bullish + bearish;
-    const bullPct = (bullish / total * 100).toFixed(0);
-    const bearPct = (bearish / total * 100).toFixed(0);
-
-    document.getElementById('bullFill').style.width = bullPct + '%';
-    document.getElementById('bearFill').style.width = bearPct + '%';
-    document.getElementById('bullLabel').textContent = bullish;
-    document.getElementById('bearLabel').textContent = bearish;
-    
-    const badge = document.getElementById('sentimentBadge');
-    if (bearish > bullish) {
-        badge.className = 'badge bearish';
-        badge.textContent = 'BEARISH BIAS';
-    } else {
-        badge.className = 'badge bullish';
-        badge.textContent = 'BULLISH BIAS';
-    }
-}
-
-function formatPrice(price) {
-    return price.toLocaleString('id-ID');
-}
-
-function getSignalClass(signal) {
-    if (signal.includes('BULLISH') || signal.includes('NAIK')) return 'bullish';
-    if (signal.includes('BEARISH') || signal.includes('TURUN')) return 'bearish';
-    return 'neutral';
-}
-
-function showStockDetail(symbol) {
-    const stock = stockData.find(s => s.symbol === symbol);
-    if (!stock) return;
-    showToast(
-        `${stock.symbol} — ${stock.name}`,
-        `Rp ${formatPrice(stock.price)} · ${stock.change >= 0 ? '+' : ''}${stock.change}% · RSI ${stock.rsi} · ${stock.signal}`,
-        stock.change >= 0 ? 'success' : 'error'
-    );
-}
-
-// ============================================================
-// TABS
-// ============================================================
-function switchTab(tab, btn) {
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    
-    document.getElementById('tab-' + tab).classList.add('active');
-    if (btn) btn.classList.add('active');
-}
-
-function switchCalc(type, btn) {
-    document.querySelectorAll('.calc-tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-    
-    ['compound','averagedown','position','target'].forEach(t => {
-        const el = document.getElementById('calc' + t.charAt(0).toUpperCase() + t.slice(1));
-        if (el) el.style.display = 'none';
-    });
-    const target = document.getElementById('calc' + type.charAt(0).toUpperCase() + type.slice(1));
-    if (target) target.style.display = 'block';
-}
-
-// ============================================================
-// COMMAND PALETTE
-// ============================================================
-function openCommandPalette() {
-    document.getElementById('commandPalette').classList.add('active');
-    document.getElementById('commandInput').focus();
-}
-
-function closeCommandPalette() {
-    document.getElementById('commandPalette').classList.remove('active');
-}
-
-function executeCommand(cmd) {
-    closeCommandPalette();
-    switch(cmd) {
-        case 'dashboard': switchTab('dashboard', document.querySelectorAll('.tab-btn')[0]); break;
-        case 'signals': switchTab('signals', document.querySelectorAll('.tab-btn')[1]); break;
-        case 'portfolio': switchTab('portfolio', document.querySelectorAll('.tab-btn')[2]); break;
-        case 'alerts': switchTab('alerts', document.querySelectorAll('.tab-btn')[3]); break;
-        case 'screener': switchTab('screener', document.querySelectorAll('.tab-btn')[4]); break;
-        case 'calculator': switchTab('calculator', document.querySelectorAll('.tab-btn')[5]); break;
-        case 'premium': switchTab('premium', document.querySelectorAll('.tab-btn')[6]); break;
-    }
-}
-
-function initCommandPalette() {
-    const palette = document.getElementById('commandPalette');
-    
-    document.addEventListener('keydown', (e) => {
-        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-            e.preventDefault();
-            openCommandPalette();
-        }
-        if (e.key === 'Escape') closeCommandPalette();
-    });
-    
-    palette.addEventListener('click', (e) => {
-        if (e.target === palette) closeCommandPalette();
-    });
-}
-
-// ============================================================
-// TOAST
-// ============================================================
-function showToast(title, message, type = 'success') {
-    const container = document.getElementById('toastContainer');
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.innerHTML = `
-        <div class="toast-icon">
-            <i class="fas fa-${type === 'success' ? 'check' : type === 'warning' ? 'exclamation' : 'times'}"></i>
-        </div>
-        <div class="toast-content">
-            <div class="toast-title">${title}</div>
-            <div class="toast-message">${message}</div>
-        </div>
-    `;
-    container.appendChild(toast);
-    setTimeout(() => toast.remove(), 4000);
-}
-
-// ============================================================
-// CALCULATORS
-// ============================================================
-function calcCompound() {
-    const p = parseFloat(document.getElementById('ciPrincipal').value);
-    const m = parseFloat(document.getElementById('ciMonthly').value);
-    const r = parseFloat(document.getElementById('ciRate').value) / 100;
-    const y = parseFloat(document.getElementById('ciYears').value);
-    
-    let total = p;
-    for (let i = 0; i < y * 12; i++) {
-        total = total * (1 + r/12) + m;
-    }
-    document.getElementById('ciResult').textContent = 'Rp ' + Math.round(total).toLocaleString('id-ID');
-}
-
-function calcAvgDown() {
-    const buy1 = parseFloat(document.getElementById('adBuy1').value);
-    const lot1 = parseFloat(document.getElementById('adLot1').value);
-    const buy2 = parseFloat(document.getElementById('adBuy2').value);
-    const lot2 = parseFloat(document.getElementById('adLot2').value);
-    
-    const totalLot = lot1 + lot2;
-    const avg = ((buy1 * lot1) + (buy2 * lot2)) / totalLot;
-    document.getElementById('adResult').textContent = 'Rp ' + Math.round(avg).toLocaleString('id-ID');
-}
-
-function calcPosition() {
-    const capital = parseFloat(document.getElementById('psCapital').value);
-    const risk = parseFloat(document.getElementById('psRisk').value) / 100;
-    const entry = parseFloat(document.getElementById('psEntry').value);
-    const stop = parseFloat(document.getElementById('psStop').value);
-    
-    const riskPerShare = entry - stop;
-    const maxLoss = capital * risk;
-    const shares = Math.floor(maxLoss / riskPerShare);
-    const lots = Math.floor(shares / 100);
-    document.getElementById('psResult').textContent = lots + ' lot';
-}
-
-function calcTarget() {
-    const buy = parseFloat(document.getElementById('tpBuy').value);
-    const lot = parseFloat(document.getElementById('tpLot').value);
-    const percent = parseFloat(document.getElementById('tpPercent').value) / 100;
-    const fee = parseFloat(document.getElementById('tpFee').value) / 100;
-    
-    const target = buy * (1 + percent + (fee * 2));
-    document.getElementById('tpResult').textContent = 'Rp ' + Math.round(target).toLocaleString('id-ID');
-}
-
-// ============================================================
-// SCREENER
-// ============================================================
-function runScreener() {
-    const maxRsi = parseFloat(document.getElementById('screenerRsi').value);
-    const signal = document.getElementById('screenerSignal').value;
-    const maxPrice = parseFloat(document.getElementById('screenerPrice').value);
-    
-    const results = stockData.filter(s => {
-        if (s.rsi > maxRsi) return false;
-        if (s.price > maxPrice) return false;
-        if (signal !== 'Semua' && !s.signal.includes(signal.toUpperCase())) return false;
-        return true;
-    }).slice(0, 20);
-    
-    document.getElementById('screenerResults').innerHTML = results.map(s => `
-        <div class="portfolio-item">
-            <div class="portfolio-info">
-                <div class="mover-avatar">${s.symbol.slice(0,2)}</div>
-                <div>
-                    <div class="portfolio-symbol">${s.symbol}</div>
-                    <div class="portfolio-lots">${s.sector} · RSI ${s.rsi}</div>
-                </div>
-            </div>
-            <div class="portfolio-value">
-                <div class="portfolio-price">Rp ${formatPrice(s.price)}</div>
-                <div class="portfolio-pnl ${s.change >= 0 ? 'up' : 'down'}">
-                    ${s.change >= 0 ? '+' : ''}${s.change}%
-                </div>
-            </div>
-        </div>
-    `).join('');
-    
-    showToast('Screener', `Ditemukan ${results.length} saham yang sesuai`, 'success');
-}
-</script>
-
-</body>
-</html>
+                <i class="fas fa-search
