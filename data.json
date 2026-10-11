@@ -1,0 +1,260 @@
+{
+  "updated": "11 Oct 2026 12:56 WIB",
+  "total": 20,
+  "saham": [
+    {
+      "kode": "BBRI",
+      "harga": 3100.0,
+      "perubahan": 2.31,
+      "ma20": 3189.0,
+      "ma50": 3188.0,
+      "rsi": 32.8,
+      "verdict": "CENDERUNG NAIK",
+      "level": "mild-bull",
+      "sinyal": [],
+      "skor": 1
+    },
+    {
+      "kode": "ANTM",
+      "harga": 3180.0,
+      "perubahan": 0.95,
+      "ma20": 3211.0,
+      "ma50": 3139.0,
+      "rsi": 46.2,
+      "verdict": "CENDERUNG NAIK",
+      "level": "mild-bull",
+      "sinyal": [],
+      "skor": 1
+    },
+    {
+      "kode": "PTBA",
+      "harga": 3300.0,
+      "perubahan": -0.6,
+      "ma20": 3146.0,
+      "ma50": 2793.0,
+      "rsi": 63.1,
+      "verdict": "CENDERUNG NAIK",
+      "level": "mild-bull",
+      "sinyal": [],
+      "skor": 1
+    },
+    {
+      "kode": "BBNI",
+      "harga": 3430.0,
+      "perubahan": 0.59,
+      "ma20": 3543.0,
+      "ma50": 3640.0,
+      "rsi": 26.8,
+      "verdict": "NETRAL",
+      "level": "neutral",
+      "sinyal": [
+        "OVERSOLD (RSI 26.8)"
+      ],
+      "skor": 0
+    },
+    {
+      "kode": "TLKM",
+      "harga": 2320.0,
+      "perubahan": 2.65,
+      "ma20": 2421.0,
+      "ma50": 2547.0,
+      "rsi": 29.5,
+      "verdict": "NETRAL",
+      "level": "neutral",
+      "sinyal": [
+        "OVERSOLD (RSI 29.5)"
+      ],
+      "skor": 0
+    },
+    {
+      "kode": "GOTO",
+      "harga": 30.0,
+      "perubahan": 0.0,
+      "ma20": 41.0,
+      "ma50": 46.0,
+      "rsi": 14.3,
+      "verdict": "NETRAL",
+      "level": "neutral",
+      "sinyal": [
+        "OVERSOLD (RSI 14.3)"
+      ],
+      "skor": 0
+    },
+    {
+      "kode": "ARTO",
+      "harga": 785.0,
+      "perubahan": 0.0,
+      "ma20": 849.0,
+      "ma50": 1010.0,
+      "rsi": 26.1,
+      "verdict": "NETRAL",
+      "level": "neutral",
+      "sinyal": [
+        "OVERSOLD (RSI 26.1)"
+      ],
+      "skor": 0
+    },
+    {
+      "kode": "TPIA",
+      "harga": 1675.0,
+      "perubahan": 0.3,
+      "ma20": 1777.0,
+      "ma50": 1923.0,
+      "rsi": 29.3,
+      "verdict": "NETRAL",
+      "level": "neutral",
+      "sinyal": [
+        "OVERSOLD (RSI 29.3)"
+      ],
+      "skor": 0
+    },
+    {
+      "kode": "BRPT",
+      "harga": 1405.0,
+      "perubahan": 1.08,
+      "ma20": 1515.0,
+      "ma50": 1702.0,
+      "rsi": 29.7,
+      "verdict": "NETRAL",
+      "level": "neutral",
+      "sinyal": [
+        "OVERSOLD (RSI 29.7)"
+      ],
+      "skor": 0
+    },
+    {
+      "kode": "BBCA",
+      "harga": 6050.0,
+      "perubahan": 0.83,
+      "ma20": 6200.0,
+      "ma50": 6338.0,
+      "rsi": 40.0,
+      "verdict": "CENDERUNG TURUN",
+      "level": "mild-bear",
+      "sinyal": [],
+      "skor": -1
+    },
+    {
+      "kode": "BMRI",
+      "harga": 4040.0,
+      "perubahan": 1.0,
+      "ma20": 4133.0,
+      "ma50": 4162.0,
+      "rsi": 34.6,
+      "verdict": "CENDERUNG TURUN",
+      "level": "mild-bear",
+      "sinyal": [],
+      "skor": -1
+    },
+    {
+      "kode": "ASII",
+      "harga": 4820.0,
+      "perubahan": 0.42,
+      "ma20": 4766.0,
+      "ma50": 4846.0,
+      "rsi": 50.0,
+      "verdict": "CENDERUNG TURUN",
+      "level": "mild-bear",
+      "sinyal": [],
+      "skor": -1
+    },
+    {
+      "kode": "UNVR",
+      "harga": 1595.0,
+      "perubahan": 0.95,
+      "ma20": 1615.0,
+      "ma50": 1695.0,
+      "rsi": 41.9,
+      "verdict": "CENDERUNG TURUN",
+      "level": "mild-bear",
+      "sinyal": [],
+      "skor": -1
+    },
+    {
+      "kode": "ICBP",
+      "harga": 6950.0,
+      "perubahan": 2.58,
+      "ma20": 6818.0,
+      "ma50": 7204.0,
+      "rsi": 55.8,
+      "verdict": "CENDERUNG TURUN",
+      "level": "mild-bear",
+      "sinyal": [],
+      "skor": -1
+    },
+    {
+      "kode": "INDF",
+      "harga": 6950.0,
+      "perubahan": 0.72,
+      "ma20": 6932.0,
+      "ma50": 7150.0,
+      "rsi": 46.9,
+      "verdict": "CENDERUNG TURUN",
+      "level": "mild-bear",
+      "sinyal": [],
+      "skor": -1
+    },
+    {
+      "kode": "KLBF",
+      "harga": 785.0,
+      "perubahan": 1.29,
+      "ma20": 748.0,
+      "ma50": 766.0,
+      "rsi": 64.0,
+      "verdict": "CENDERUNG TURUN",
+      "level": "mild-bear",
+      "sinyal": [],
+      "skor": -1
+    },
+    {
+      "kode": "ADRO",
+      "harga": 2580.0,
+      "perubahan": 1.18,
+      "ma20": 2572.0,
+      "ma50": 2591.0,
+      "rsi": 46.4,
+      "verdict": "CENDERUNG TURUN",
+      "level": "mild-bear",
+      "sinyal": [],
+      "skor": -1
+    },
+    {
+      "kode": "SMGR",
+      "harga": 1580.0,
+      "perubahan": 0.64,
+      "ma20": 1556.0,
+      "ma50": 1580.0,
+      "rsi": 52.3,
+      "verdict": "CENDERUNG TURUN",
+      "level": "mild-bear",
+      "sinyal": [],
+      "skor": -1
+    },
+    {
+      "kode": "INTP",
+      "harga": 5050.0,
+      "perubahan": 2.02,
+      "ma20": 5075.0,
+      "ma50": 5236.0,
+      "rsi": 41.6,
+      "verdict": "CENDERUNG TURUN",
+      "level": "mild-bear",
+      "sinyal": [],
+      "skor": -1
+    },
+    {
+      "kode": "MDKA",
+      "harga": 2940.0,
+      "perubahan": 1.73,
+      "ma20": 2912.0,
+      "ma50": 2920.0,
+      "rsi": 54.1,
+      "verdict": "SANGAT BEARISH",
+      "level": "strong-bear",
+      "sinyal": [
+        "DEATH CROSS"
+      ],
+      "skor": -4
+    }
+  ]
+}
