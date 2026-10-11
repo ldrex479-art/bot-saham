@@ -4,144 +4,223 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard Saham IHSG</title>
+<meta name="theme-color" content="#0a0e14">
+<link rel="manifest" href="manifest.json">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   :root{
     --bg:#0a0e14;--bg2:#111720;--card:#161d2b;--line:#232c3d;
-    --text:#e6edf3;--muted:#7a8699;
-    --green:#26d07c;--red:#ff4d4f;--yellow:#ffc107;--orange:#ff9800;
-    --blue:#4a9eff;--gold:#d4a84b;
+    --text:#e6edf3;--muted:#7a8699;--green:#26d07c;--red:#ff4d4f;
+    --yellow:#ffc107;--orange:#ff9800;--blue:#4a9eff;--gold:#d4a84b;
+  }
+  body.light{
+    --bg:#f5f7fa;--bg2:#ffffff;--card:#ffffff;--line:#e1e6ec;
+    --text:#1a2332;--muted:#5a6577;
   }
   body{
     background:var(--bg);color:var(--text);
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    min-height:100vh;padding-bottom:40px;
+    min-height:100vh;padding-bottom:40px;transition:background 0.3s,color 0.3s;
     -webkit-font-smoothing:antialiased;
   }
   .header{
     background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%);
-    padding:30px 20px 25px;border-bottom:1px solid var(--line);
-    position:sticky;top:0;z-index:10;backdrop-filter:blur(20px);
+    padding:25px 20px;border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);
   }
   .header-inner{max-width:1200px;margin:0 auto;}
-  .title{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
-  .title h1{font-size:22px;font-weight:600;letter-spacing:-0.5px;}
+  .top-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+  .title{display:flex;align-items:center;gap:10px;flex:1;}
+  .title h1{font-size:20px;font-weight:600;letter-spacing:-0.5px;}
   .title .dot{
     width:10px;height:10px;border-radius:50%;background:var(--green);
     box-shadow:0 0 10px var(--green);animation:pulse 2s infinite;
   }
   @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
-  .updated{font-size:12px;color:var(--muted);letter-spacing:0.5px;}
-  .stats{display:flex;gap:15px;margin-top:20px;flex-wrap:wrap;}
+  .icon-btn{
+    background:var(--card);border:1px solid var(--line);
+    color:var(--text);width:36px;height:36px;border-radius:8px;
+    cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;
+    transition:all 0.3s;
+  }
+  .icon-btn:hover{border-color:var(--gold);color:var(--gold);}
+  .updated{font-size:11px;color:var(--muted);letter-spacing:0.5px;margin-top:6px;}
+  .stats{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap;}
   .stat{
     background:var(--card);border:1px solid var(--line);
-    border-radius:10px;padding:10px 16px;font-size:12px;
+    border-radius:10px;padding:8px 14px;font-size:12px;
   }
-  .stat .label{color:var(--muted);margin-bottom:4px;font-size:10px;text-transform:uppercase;letter-spacing:1px;}
-  .stat .value{font-weight:600;font-size:15px;}
-  .container{max-width:1200px;margin:0 auto;padding:25px 20px;}
+  .stat .label{color:var(--muted);margin-bottom:3px;font-size:9px;text-transform:uppercase;letter-spacing:1px;}
+  .stat .value{font-weight:600;font-size:14px;}
+  .container{max-width:1200px;margin:0 auto;padding:20px;}
   .section-title{
-    font-size:14px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
-    color:var(--muted);margin:30px 0 15px;display:flex;align-items:center;gap:10px;
+    font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+    color:var(--muted);margin:25px 0 12px;display:flex;align-items:center;gap:10px;
+    justify-content:space-between;
   }
-  .section-title::before{
-    content:'';width:3px;height:16px;background:var(--gold);border-radius:2px;
-  }
-  .movers-grid{
-    display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:20px;
-  }
+  .section-title .left{display:flex;align-items:center;gap:10px;}
+  .section-title .left::before{content:'';width:3px;height:14px;background:var(--gold);border-radius:2px;}
+  .movers-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px;}
   .movers-box{
     background:var(--card);border:1px solid var(--line);
-    border-radius:14px;padding:16px;
+    border-radius:12px;padding:14px;
   }
   .movers-box h3{
-    font-size:11px;text-transform:uppercase;letter-spacing:1px;
-    color:var(--muted);margin-bottom:12px;font-weight:600;
+    font-size:10px;text-transform:uppercase;letter-spacing:1px;
+    color:var(--muted);margin-bottom:10px;font-weight:600;
   }
   .mover-item{
     display:flex;justify-content:space-between;align-items:center;
-    padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;
+    padding:7px 0;border-bottom:1px solid var(--line);font-size:12px;
+    cursor:pointer;transition:all 0.2s;
   }
   .mover-item:last-child{border-bottom:none;}
+  .mover-item:hover{color:var(--gold);}
   .mover-item .kode-mover{font-weight:700;letter-spacing:0.5px;}
   .mover-item .val{font-weight:600;}
-  .controls{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
-  .search{
-    flex:1;min-width:200px;
+  .alerts-box{
     background:var(--card);border:1px solid var(--line);
-    border-radius:10px;padding:12px 16px;
-    color:var(--text);font-size:14px;outline:none;transition:border-color 0.3s;
+    border-radius:12px;padding:14px;margin-bottom:15px;
+  }
+  .alert-item{
+    display:flex;align-items:center;gap:10px;
+    padding:8px 10px;border-radius:8px;font-size:12px;
+    margin-bottom:6px;border-left:3px solid var(--muted);
+  }
+  .alert-item:last-child{margin-bottom:0;}
+  .alert-bull{background:rgba(38,208,124,0.08);border-color:var(--green);}
+  .alert-bear{background:rgba(255,77,79,0.08);border-color:var(--red);}
+  .alert-warn{background:rgba(255,152,0,0.08);border-color:var(--orange);}
+  .alert-info{background:rgba(74,158,255,0.08);border-color:var(--blue);}
+  .alert-kode{font-weight:700;color:var(--gold);}
+  .controls{display:flex;gap:8px;margin-bottom:15px;flex-wrap:wrap;}
+  .search{
+    flex:1;min-width:180px;
+    background:var(--card);border:1px solid var(--line);
+    border-radius:10px;padding:11px 14px;
+    color:var(--text);font-size:13px;outline:none;transition:border-color 0.3s;
   }
   .search:focus{border-color:var(--gold);}
   .search::placeholder{color:var(--muted);}
-  .filters{display:flex;gap:8px;flex-wrap:wrap;}
+  .filters{display:flex;gap:6px;flex-wrap:wrap;}
   .filter{
     background:var(--card);border:1px solid var(--line);
-    border-radius:8px;padding:10px 16px;
-    color:var(--text);font-size:12px;font-weight:500;
+    border-radius:8px;padding:9px 14px;
+    color:var(--text);font-size:11px;font-weight:500;
     cursor:pointer;transition:all 0.3s;white-space:nowrap;
   }
   .filter:hover{border-color:var(--gold);}
   .filter.active{background:var(--gold);color:#000;border-color:var(--gold);}
-  .grid{
-    display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:15px;
+  .select{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:8px;padding:9px 14px;
+    color:var(--text);font-size:11px;outline:none;cursor:pointer;
   }
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;}
   .card{
     background:var(--card);border:1px solid var(--line);
-    border-radius:14px;padding:18px;
-    transition:all 0.3s;position:relative;overflow:hidden;
+    border-radius:14px;padding:16px;
+    transition:all 0.3s;position:relative;overflow:hidden;cursor:pointer;
   }
-  .card::before{
-    content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--muted);
-  }
-  .card.strong-bull::before{background:var(--green);}
-  .card.bull::before{background:var(--green);}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--muted);}
+  .card.strong-bull::before,.card.bull::before{background:var(--green);}
   .card.mild-bull::before{background:#8bc34a;}
-  .card.neutral::before{background:var(--muted);}
   .card.mild-bear::before{background:var(--orange);}
-  .card.bear::before{background:var(--red);}
-  .card.strong-bear::before{background:var(--red);}
+  .card.bear::before,.card.strong-bear::before{background:var(--red);}
   .card:hover{transform:translateY(-3px);border-color:var(--gold);}
-  .card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;position:relative;}
-  .kode{font-size:18px;font-weight:700;letter-spacing:0.5px;}
-  .harga{font-size:13px;color:var(--muted);margin-top:4px;}
+  .card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+  .kode{font-size:17px;font-weight:700;letter-spacing:0.5px;}
+  .sektor{font-size:10px;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-top:2px;}
+  .harga{font-size:12px;color:var(--muted);margin-top:4px;}
   .harga span{font-weight:600;}
   .up{color:var(--green);}
   .down{color:var(--red);}
   .star{
-    position:absolute;top:0;right:0;
-    font-size:20px;cursor:pointer;
-    color:var(--line);transition:all 0.2s;
-    background:none;border:none;padding:0;line-height:1;
+    position:absolute;top:14px;right:14px;
+    font-size:18px;cursor:pointer;color:var(--line);
+    transition:all 0.2s;background:none;border:none;padding:0;line-height:1;
   }
   .star:hover{color:var(--gold);transform:scale(1.2);}
   .star.on{color:var(--gold);}
   .verdict{
-    font-size:10px;font-weight:600;padding:5px 10px;
-    border-radius:20px;letter-spacing:0.8px;text-transform:uppercase;
-    white-space:nowrap;display:inline-block;
+    font-size:9px;font-weight:600;padding:4px 9px;
+    border-radius:20px;letter-spacing:0.7px;text-transform:uppercase;
+    white-space:nowrap;display:inline-block;margin-top:8px;
   }
-  .v-strong-bull{background:rgba(38,208,124,0.15);color:var(--green);}
-  .v-bull{background:rgba(38,208,124,0.12);color:var(--green);}
+  .v-strong-bull,.v-bull{background:rgba(38,208,124,0.15);color:var(--green);}
   .v-mild-bull{background:rgba(139,195,74,0.15);color:#8bc34a;}
   .v-neutral{background:rgba(122,134,153,0.15);color:var(--muted);}
   .v-mild-bear{background:rgba(255,152,0,0.15);color:var(--orange);}
-  .v-bear{background:rgba(255,77,79,0.12);color:var(--red);}
-  .v-strong-bear{background:rgba(255,77,79,0.18);color:var(--red);}
-  .chart-wrap{
-    height:60px;margin:14px 0 10px;position:relative;
-  }
+  .v-bear,.v-strong-bear{background:rgba(255,77,79,0.15);color:var(--red);}
+  .chart-wrap{height:55px;margin:10px 0 8px;position:relative;}
   .metrics{
-    display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;
-    padding-top:14px;border-top:1px solid var(--line);margin-top:10px;
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;
+    padding-top:10px;border-top:1px solid var(--line);margin-top:8px;
   }
-  .metric .label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;}
-  .metric .val{font-size:13px;font-weight:600;}
-  .sinyal{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;}
+  .metric .label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;}
+  .metric .val{font-size:12px;font-weight:600;}
+  .sinyal{margin-top:10px;display:flex;flex-wrap:wrap;gap:5px;}
   .sinyal-item{
-    font-size:10px;padding:3px 8px;border-radius:4px;
-    background:rgba(255,255,255,0.05);color:var(--muted);letter-spacing:0.3px;
+    font-size:9px;padding:3px 7px;border-radius:4px;
+    background:rgba(255,255,255,0.05);color:var(--muted);
+  }
+  body.light .sinyal-item{background:rgba(0,0,0,0.05);}
+  /* MODAL */
+  .modal-bg{
+    display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);
+    z-index:1000;padding:20px;overflow-y:auto;
+    backdrop-filter:blur(8px);
+  }
+  .modal-bg.show{display:block;}
+  .modal{
+    max-width:600px;margin:40px auto;
+    background:var(--bg2);border:1px solid var(--line);
+    border-radius:16px;padding:24px;
+    animation:slideUp 0.3s ease;
+  }
+  @keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+  .modal-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
+  .modal-head h2{font-size:24px;font-weight:700;letter-spacing:-0.5px;}
+  .modal-close{
+    background:none;border:none;color:var(--muted);font-size:24px;
+    cursor:pointer;line-height:1;padding:0;
+  }
+  .modal-close:hover{color:var(--red);}
+  .modal-chart{height:200px;margin:16px 0;}
+  .modal-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px;}
+  .modal-stat{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:10px;padding:12px;text-align:center;
+  }
+  .modal-stat .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;}
+  .modal-stat .val{font-size:16px;font-weight:600;}
+  .modal-action{
+    margin-top:16px;padding:14px;border-radius:10px;
+    font-size:13px;text-align:center;font-weight:500;
+  }
+  .action-buy{background:rgba(38,208,124,0.12);color:var(--green);border:1px solid var(--green);}
+  .action-sell{background:rgba(255,77,79,0.12);color:var(--red);border:1px solid var(--red);}
+  .action-hold{background:rgba(122,134,153,0.12);color:var(--muted);border:1px solid var(--line);}
+  /* COMPARE */
+  .compare-bar{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:12px;padding:12px;margin-bottom:15px;
+    display:none;
+  }
+  .compare-bar.show{display:block;}
+  .compare-list{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+  .compare-tag{
+    background:var(--gold);color:#000;padding:5px 12px;border-radius:20px;
+    font-size:11px;font-weight:600;display:flex;align-items:center;gap:6px;
+  }
+  .compare-tag button{
+    background:none;border:none;color:#000;cursor:pointer;font-size:14px;
+    line-height:1;padding:0;
+  }
+  .compare-btn{
+    background:var(--gold);color:#000;border:none;padding:8px 16px;
+    border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;
   }
   .loading,.empty{text-align:center;padding:60px 20px;color:var(--muted);grid-column:1/-1;}
   .loader{
@@ -152,10 +231,12 @@
   @keyframes spin{to{transform:rotate(360deg);}}
   .footer{
     text-align:center;padding:30px 20px;color:var(--muted);
-    font-size:11px;letter-spacing:0.5px;max-width:1200px;margin:0 auto;
+    font-size:11px;max-width:1200px;margin:0 auto;
   }
   @media (max-width:600px){
     .movers-grid{grid-template-columns:1fr;}
+    .modal{margin:20px auto;padding:18px;}
+    .modal-chart{height:150px;}
   }
 </style>
 </head>
@@ -163,22 +244,31 @@
 
 <div class="header">
   <div class="header-inner">
-    <div class="title">
-      <div class="dot"></div>
-      <h1>Dashboard Saham IHSG</h1>
+    <div class="top-bar">
+      <div class="title">
+        <div class="dot"></div>
+        <h1>Dashboard Saham IHSG</h1>
+      </div>
+      <button class="icon-btn" id="themeBtn" title="Tema">🌙</button>
+      <button class="icon-btn" id="csvBtn" title="Export CSV">📥</button>
     </div>
     <div class="updated" id="updated">Memuat data...</div>
     <div class="stats">
       <div class="stat"><div class="label">Total</div><div class="value" id="stat-total">-</div></div>
       <div class="stat"><div class="label">Bullish</div><div class="value" style="color:var(--green)" id="stat-bull">-</div></div>
       <div class="stat"><div class="label">Bearish</div><div class="value" style="color:var(--red)" id="stat-bear">-</div></div>
+      <div class="stat"><div class="label">Alert</div><div class="value" style="color:var(--gold)" id="stat-alert">-</div></div>
     </div>
   </div>
 </div>
 
 <div class="container">
-  <!-- TOP MOVERS -->
-  <div class="section-title">Top Movers Hari Ini</div>
+  <div class="section-title"><div class="left">Alert & Sinyal</div></div>
+  <div class="alerts-box" id="alerts-box">
+    <div style="color:var(--muted);font-size:12px;">Memuat...</div>
+  </div>
+
+  <div class="section-title"><div class="left">Top Movers</div></div>
   <div class="movers-grid">
     <div class="movers-box">
       <h3>🚀 Top 5 Naik</h3>
@@ -190,17 +280,27 @@
     </div>
   </div>
 
-  <!-- SEMUA SAHAM -->
-  <div class="section-title">Semua Saham</div>
+  <div class="section-title"><div class="left">Semua Saham</div></div>
+
+  <div class="compare-bar" id="compare-bar">
+    <div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">Bandingkan:</div>
+    <div class="compare-list" id="compare-list"></div>
+    <button class="compare-btn" id="compareGo">Lihat Perbandingan</button>
+  </div>
+
   <div class="controls">
     <input type="text" class="search" id="search" placeholder="Cari kode saham...">
-    <div class="filters" id="filters">
+    <select class="select" id="sectorFilter">
+      <option value="all">Semua Sektor</option>
+    </select>
+    <div class="filters">
       <button class="filter active" data-filter="all">Semua</button>
       <button class="filter" data-filter="fav">⭐ Favorit</button>
       <button class="filter" data-filter="bull">Bullish</button>
       <button class="filter" data-filter="bear">Bearish</button>
     </div>
   </div>
+
   <div class="grid" id="grid">
     <div class="loading">
       <div class="loader"></div>
@@ -209,8 +309,12 @@
   </div>
 </div>
 
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modalContent"></div>
+</div>
+
 <div class="footer">
-  ⚠️ Bukan rekomendasi beli/jual. DYOR (Do Your Own Research).<br>
+  ⚠️ Bukan rekomendasi beli/jual. DYOR.<br>
   Data dari Yahoo Finance · Delay ~15 menit
 </div>
 
@@ -218,7 +322,38 @@
   let allData = [];
   let currentFilter = 'all';
   let currentSearch = '';
+  let currentSector = 'all';
   let favorites = JSON.parse(localStorage.getItem('saham_fav') || '[]');
+  let compareList = [];
+  let charts = {};
+
+  // THEME
+  const themeBtn = document.getElementById('themeBtn');
+  if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light');
+    themeBtn.textContent = '☀️';
+  }
+  themeBtn.addEventListener('click', () => {
+    document.body.classList.toggle('light');
+    const isLight = document.body.classList.contains('light');
+    themeBtn.textContent = isLight ? '☀️' : '🌙';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    render();
+  });
+
+  // CSV EXPORT
+  document.getElementById('csvBtn').addEventListener('click', () => {
+    if (!allData.length) return;
+    const headers = ['Kode','Sektor','Harga','Perubahan %','MA20','MA50','RSI','Verdict'];
+    const rows = allData.map(s => [s.kode, s.sektor, s.harga, s.perubahan, s.ma20, s.ma50, s.rsi, s.verdict]);
+    const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csv], {type: 'text/csv'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'saham_ihsg_' + new Date().toISOString().split('T')[0] + '.csv';
+    a.click();
+  });
 
   function toggleFav(kode) {
     const i = favorites.indexOf(kode);
@@ -229,10 +364,42 @@
   }
   window.toggleFav = toggleFav;
 
+  function toggleCompare(kode, e) {
+    e.stopPropagation();
+    const i = compareList.indexOf(kode);
+    if (i >= 0) compareList.splice(i, 1);
+    else if (compareList.length < 3) compareList.push(kode);
+    else alert('Maksimal 3 saham untuk dibandingkan');
+    renderCompareBar();
+    render();
+  }
+  window.toggleCompare = toggleCompare;
+
+  function renderCompareBar() {
+    const bar = document.getElementById('compare-bar');
+    const list = document.getElementById('compare-list');
+    if (compareList.length === 0) {
+      bar.classList.remove('show');
+      return;
+    }
+    bar.classList.add('show');
+    list.innerHTML = compareList.map(k =>
+      `<div class="compare-tag">${k}<button onclick="toggleCompare('${k}', event)">×</button></div>`
+    ).join('');
+  }
+
+  document.getElementById('compareGo').addEventListener('click', () => {
+    if (compareList.length < 2) {
+      alert('Pilih minimal 2 saham untuk dibandingkan');
+      return;
+    }
+    showCompareModal();
+  });
+
   async function loadData() {
     try {
       const r = await fetch('data.json?v=' + Date.now());
-      if (!r.ok) throw new Error('data.json tidak ditemukan');
+      if (!r.ok) throw new Error('not found');
       const data = await r.json();
       allData = data.saham || [];
       document.getElementById('updated').textContent = 'Update terakhir: ' + (data.updated || '-');
@@ -241,8 +408,11 @@
       document.getElementById('stat-total').textContent = allData.length;
       document.getElementById('stat-bull').textContent = bull;
       document.getElementById('stat-bear').textContent = bear;
+      document.getElementById('stat-alert').textContent = (data.alerts || []).length;
       
+      renderAlerts(data.alerts || []);
       renderMovers(data.top_naik || [], data.top_turun || []);
+      buildSectorFilter();
       render();
     } catch (e) {
       document.getElementById('grid').innerHTML =
@@ -250,21 +420,164 @@
     }
   }
 
+  function renderAlerts(alerts) {
+    const box = document.getElementById('alerts-box');
+    if (alerts.length === 0) {
+      box.innerHTML = '<div style="color:var(--muted);font-size:12px;">✨ Tidak ada alert hari ini. Semua tenang.</div>';
+      return;
+    }
+    box.innerHTML = alerts.map(a =>
+      `<div class="alert-item alert-${a.tipe}">
+        <span class="alert-kode">${a.kode}</span>
+        <span>${a.pesan}</span>
+      </div>`
+    ).join('');
+  }
+
+  function buildSectorFilter() {
+    const sectors = [...new Set(allData.map(x => x.sektor))].sort();
+    const sel = document.getElementById('sectorFilter');
+    sel.innerHTML = '<option value="all">Semua Sektor</option>' +
+      sectors.map(s => `<option value="${s}">${s}</option>`).join('');
+    sel.addEventListener('change', e => {
+      currentSector = e.target.value;
+      render();
+    });
+  }
+
   function renderMovers(naik, turun) {
-    const naikEl = document.getElementById('top-naik');
-    const turunEl = document.getElementById('top-turun');
-    naikEl.innerHTML = naik.map(x =>
-      `<div class="mover-item">
+    document.getElementById('top-naik').innerHTML = naik.map(x =>
+      `<div class="mover-item" onclick="showDetail('${x.kode}')">
         <span class="kode-mover">${x.kode}</span>
         <span class="val up">+${x.perubahan}%</span>
       </div>`
-    ).join('') || '<div style="color:var(--muted);font-size:12px;">Belum ada data</div>';
-    turunEl.innerHTML = turun.map(x =>
-      `<div class="mover-item">
+    ).join('') || '<div style="color:var(--muted);font-size:12px;">-</div>';
+    document.getElementById('top-turun').innerHTML = turun.map(x =>
+      `<div class="mover-item" onclick="showDetail('${x.kode}')">
         <span class="kode-mover">${x.kode}</span>
         <span class="val down">${x.perubahan}%</span>
       </div>`
-    ).join('') || '<div style="color:var(--muted);font-size:12px;">Belum ada data</div>';
+    ).join('') || '<div style="color:var(--muted);font-size:12px;">-</div>';
+  }
+
+  function showDetail(kode) {
+    const s = allData.find(x => x.kode === kode);
+    if (!s) return;
+    const action = s.skor >= 2 ? {cls: 'buy', txt: '📈 Sinyal Beli — Tren Bullish'} :
+                   s.skor <= -2 ? {cls: 'sell', txt: '📉 Sinyal Jual — Tren Bearish'} :
+                   {cls: 'hold', txt: '⏸️ Tahan — Belum Ada Sinyal Kuat'};
+    const modal = document.getElementById('modalContent');
+    modal.innerHTML = `
+      <div class="modal-head">
+        <div>
+          <h2>${s.kode}</h2>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px;">${s.sektor}</div>
+        </div>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div style="font-size:20px;font-weight:700;">
+        Rp ${s.harga.toLocaleString('id-ID')}
+        <span class="${s.perubahan >= 0 ? 'up' : 'down'}" style="font-size:14px;margin-left:8px;">
+          ${s.perubahan >= 0 ? '▲' : '▼'} ${s.perubahan}%
+        </span>
+      </div>
+      <div class="modal-chart"><canvas id="modalChart"></canvas></div>
+      <div class="modal-stats">
+        <div class="modal-stat"><div class="label">MA20</div><div class="val">${s.ma20.toLocaleString('id-ID')}</div></div>
+        <div class="modal-stat"><div class="label">MA50</div><div class="val">${s.ma50.toLocaleString('id-ID')}</div></div>
+        <div class="modal-stat"><div class="label">RSI</div><div class="val">${s.rsi}</div></div>
+      </div>
+      <div class="modal-action action-${action.cls}">${action.txt}</div>
+    `;
+    document.getElementById('modalBg').classList.add('show');
+    
+    setTimeout(() => {
+      const ctx = document.getElementById('modalChart');
+      if (charts.modal) charts.modal.destroy();
+      charts.modal = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: s.historis.map(h => h.tgl),
+          datasets: [{
+            data: s.historis.map(h => h.harga),
+            borderColor: s.perubahan >= 0 ? '#26d07c' : '#ff4d4f',
+            backgroundColor: (s.perubahan >= 0 ? '#26d07c' : '#ff4d4f') + '20',
+            borderWidth: 2, fill: true, tension: 0.35,
+            pointRadius: 0, pointHoverRadius: 5
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {legend: {display: false}},
+          scales: {
+            x: {grid: {color: 'rgba(255,255,255,0.05)'}, ticks: {color: '#7a8699', font: {size: 9}}},
+            y: {grid: {color: 'rgba(255,255,255,0.05)'}, ticks: {color: '#7a8699', font: {size: 9}}}
+          }
+        }
+      });
+    }, 50);
+  }
+  window.showDetail = showDetail;
+
+  function closeModal() {
+    document.getElementById('modalBg').classList.remove('show');
+  }
+  window.closeModal = closeModal;
+
+  document.getElementById('modalBg').addEventListener('click', e => {
+    if (e.target.id === 'modalBg') closeModal();
+  });
+
+  function showCompareModal() {
+    const stocks = compareList.map(k => allData.find(x => x.kode === k)).filter(Boolean);
+    const colors = ['#26d07c', '#4a9eff', '#d4a84b'];
+    const modal = document.getElementById('modalContent');
+    modal.innerHTML = `
+      <div class="modal-head">
+        <h2>Perbandingan Saham</h2>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-chart"><canvas id="compareChart"></canvas></div>
+      <div style="display:grid;gap:8px;margin-top:16px;">
+        ${stocks.map((s, i) => `
+          <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center;">
+            <div><span style="color:${colors[i]};font-weight:700;">${s.kode}</span> <span style="color:var(--muted);font-size:11px;">${s.sektor}</span></div>
+            <div style="text-align:right;">
+              <div style="font-weight:600;">Rp ${s.harga.toLocaleString('id-ID')}</div>
+              <div class="${s.perubahan >= 0 ? 'up' : 'down'}" style="font-size:11px;">${s.perubahan >= 0 ? '+' : ''}${s.perubahan}%</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    document.getElementById('modalBg').classList.add('show');
+    
+    setTimeout(() => {
+      const ctx = document.getElementById('compareChart');
+      if (charts.compare) charts.compare.destroy();
+      const maxLen = Math.max(...stocks.map(s => s.historis.length));
+      const labels = stocks[0].historis.map(h => h.tgl);
+      charts.compare = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: stocks.map((s, i) => ({
+            label: s.kode,
+            data: s.historis.map(h => h.harga),
+            borderColor: colors[i],
+            borderWidth: 2, tension: 0.35, pointRadius: 0
+          }))
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {legend: {labels: {color: '#e6edf3', font: {size: 11}}}},
+          scales: {
+            x: {grid: {color: 'rgba(255,255,255,0.05)'}, ticks: {color: '#7a8699', font: {size: 9}}},
+            y: {grid: {color: 'rgba(255,255,255,0.05)'}, ticks: {color: '#7a8699', font: {size: 9}}}
+          }
+        }
+      });
+    }, 50);
   }
 
   function render() {
@@ -275,34 +588,40 @@
     else if (currentFilter === 'bear') filtered = filtered.filter(x => x.skor <= -0.5);
     else if (currentFilter === 'fav') filtered = filtered.filter(x => favorites.includes(x.kode));
 
-    if (currentSearch) {
-      filtered = filtered.filter(x => x.kode.toLowerCase().includes(currentSearch.toLowerCase()));
-    }
+    if (currentSector !== 'all') filtered = filtered.filter(x => x.sektor === currentSector);
+    if (currentSearch) filtered = filtered.filter(x => x.kode.toLowerCase().includes(currentSearch.toLowerCase()));
 
     if (filtered.length === 0) {
       grid.innerHTML = '<div class="empty">Tidak ada saham yang cocok.</div>';
       return;
     }
 
+    // Destroy old charts
+    Object.keys(charts).forEach(k => {
+      if (k !== 'modal' && k !== 'compare') {
+        charts[k].destroy();
+        delete charts[k];
+      }
+    });
+
     grid.innerHTML = filtered.map((s, i) => {
       const up = s.perubahan >= 0;
-      const arrow = up ? '▲' : '▼';
-      const cls = up ? 'up' : 'down';
-      const sign = up ? '+' : '';
       const isFav = favorites.includes(s.kode);
+      const inCompare = compareList.includes(s.kode);
       const sinyalHtml = s.sinyal.length > 0
         ? '<div class="sinyal">' + s.sinyal.map(x => '<span class="sinyal-item">' + x + '</span>').join('') + '</div>'
         : '';
       return `
-        <div class="card ${s.level}">
+        <div class="card ${s.level}" onclick="showDetail('${s.kode}')">
           <div class="card-head">
             <div>
               <div class="kode">${s.kode}</div>
-              <div class="harga">Rp <span>${s.harga.toLocaleString('id-ID')}</span> · <span class="${cls}">${arrow} ${sign}${s.perubahan}%</span></div>
+              <div class="sektor">${s.sektor}</div>
             </div>
-            <button class="star ${isFav ? 'on' : ''}" onclick="event.stopPropagation();toggleFav('${s.kode}')">${isFav ? '★' : '☆'}</button>
           </div>
+          <button class="star ${isFav ? 'on' : ''}" onclick="event.stopPropagation();toggleFav('${s.kode}')">${isFav ? '★' : '☆'}</button>
           <div class="verdict v-${s.level}">${s.verdict}</div>
+          <div class="harga" style="margin-top:8px;">Rp <span>${s.harga.toLocaleString('id-ID')}</span> · <span class="${up ? 'up' : 'down'}">${up ? '▲' : '▼'} ${up ? '+' : ''}${s.perubahan}%</span></div>
           <div class="chart-wrap"><canvas id="chart-${i}"></canvas></div>
           <div class="metrics">
             <div class="metric"><div class="label">MA20</div><div class="val">${s.ma20.toLocaleString('id-ID')}</div></div>
@@ -310,46 +629,32 @@
             <div class="metric"><div class="label">RSI</div><div class="val">${s.rsi}</div></div>
           </div>
           ${sinyalHtml}
+          <button onclick="toggleCompare('${s.kode}', event)" style="margin-top:10px;width:100%;background:${inCompare ? 'var(--gold)' : 'transparent'};color:${inCompare ? '#000' : 'var(--muted)'};border:1px solid ${inCompare ? 'var(--gold)' : 'var(--line)'};padding:6px;border-radius:6px;font-size:10px;cursor:pointer;letter-spacing:0.5px;">
+            ${inCompare ? '✓ DIPILIH' : '+ BANDINGKAN'}
+          </button>
         </div>
       `;
     }).join('');
 
-    // Render charts
     filtered.forEach((s, i) => {
       if (!s.historis || s.historis.length === 0) return;
       const ctx = document.getElementById('chart-' + i);
       if (!ctx) return;
-      const labels = s.historis.map(h => h.tgl);
-      const data = s.historis.map(h => h.harga);
       const up = s.perubahan >= 0;
       const color = up ? '#26d07c' : '#ff4d4f';
-      new Chart(ctx, {
+      charts['card-' + i] = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: labels,
+          labels: s.historis.map(h => h.tgl),
           datasets: [{
-            data: data,
-            borderColor: color,
-            backgroundColor: color + '20',
-            borderWidth: 1.5,
-            fill: true,
-            tension: 0.35,
-            pointRadius: 0,
-            pointHoverRadius: 3
+            data: s.historis.map(h => h.harga),
+            borderColor: color, backgroundColor: color + '20',
+            borderWidth: 1.5, fill: true, tension: 0.35, pointRadius: 0
           }]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {legend: {display: false}, tooltip: {
-            backgroundColor: '#161d2b',
-            borderColor: '#232c3d',
-            borderWidth: 1,
-            titleColor: '#e6edf3',
-            bodyColor: '#e6edf3',
-            displayColors: false,
-            callbacks: {label: (ctx) => 'Rp ' + ctx.parsed.y.toLocaleString('id-ID')}
-          }},
+          responsive: true, maintainAspectRatio: false,
+          plugins: {legend: {display: false}},
           scales: {x: {display: false}, y: {display: false}},
           interaction: {intersect: false, mode: 'index'}
         }
