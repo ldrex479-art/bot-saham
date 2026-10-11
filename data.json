@@ -1,5 +1,5 @@
 {
-  "updated": "11 Oct 2026 13:42 WIB",
+  "updated": "11 Oct 2026 13:48 WIB",
   "total": 51,
   "top_naik": [
     {
@@ -37328,9 +37328,9 @@
       "perubahan": 0.0,
       "ma20": 14.0,
       "ma50": 14.0,
-      "rsi": NaN,
+      "rsi": 50,
       "volume": 0,
-      "vol_ratio": 1,
+      "vol_ratio": 0.0,
       "verdict": "CENDERUNG TURUN",
       "level": "mild-bear",
       "confidence": 20,
@@ -42494,9 +42494,9 @@
       "perubahan": 0.0,
       "ma20": 204.0,
       "ma50": 204.0,
-      "rsi": NaN,
+      "rsi": 50,
       "volume": 0,
-      "vol_ratio": 1,
+      "vol_ratio": 0.0,
       "verdict": "CENDERUNG TURUN",
       "level": "mild-bear",
       "confidence": 20,
