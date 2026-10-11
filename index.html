@@ -1161,3 +1161,45 @@ document.getElementById('runScreener').addEventListener('click',()=>{
   if(sig==='bull')res=res.filter(s=>s.skor>=0.5);else if(sig==='bear')res=res.filter(s=>s.skor<=-0.5);
   document.querySelectorAll('.preset').forEach(x=>x.classList.remove('active'));
   playSound('click');
+  displayScreenResults(res);
+});
+
+document.getElementById('newsSearch').addEventListener('input',e=>{
+  const q=e.target.value.toLowerCase();
+  document.querySelectorAll('.news-item').forEach(item=>{
+    const title=item.querySelector('h4').textContent.toLowerCase();
+    item.style.display=title.includes(q)?'block':'none';
+  });
+});
+
+async function loadNews(){
+  const el=document.getElementById('news-container');
+  if(el.dataset.loaded==='1')return;
+  el.innerHTML='<div class="loading"><div class="loader"></div>Memuat berita...</div>';
+  try{
+    const rssUrl='https://www.cnbcindonesia.com/market/rss';
+    const proxy='https://api.allorigins.win/get?url='+encodeURIComponent(rssUrl);
+    const r=await fetch(proxy);
+    const j=await r.json();
+    const parser=new DOMParser();
+    const xml=parser.parseFromString(j.contents,'text/xml');
+    const items=[...xml.querySelectorAll('item')].slice(0,20);
+    if(!items.length)throw 0;
+    el.innerHTML=items.map(it=>{
+      const title=it.querySelector('title')?.textContent||'';
+      const link=it.querySelector('link')?.textContent||'';
+      const pub=it.querySelector('pubDate')?.textContent||'';
+      const dt=new Date(pub);
+      const dtStr=isNaN(dt)?pub:dt.toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+      return `<div class="news-item"><a href="${link}" target="_blank"><div class="nicon">📰</div><div style="flex:1;"><h4>${title}</h4><div class="meta"><span>🇮🇩 CNBC Indonesia</span><span>${dtStr}</span></div></div></a></div>`;
+    }).join('');
+    el.dataset.loaded='1';
+  }catch(e){
+    el.innerHTML='<div class="empty">❌ Gagal memuat berita. Coba refresh.</div>';
+  }
+}
+
+loadData();
+</script>
+</body>
+</html>
