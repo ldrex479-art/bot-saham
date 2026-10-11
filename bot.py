@@ -39,6 +39,15 @@ def analisis_saham(kode):
         ma50 = float(last['MA50'])
         rsi = float(last['RSI'])
 
+        # Data historis 30 hari buat chart
+        hist = df.tail(30)
+        historis = []
+        for idx, row in hist.iterrows():
+            historis.append({
+                'tgl': idx.strftime("%d/%m"),
+                'harga': round(float(row['Close']), 0)
+            })
+
         skor = 0
         sinyal = []
 
@@ -93,7 +102,8 @@ def analisis_saham(kode):
             'verdict': verdict,
             'level': level,
             'sinyal': sinyal,
-            'skor': skor
+            'skor': skor,
+            'historis': historis
         }
     except Exception as e:
         print(f"Error {kode}: {e}")
@@ -111,16 +121,22 @@ def main():
 
     hasil.sort(key=lambda x: x['skor'], reverse=True)
 
+    # Top movers
+    naik = sorted(hasil, key=lambda x: x['perubahan'], reverse=True)[:5]
+    turun = sorted(hasil, key=lambda x: x['perubahan'])[:5]
+
     output = {
         'updated': datetime.now().strftime("%d %b %Y %H:%M WIB"),
         'total': len(hasil),
+        'top_naik': [{'kode': x['kode'], 'perubahan': x['perubahan'], 'harga': x['harga']} for x in naik],
+        'top_turun': [{'kode': x['kode'], 'perubahan': x['perubahan'], 'harga': x['harga']} for x in turun],
         'saham': hasil
     }
 
     with open('data.json', 'w', encoding='utf-8') as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
 
-    print(f"\n✅ data.json tersimpan dengan {len(hasil)} saham.")
+    print(f"\n data.json tersimpan dengan {len(hasil)} saham.")
 
 
 if __name__ == "__main__":
