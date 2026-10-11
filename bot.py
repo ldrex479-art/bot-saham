@@ -1,56 +1,285 @@
 import json
 import math
+import random
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import yfinance as yf
 import pandas as pd
 from datetime import datetime
 
-WATCHLIST = [
-    # Perbankan (12)
-    ("BBCA.JK","Perbankan"),("BBRI.JK","Perbankan"),("BMRI.JK","Perbankan"),("BBNI.JK","Perbankan"),
-    ("ARTO.JK","Perbankan"),("BRIS.JK","Perbankan"),("BTPS.JK","Perbankan"),("BNGA.JK","Perbankan"),
-    ("BDMN.JK","Perbankan"),("BJBR.JK","Perbankan"),("BJTM.JK","Perbankan"),("NISP.JK","Perbankan"),
-    # Telekomunikasi (5)
-    ("TLKM.JK","Telekomunikasi"),("ISAT.JK","Telekomunikasi"),("EXCL.JK","Telekomunikasi"),
-    ("TOWR.JK","Telekomunikasi"),("MTEL.JK","Telekomunikasi"),
-    # Otomotif (5)
-    ("ASII.JK","Otomotif"),("AUTO.JK","Otomotif"),("SMSM.JK","Otomotif"),("INDS.JK","Otomotif"),("GJTL.JK","Otomotif"),
-    # Konsumer (10)
-    ("UNVR.JK","Konsumer"),("ICBP.JK","Konsumer"),("INDF.JK","Konsumer"),("MYOR.JK","Konsumer"),
-    ("GGRM.JK","Konsumer"),("HMSP.JK","Konsumer"),("WIIM.JK","Konsumer"),("CPIN.JK","Konsumer"),
-    ("JPFA.JK","Konsumer"),("SIDO.JK","Konsumer"),
-    # Kesehatan (5)
-    ("KLBF.JK","Kesehatan"),("KAEF.JK","Kesehatan"),("MIKA.JK","Kesehatan"),
-    ("HEAL.JK","Kesehatan"),("SILO.JK","Kesehatan"),
-    # Tambang (10)
-    ("ANTM.JK","Tambang"),("PTBA.JK","Tambang"),("ADRO.JK","Tambang"),("MDKA.JK","Tambang"),
-    ("INCO.JK","Tambang"),("TINS.JK","Tambang"),("ITMG.JK","Tambang"),("HRUM.JK","Tambang"),
-    ("BYAN.JK","Tambang"),("GEMS.JK","Tambang"),
-    # Semen (5)
-    ("SMGR.JK","Semen"),("INTP.JK","Semen"),("WSBP.JK","Semen"),("SMCB.JK","Semen"),("SMBR.JK","Semen"),
-    # Teknologi (6)
-    ("GOTO.JK","Teknologi"),("BUKA.JK","Teknologi"),("EMTK.JK","Teknologi"),
-    ("DCII.JK","Teknologi"),("MTDL.JK","Teknologi"),("MLPT.JK","Teknologi"),
-    # Energi (8)
-    ("PGAS.JK","Energi"),("MEDC.JK","Energi"),("BRPT.JK","Energi"),("TPIA.JK","Energi"),
-    ("AKRA.JK","Energi"),("ESSA.JK","Energi"),("RAJA.JK","Energi"),("ELSA.JK","Energi"),
-    # Properti (8)
-    ("BSDE.JK","Properti"),("CTRA.JK","Properti"),("PWON.JK","Properti"),("SMRA.JK","Properti"),
-    ("LPKR.JK","Properti"),("ASRI.JK","Properti"),("DILD.JK","Properti"),("APLN.JK","Properti"),
-    # Infrastruktur (6)
-    ("JSMR.JK","Infrastruktur"),("WIKA.JK","Infrastruktur"),("WSKT.JK","Infrastruktur"),
-    ("PTPP.JK","Infrastruktur"),("ADHI.JK","Infrastruktur"),("TOTL.JK","Infrastruktur"),
-    # Agrikultur (5)
-    ("AALI.JK","Agrikultur"),("LSIP.JK","Agrikultur"),("SIMP.JK","Agrikultur"),
-    ("SGRO.JK","Agrikultur"),("TBLA.JK","Agrikultur"),
-    # Logistik (4)
-    ("ASSA.JK","Logistik"),("SMDR.JK","Logistik"),("TMAS.JK","Logistik"),("BIRD.JK","Logistik"),
-    # Ritel (5)
-    ("ACES.JK","Ritel"),("MAPI.JK","Ritel"),("LPPF.JK","Ritel"),("RALS.JK","Ritel"),("AMRT.JK","Ritel"),
-    # Multifinance (3)
-    ("BFIN.JK","Multifinance"),("ADMF.JK","Multifinance"),("MFIN.JK","Multifinance"),
-    # Asuransi (1)
-    ("PNIN.JK","Asuransi"),
-]
+# Format: KODE|Sektor
+RAW_LIST = """
+BBCA|Perbankan
+BBRI|Perbankan
+BMRI|Perbankan
+BBNI|Perbankan
+ARTO|Perbankan
+BRIS|Perbankan
+BTPS|Perbankan
+BNGA|Perbankan
+BDMN|Perbankan
+BJBR|Perbankan
+BJTM|Perbankan
+NISP|Perbankan
+BBTN|Perbankan
+BBYB|Perbankan
+AGRO|Perbankan
+PNBN|Perbankan
+MEGA|Perbankan
+BACA|Perbankan
+BCAP|Perbankan
+BFIN|Multifinance
+ADMF|Multifinance
+MFIN|Multifinance
+CFIN|Multifinance
+WOMF|Multifinance
+PNIN|Asuransi
+ASBI|Asuransi
+LIFE|Asuransi
+AMAG|Asuransi
+ABDA|Asuransi
+MPMX|Asuransi
+TLKM|Telekomunikasi
+ISAT|Telekomunikasi
+EXCL|Telekomunikasi
+TOWR|Telekomunikasi
+MTEL|Telekomunikasi
+TBIG|Telekomunikasi
+ASII|Otomotif
+AUTO|Otomotif
+SMSM|Otomotif
+INDS|Otomotif
+GJTL|Otomotif
+IMAS|Otomotif
+BIRD|Otomotif
+UNVR|Konsumer
+ICBP|Konsumer
+INDF|Konsumer
+MYOR|Konsumer
+GGRM|Konsumer
+HMSP|Konsumer
+WIIM|Konsumer
+CPIN|Konsumer
+JPFA|Konsumer
+MAIN|Konsumer
+SIDO|Konsumer
+DLTA|Konsumer
+MLBI|Konsumer
+ROTI|Konsumer
+CAMP|Konsumer
+AISA|Konsumer
+ULTJ|Konsumer
+STTP|Konsumer
+TBLA|Konsumer
+LSIP|Agrikultur
+AALI|Agrikultur
+SIMP|Agrikultur
+SGRO|Agrikultur
+DSNG|Agrikultur
+ANJT|Agrikultur
+BWPT|Agrikultur
+PALM|Agrikultur
+SSMS|Agrikultur
+KLBF|Kesehatan
+KAEF|Kesehatan
+MIKA|Kesehatan
+HEAL|Kesehatan
+SILO|Kesehatan
+SAME|Kesehatan
+PRDA|Kesehatan
+IRRA|Kesehatan
+TSPC|Kesehatan
+PEHA|Kesehatan
+DVLA|Kesehatan
+SDPC|Kesehatan
+ANTM|Tambang
+PTBA|Tambang
+ADRO|Tambang
+MDKA|Tambang
+INCO|Tambang
+TINS|Tambang
+ITMG|Tambang
+HRUM|Tambang
+BYAN|Tambang
+GEMS|Tambang
+BUMI|Tambang
+TOBA|Tambang
+DOID|Tambang
+PTRO|Tambang
+MBAP|Tambang
+BSSR|Tambang
+INDY|Tambang
+PTRO|Tambang
+SGER|Tambang
+KKGI|Tambang
+MYOH|Tambang
+FIRE|Tambang
+SMGR|Semen
+INTP|Semen
+WSBP|Semen
+SMCB|Semen
+SMBR|Semen
+ARNA|Semen
+TOTO|Semen
+GOTO|Teknologi
+BUKA|Teknologi
+EMTK|Teknologi
+DCII|Teknologi
+MTDL|Teknologi
+MLPT|Teknologi
+DMMX|Teknologi
+WIFI|Teknologi
+KREN|Teknologi
+LMAS|Teknologi
+TECH|Teknologi
+NFCX|Teknologi
+PGAS|Energi
+MEDC|Energi
+BRPT|Energi
+TPIA|Energi
+AKRA|Energi
+ESSA|Energi
+RAJA|Energi
+ELSA|Energi
+ENRG|Energi
+BULL|Energi
+SURE|Energi
+PSAB|Energi
+ARTI|Energi
+BSDE|Properti
+CTRA|Properti
+PWON|Properti
+SMRA|Properti
+LPKR|Properti
+ASRI|Properti
+DILD|Properti
+APLN|Properti
+KIJA|Properti
+DMAS|Properti
+BKSL|Properti
+MDLN|Properti
+BEST|Properti
+PPRO|Properti
+RDTX|Properti
+KOTA|Properti
+JSMR|Infrastruktur
+WIKA|Infrastruktur
+WSKT|Infrastruktur
+PTPP|Infrastruktur
+ADHI|Infrastruktur
+TOTL|Infrastruktur
+NRCA|Infrastruktur
+ACST|Infrastruktur
+MTRA|Infrastruktur
+IPCM|Infrastruktur
+ASSA|Logistik
+SMDR|Logistik
+TMAS|Logistik
+HITS|Logistik
+SOCA|Logistik
+BIRD|Logistik
+SAFE|Logistik
+WEHA|Logistik
+LEAD|Logistik
+ACES|Ritel
+MAPI|Ritel
+LPPF|Ritel
+RALS|Ritel
+AMRT|Ritel
+CSAP|Ritel
+MIDI|Ritel
+HERO|Ritel
+ERAA|Ritel
+RANC|Ritel
+DPUM|Ritel
+KOIN|Ritel
+LION|Industri
+KRAS|Industri
+INAI|Industri
+BAJA|Industri
+JKSW|Industri
+GGRP|Industri
+ISSP|Industri
+LMSH|Industri
+KBLI|Industri
+KBLM|Industri
+PICO|Industri
+SCCO|Industri
+IKAI|Industri
+INTA|Industri
+ALKA|Industri
+BMSR|Industri
+SRIL|Tekstil
+TRIS|Tekstil
+RICY|Tekstil
+UNIT|Tekstil
+ARGO|Tekstil
+CNTX|Tekstil
+ESTI|Tekstil
+POLY|Tekstil
+HMSP|Konsumer
+RMBA|Konsumer
+BATI|Konsumer
+ITIC|Konsumer
+ASDM|Konsumer
+NICL|Tambang
+ZINC|Tambang
+CITA|Tambang
+PSAB|Tambang
+DKFT|Tambang
+IFSH|Tambang
+TIRT|Industri
+INOV|Teknologi
+POWR|Energi
+KEEN|Energi
+TGRA|Energi
+PSSI|Energi
+META|Properti
+MTLA|Properti
+BAPI|Properti
+BSSR|Tambang
+LUCY|Ritel
+SOTS|Ritel
+SRAJ|Kesehatan
+PRIM|Kesehatan
+BMHS|Kesehatan
+RSGK|Kesehatan
+BABP|Perbankan
+BBHI|Perbankan
+BBKP|Perbankan
+BCIC|Perbankan
+BEKS|Perbankan
+BINA|Perbankan
+BMAS|Perbankan
+BNBA|Perbankan
+BNII|Perbankan
+BSIM|Perbankan
+BTPN|Perbankan
+BVIC|Perbankan
+DNAR|Perbankan
+INPC|Perbankan
+MAYA|Perbankan
+MCOR|Perbankan
+NICK|Perbankan
+NOBU|Perbankan
+BANK|Perbankan
+AGRS|Perbankan
+AMAR|Perbankan
+BBHI|Perbankan
+BBMD|Perbankan
+BCAP|Perbankan
+BGTG|Perbankan
+BKSW|Perbankan
+BMRI|Perbankan
+BNLI|Perbankan
+BSWD|Perbankan
+MASB|Perbankan
+PNBS|Perbankan
+VRNA|Perbankan
+YELO|Perbankan
+"""
+
+WATCHLIST = [tuple(line.split('|')) for line in RAW_LIST.strip().split('\n') if line.strip()]
 
 
 def safe(v, default=0):
@@ -73,29 +302,28 @@ def safe_int(v, default=0):
         return default
 
 
-def analisis_saham(kode, sektor):
+def analisis_saham(item):
+    kode_short, sektor = item
+    kode = kode_short + ".JK"
     try:
-        df = yf.download(kode, period="6mo", interval="1d", progress=False, auto_adjust=True)
-        if df.empty or len(df) < 50:
+        df = yf.download(kode, period="3mo", interval="1d", progress=False, auto_adjust=True, threads=False)
+        if df.empty or len(df) < 30:
             return None
         if isinstance(df.columns, pd.MultiIndex):
             df.columns = df.columns.get_level_values(0)
 
         close = df['Close']
-        high = df['High']
-        low = df['Low']
         df['MA20'] = close.rolling(20).mean()
         df['MA50'] = close.rolling(50).mean()
-        df['BB_std'] = close.rolling(20).std()
-        df['BB_upper'] = df['MA20'] + 2 * df['BB_std']
-        df['BB_lower'] = df['MA20'] - 2 * df['BB_std']
 
         delta = close.diff()
         gain = delta.where(delta > 0, 0).rolling(14).mean()
         loss = (-delta.where(delta < 0, 0)).rolling(14).mean()
         df['RSI'] = 100 - (100 / (1 + gain / loss))
 
-        last, prev = df.iloc[-1], df.iloc[-2]
+        last = df.iloc[-1]
+        prev = df.iloc[-2]
+
         harga = safe(last['Close'])
         if harga == 0:
             return None
@@ -108,13 +336,8 @@ def analisis_saham(kode, sektor):
         ma50 = safe(last['MA50'])
         rsi = safe(last['RSI'], 50)
 
-        # 52w high/low
-        high_52w = safe(high.max())
-        low_52w = safe(low.min())
-        pos_52w = ((harga - low_52w) / (high_52w - low_52w) * 100) if (high_52w - low_52w) > 0 else 50
-
-        # OHLC 90 hari
-        hist = df.tail(90)
+        # Candles 60 hari
+        hist = df.tail(60)
         candles = []
         for idx, row in hist.iterrows():
             o, h, l, c = safe(row['Open']), safe(row['High']), safe(row['Low']), safe(row['Close'])
@@ -128,7 +351,7 @@ def analisis_saham(kode, sektor):
             })
 
         spark = [{'tgl': idx.strftime("%d/%m"), 'harga': round(safe(r['Close']), 0)}
-                 for idx, r in df.tail(30).iterrows() if safe(r['Close']) > 0]
+                 for idx, r in df.tail(20).iterrows() if safe(r['Close']) > 0]
 
         skor, sinyal, alerts = 0, [], []
         if ma20 > ma50: skor += 1
@@ -166,20 +389,15 @@ def analisis_saham(kode, sektor):
             vol_ratio = 0
 
         return {
-            'kode': kode.replace('.JK',''),
+            'kode': kode_short,
             'sektor': sektor,
             'harga': round(harga, 0),
             'perubahan': round(perubahan, 2),
             'ma20': round(ma20, 0),
             'ma50': round(ma50, 0),
             'rsi': round(rsi, 1),
-            'bb_upper': round(safe(last['BB_upper']), 0),
-            'bb_lower': round(safe(last['BB_lower']), 0),
             'volume': volume,
             'vol_ratio': vol_ratio,
-            'high_52w': round(high_52w, 0),
-            'low_52w': round(low_52w, 0),
-            'pos_52w': round(pos_52w, 1),
             'verdict': verdict,
             'level': level,
             'confidence': confidence,
@@ -190,38 +408,39 @@ def analisis_saham(kode, sektor):
             'spark': spark
         }
     except Exception as e:
-        print(f"Error {kode}: {e}")
         return None
 
 
 def main():
-    print(f"Analisis {len(WATCHLIST)} saham...")
+    print(f"Analisis {len(WATCHLIST)} saham (parallel)...")
     hasil = []
-    for kode, sektor in WATCHLIST:
-        h = analisis_saham(kode, sektor)
-        if h and h['harga'] > 0:
-            hasil.append(h)
-            print(f"  {h['kode']:6s} Rp {h['harga']:>8,.0f} | {h['verdict']}")
+    done = 0
+
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        futures = {executor.submit(analisis_saham, item): item for item in WATCHLIST}
+        for future in as_completed(futures):
+            done += 1
+            h = future.result()
+            if h and h['harga'] > 0:
+                hasil.append(h)
+                if done % 20 == 0 or done == len(WATCHLIST):
+                    print(f"  [{done}/{len(WATCHLIST)}] Berhasil: {len(hasil)}")
 
     hasil.sort(key=lambda x: x['skor'], reverse=True)
+    print(f"\nTotal berhasil: {len(hasil)} saham")
 
     naik = sorted(hasil, key=lambda x: x['perubahan'], reverse=True)[:5]
     turun = sorted(hasil, key=lambda x: x['perubahan'])[:5]
-
-    # Top by volume
-    top_volume = sorted(hasil, key=lambda x: x['volume'], reverse=True)[:5]
 
     all_alerts = []
     for h in hasil:
         for a in h['alerts']:
             all_alerts.append({'kode': h['kode'], **a})
 
-    # Sektor
     sec = {}
     for h in hasil:
         s = h['sektor']
-        if s not in sec:
-            sec[s] = {'total': 0, 'n': 0, 'bull': 0, 'bear': 0}
+        if s not in sec: sec[s] = {'total': 0, 'n': 0, 'bull': 0, 'bear': 0}
         sec[s]['total'] += h['perubahan']; sec[s]['n'] += 1
         if h['skor'] >= 0.5: sec[s]['bull'] += 1
         elif h['skor'] <= -0.5: sec[s]['bear'] += 1
@@ -229,7 +448,6 @@ def main():
                     'bull': v['bull'], 'bear': v['bear']} for k,v in sec.items()]
     sector_perf.sort(key=lambda x: x['avg'], reverse=True)
 
-    # Market breadth
     advancing = sum(1 for h in hasil if h['perubahan'] > 0)
     declining = sum(1 for h in hasil if h['perubahan'] < 0)
     unchanged = len(hasil) - advancing - declining
@@ -240,8 +458,7 @@ def main():
         'breadth': {'advancing': advancing, 'declining': declining, 'unchanged': unchanged},
         'top_naik': [{'kode': x['kode'], 'perubahan': x['perubahan'], 'harga': x['harga']} for x in naik],
         'top_turun': [{'kode': x['kode'], 'perubahan': x['perubahan'], 'harga': x['harga']} for x in turun],
-        'top_volume': [{'kode': x['kode'], 'volume': x['volume'], 'harga': x['harga']} for x in top_volume],
-        'alerts': all_alerts,
+        'alerts': all_alerts[:50],
         'sector_perf': sector_perf,
         'saham': hasil
     }
