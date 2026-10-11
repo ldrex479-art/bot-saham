@@ -1,12 +1,12 @@
+import os
+import requests
 import yfinance as yf
 import pandas as pd
-import requests
-import os
 from datetime import datetime
 
-# ===== AMBIL DARI ENVIRONMENT (GitHub Secrets) =====
-TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
-TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
+# ===== AMBIL DARI GITHUB SECRETS =====
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "").strip()
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
 
 WATCHLIST = [
     "BBCA.JK", "BBRI.JK", "BMRI.JK", "BBNI.JK", "TLKM.JK",
@@ -17,6 +17,13 @@ WATCHLIST = [
 
 
 def kirim_telegram(pesan):
+    """Kirim pesan ke Telegram, print detail kalau gagal."""
+    if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
+        print("❌ ERROR: TELEGRAM_TOKEN atau TELEGRAM_CHAT_ID kosong!")
+        print(f"   Token panjang: {len(TELEGRAM_TOKEN)} karakter")
+        print(f"   Chat ID: '{TELEGRAM_CHAT_ID}'")
+        return False
+
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     data = {
         "chat_id": TELEGRAM_CHAT_ID,
@@ -24,17 +31,26 @@ def kirim_telegram(pesan):
         "parse_mode": "HTML",
         "disable_web_page_preview": True
     }
+
+    print(f"📡 Kirim ke: chat_id={TELEGRAM_CHAT_ID}")
+    print(f"   Token prefix: {TELEGRAM_TOKEN[:15]}...")
+    print(f"   Token panjang: {len(TELEGRAM_TOKEN)} karakter")
+
     try:
-        r = requests.post(url, data=data, timeout=10)
+        r = requests.post(url, data=data, timeout=15)
+        print(f"   Status: {r.status_code}")
+        print(f"   Respon: {r.text[:300]}")
         return r.status_code == 200
     except Exception as e:
-        print(f"Error kirim Telegram: {e}")
+        print(f"❌ Exception: {e}")
         return False
 
 
-def analisis(kode):
+def analisis_saham(kode):
+    """Analisis satu saham."""
     try:
-        df = yf.download(kode, period="6mo", interval="1d", progress=False, auto_adjust=True)
+        df = yf.download(kode, period="6mo", interval="1d",
+                         progress=False, auto_adjust=True)
         if df.empty or len(df) < 50:
             return None
         if isinstance(df.columns, pd.MultiIndex):
@@ -79,16 +95,23 @@ def analisis(kode):
             sinyal.append(f"💎 OVERSOLD (RSI {rsi:.1f})")
             skor += 1
 
-        if skor >= 3: verdict = "🟢🟢 SANGAT BULLISH"
-        elif skor >= 2: verdict = "🟢 BULLISH"
-        elif skor >= 0.5: verdict = "🟡 CENDERUNG NAIK"
-        elif skor <= -3: verdict = "🔴🔴 SANGAT BEARISH"
-        elif skor <= -2: verdict = "🔴 BEARISH"
-        elif skor <= -0.5: verdict = "🟠 CENDERUNG TURUN"
-        else: verdict = "⚪ NETRAL"
+        if skor >= 3:
+            verdict = "🟢🟢 SANGAT BULLISH"
+        elif skor >= 2:
+            verdict = "🟢 BULLISH"
+        elif skor >= 0.5:
+            verdict = "🟡 CENDERUNG NAIK"
+        elif skor <= -3:
+            verdict = "🔴🔴 SANGAT BEARISH"
+        elif skor <= -2:
+            verdict = "🔴 BEARISH"
+        elif skor <= -0.5:
+            verdict = "🟠 CENDERUNG TURUN"
+        else:
+            verdict = "⚪ NETRAL"
 
         return {
-            'kode': kode.replace('.JK',''),
+            'kode': kode.replace('.JK', ''),
             'harga': harga,
             'ma20': ma20,
             'ma50': ma50,
@@ -98,21 +121,25 @@ def analisis(kode):
             'skor': skor
         }
     except Exception as e:
-        print(f"Error {kode}: {e}")
+        print(f"   Error {kode}: {e}")
         return None
 
 
 def main():
-    print(f"🔍 Analisis {len(WATCHLIST)} saham...")
+    print("=" * 50)
+    print(f"🤖 Bot Saham IHSG — {datetime.now().strftime('%d %b %Y %H:%M')}")
+    print("=" * 50)
+
+    print(f"\n🔍 Analisis {len(WATCHLIST)} saham...\n")
     hasil = []
     for kode in WATCHLIST:
-        h = analisis(kode)
+        h = analisis_saham(kode)
         if h:
             hasil.append(h)
             print(f"   {h['kode']}: Rp {h['harga']:,.0f} | {h['verdict']}")
 
     if not hasil:
-        print("❌ Tidak ada data")
+        print("\n❌ Tidak ada data saham. Cek koneksi / kode saham.")
         return
 
     hasil.sort(key=lambda x: x['skor'], reverse=True)
@@ -132,8 +159,15 @@ def main():
     pesan += "━" * 20 + "\n"
     pesan += "⚠️ <i>Bukan rekomendasi. DYOR.</i>"
 
+    print("\n" + "=" * 50)
+    print("📤 Kirim ke Telegram...")
+    print("=" * 50)
     ok = kirim_telegram(pesan)
-    print(f"📤 Telegram: {'✅' if ok else '❌'}")
+
+    if ok:
+        print("\n✅ SUKSES! Cek Telegram kamu.")
+    else:
+        print("\n❌ GAGAL kirim Telegram. Lihat detail di atas.")
 
 
 if __name__ == "__main__":
