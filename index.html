@@ -3,586 +3,728 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saham Indonesia — Premium Dashboard</title>
+    <title>Saham Indonesia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --bg-primary: #070b12;
-            --bg-secondary: #0d1421;
-            --bg-card: #131c2e;
-            --bg-hover: #1c2940;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --accent-green: #10b981;
-            --accent-red: #ef4444;
-            --accent-blue: #3b82f6;
-            --accent-gold: #f59e0b;
-            --accent-purple: #8b5cf6;
-            --accent-cyan: #06b6d4;
-            --border-color: #1e293b;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-            --radius: 14px;
-            --radius-sm: 10px;
-        }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e17;
+            color: #f3f4f6;
+            line-height: 1.5;
         }
 
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
-        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
-
-        /* HEADER */
+        /* ============ HEADER ============ */
         .header {
-            background: rgba(13, 20, 33, 0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
+            background: #111827;
+            border-bottom: 1px solid #2d3748;
             position: sticky;
             top: 0;
             z-index: 100;
-            padding: 0 24px;
+            padding: 0 20px;
         }
         .header-inner {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 64px;
-            max-width: 1600px;
+            height: 56px;
+            max-width: 1400px;
             margin: 0 auto;
-            gap: 16px;
         }
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 1.15rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
         }
         .logo-icon {
-            width: 40px; height: 40px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            border-radius: 10px;
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 8px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            font-size: 1rem;
         }
         .header-status {
-            display: flex; align-items: center; gap: 8px;
-            font-size: 0.75rem; color: var(--text-secondary);
-            background: var(--bg-card);
-            padding: 6px 14px; border-radius: 20px;
-            border: 1px solid var(--border-color);
+            display: flex; align-items: center; gap: 6px;
+            font-size: 0.75rem; color: #9ca3af;
+            background: #1a2332;
+            padding: 5px 12px; border-radius: 16px;
+            border: 1px solid #2d3748;
         }
         .status-dot {
-            width: 8px; height: 8px; border-radius: 50%;
-            background: var(--accent-red);
-            animation: pulse 2s infinite;
+            width: 6px; height: 6px; border-radius: 50%;
+            background: #ef4444;
         }
-        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-
-        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .header-actions { display: flex; align-items: center; gap: 8px; }
         .search-btn {
-            display: flex; align-items: center; gap: 10px;
-            padding: 8px 14px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            color: var(--text-secondary);
-            cursor: pointer; transition: all 0.2s; font-size: 0.8rem;
-        }
-        .search-btn:hover { border-color: var(--accent-blue); color: var(--text-primary); }
-        .search-btn kbd {
-            padding: 2px 6px; background: var(--bg-secondary);
-            border-radius: 4px; font-size: 0.65rem;
-            border: 1px solid var(--border-color);
-        }
-        .premium-badge {
-            display: flex; align-items: center; gap: 6px;
-            padding: 6px 14px;
-            background: linear-gradient(135deg, var(--accent-gold), #d97706);
-            border-radius: 20px; font-size: 0.7rem;
-            font-weight: 700; color: #000; cursor: pointer;
+            display: flex; align-items: center; gap: 8px;
+            padding: 6px 12px;
+            background: #1a2332;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 0.8rem;
             transition: all 0.2s;
         }
-        .premium-badge:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(245,158,11,0.5); }
+        .search-btn:hover { border-color: #3b82f6; color: #f3f4f6; }
+        .search-btn kbd {
+            padding: 1px 5px;
+            background: #111827;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            border: 1px solid #2d3748;
+        }
 
-        /* MAIN */
-        .main { max-width: 1600px; margin: 0 auto; padding: 24px; }
+        /* ============ MAIN ============ */
+        .main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-        /* TICKER */
+        /* ============ TICKER ============ */
         .ticker-wrap {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            overflow: hidden; margin-bottom: 24px;
+            background: #111827;
+            border: 1px solid #2d3748;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
         }
         .ticker {
             display: flex;
             animation: ticker 40s linear infinite;
-            white-space: nowrap; padding: 12px 0;
+            white-space: nowrap;
+            padding: 10px 0;
         }
-        @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
         .ticker-item {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 0 24px; font-size: 0.8rem;
-            border-right: 1px solid var(--border-color);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 20px;
+            font-size: 0.8rem;
+            border-right: 1px solid #2d3748;
         }
         .ticker-symbol { font-weight: 700; }
-        .ticker-price { color: var(--text-secondary); }
-        .ticker-change.up { color: var(--accent-green); }
-        .ticker-change.down { color: var(--accent-red); }
+        .ticker-price { color: #9ca3af; }
+        .ticker-change.up { color: #10b981; }
+        .ticker-change.down { color: #ef4444; }
 
-        /* TABS */
-        .tab-nav {
-            display: flex; gap: 4px;
-            background: var(--bg-secondary);
-            padding: 4px; border-radius: var(--radius-sm);
-            margin-bottom: 24px; overflow-x: auto;
-        }
-        .tab-btn {
-            padding: 10px 18px; background: transparent; border: none;
-            border-radius: 8px; color: var(--text-secondary);
-            font-size: 0.8rem; font-weight: 500;
-            cursor: pointer; transition: all 0.2s; white-space: nowrap;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .tab-btn:hover { color: var(--text-primary); }
-        .tab-btn.active { background: var(--bg-card); color: var(--text-primary); box-shadow: var(--shadow); }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-
-        /* CARDS */
-        .dashboard-grid {
+        /* ============ STATS ============ */
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 16px; margin-bottom: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
         }
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            padding: 20px; transition: all 0.3s;
-            position: relative; overflow: hidden;
+        .stat-card {
+            background: #1a2332;
+            border: 1px solid #2d3748;
+            border-radius: 10px;
+            padding: 16px;
+            transition: all 0.2s;
         }
-        .card::before {
-            content: ''; position: absolute;
-            top: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
-            opacity: 0; transition: opacity 0.3s;
+        .stat-card:hover {
+            border-color: #3b82f6;
         }
-        .card:hover::before { opacity: 1; }
-        .card:hover { border-color: var(--accent-blue); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-        .card-header {
-            display: flex; align-items: center;
-            justify-content: space-between; margin-bottom: 14px;
+        .stat-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
         }
-        .card-title {
-            font-size: 0.75rem; font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase; letter-spacing: 0.5px;
+        .stat-card-title {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
         }
-        .card-icon {
-            width: 36px; height: 36px; border-radius: 10px;
+        .stat-card-icon {
+            width: 32px; height: 32px;
+            border-radius: 8px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
-        .card-icon.green { background: rgba(16,185,129,0.15); color: var(--accent-green); }
-        .card-icon.red { background: rgba(239,68,68,0.15); color: var(--accent-red); }
-        .card-icon.blue { background: rgba(59,130,246,0.15); color: var(--accent-blue); }
-        .card-icon.gold { background: rgba(245,158,11,0.15); color: var(--accent-gold); }
-        .card-icon.purple { background: rgba(139,92,246,0.15); color: var(--accent-purple); }
-        .card-icon.cyan { background: rgba(6,182,212,0.15); color: var(--accent-cyan); }
+        .stat-card-icon.green { background: rgba(16,185,129,0.15); color: #10b981; }
+        .stat-card-icon.red { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .stat-card-icon.blue { background: rgba(59,130,246,0.15); color: #3b82f6; }
+        .stat-card-icon.gold { background: rgba(245,158,11,0.15); color: #f59e0b; }
+        .stat-card-icon.purple { background: rgba(139,92,246,0.15); color: #8b5cf6; }
 
-        .stat-value { font-size: 1.9rem; font-weight: 800; margin-bottom: 4px; letter-spacing: -1px; }
-        .stat-label { font-size: 0.75rem; color: var(--text-muted); }
-        .stat-change {
-            display: inline-flex; align-items: center; gap: 4px;
-            font-size: 0.75rem; font-weight: 600;
-            padding: 2px 8px; border-radius: 12px; margin-top: 8px;
+        .stat-card-value {
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin-bottom: 3px;
         }
-        .stat-change.up { background: rgba(16,185,129,0.15); color: var(--accent-green); }
-        .stat-change.down { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+        .stat-card-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
 
-        /* SECTION */
-        .section { margin-bottom: 24px; }
+        /* ============ SECTION ============ */
+        .section {
+            margin-bottom: 20px;
+        }
         .section-header {
-            display: flex; align-items: center;
-            justify-content: space-between; margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
         }
         .section-title {
-            font-size: 1rem; font-weight: 700;
-            display: flex; align-items: center; gap: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .section-title i { color: var(--accent-blue); }
+        .section-title i { color: #3b82f6; }
 
-        /* SENTIMENT BAR */
+        /* ============ SENTIMENT ============ */
+        .sentiment-card {
+            background: #1a2332;
+            border: 1px solid #2d3748;
+            border-radius: 10px;
+            padding: 16px;
+        }
         .sentiment-bar {
-            height: 8px; border-radius: 4px;
-            background: var(--bg-secondary);
-            overflow: hidden; display: flex; margin: 12px 0;
+            height: 8px;
+            border-radius: 4px;
+            background: #111827;
+            overflow: hidden;
+            display: flex;
+            margin: 12px 0;
         }
-        .sentiment-fill { height: 100%; transition: width 0.5s ease; }
-        .sentiment-bull { background: var(--accent-green); }
-        .sentiment-bear { background: var(--accent-red); }
+        .sentiment-fill { height: 100%; transition: width 0.5s; }
+        .sentiment-bull { background: #10b981; }
+        .sentiment-bear { background: #ef4444; }
         .sentiment-labels {
-            display: flex; justify-content: space-between;
-            font-size: 0.75rem; color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #9ca3af;
         }
 
-        /* SECTOR GRID */
+        /* ============ SECTOR ============ */
         .sector-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
         }
         .sector-item {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            padding: 14px; transition: all 0.2s; cursor: pointer;
+            background: #111827;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
         }
-        .sector-item:hover { border-color: var(--accent-blue); transform: scale(1.02); }
+        .sector-item:hover {
+            border-color: #3b82f6;
+            transform: scale(1.02);
+        }
         .sector-name {
-            font-size: 0.75rem; color: var(--text-secondary);
-            margin-bottom: 8px; display: flex;
-            align-items: center; gap: 6px;
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
-        .sector-value { font-size: 1.1rem; font-weight: 700; }
-        .sector-value.up { color: var(--accent-green); }
-        .sector-value.down { color: var(--accent-red); }
-        .sector-detail { font-size: 0.65rem; color: var(--text-muted); margin-top: 4px; }
-
-        /* MOVERS */
-        .movers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media (max-width: 768px) { .movers-grid { grid-template-columns: 1fr; } }
-        .mover-item {
-            display: flex; align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-sm);
-            margin-bottom: 8px; transition: all 0.2s; cursor: pointer;
+        .sector-value {
+            font-size: 1rem;
+            font-weight: 700;
         }
-        .mover-item:hover { background: var(--bg-hover); }
-        .mover-info { display: flex; align-items: center; gap: 12px; }
-        .mover-avatar {
-            width: 36px; height: 36px; border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; font-weight: 700;
-            background: var(--bg-card);
-        }
-        .mover-symbol { font-weight: 700; font-size: 0.85rem; }
-        .mover-name { font-size: 0.7rem; color: var(--text-muted); }
-        .mover-change { font-weight: 700; font-size: 0.9rem; }
-        .mover-change.up { color: var(--accent-green); }
-        .mover-change.down { color: var(--accent-red); }
-
-        /* TABLE */
-        .stock-table { width: 100%; border-collapse: collapse; }
-        .stock-table th {
-            text-align: left; padding: 12px 16px;
-            font-size: 0.7rem; color: var(--text-muted);
-            text-transform: uppercase; letter-spacing: 0.5px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .stock-table td {
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.85rem;
-        }
-        .stock-table tr { cursor: pointer; transition: background 0.2s; }
-        .stock-table tr:hover { background: var(--bg-hover); }
-        .stock-symbol { font-weight: 700; }
-        .stock-sector { font-size: 0.7rem; color: var(--text-muted); }
-
-        .badge {
-            display: inline-flex; align-items: center; gap: 4px;
-            padding: 4px 10px; border-radius: 12px;
-            font-size: 0.65rem; font-weight: 700;
-        }
-        .badge.bullish { background: rgba(16,185,129,0.15); color: var(--accent-green); }
-        .badge.bearish { background: rgba(239,68,68,0.15); color: var(--accent-red); }
-        .badge.neutral { background: rgba(107,114,128,0.15); color: var(--text-muted); }
-        .badge.very-bearish { background: rgba(239,68,68,0.25); color: #fca5a5; }
-        .badge.premium {
-            background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(139,92,246,0.2));
-            color: var(--accent-gold);
-            border: 1px solid rgba(245,158,11,0.3);
+        .sector-value.up { color: #10b981; }
+        .sector-value.down { color: #ef4444; }
+        .sector-detail {
+            font-size: 0.65rem;
+            color: #6b7280;
+            margin-top: 3px;
         }
 
-        .confidence-bar {
-            width: 60px; height: 6px;
-            background: var(--bg-secondary);
-            border-radius: 3px; overflow: hidden;
-        }
-        .confidence-fill { height: 100%; border-radius: 3px; }
-        .confidence-fill.high { background: var(--accent-green); }
-        .confidence-fill.medium { background: var(--accent-gold); }
-        .confidence-fill.low { background: var(--text-muted); }
-
-        /* PREMIUM FEATURES */
-        .premium-grid {
+        /* ============ MOVERS ============ */
+        .movers-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: 1fr 1fr;
             gap: 16px;
         }
-        .premium-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            padding: 20px; position: relative;
-            overflow: hidden; transition: all 0.3s;
+        @media (max-width: 768px) {
+            .movers-grid { grid-template-columns: 1fr; }
         }
-        .premium-card:hover {
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 30px rgba(245,158,11,0.1);
-            transform: translateY(-2px);
-        }
-        .premium-card::before {
-            content: ''; position: absolute;
-            top: 0; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, var(--accent-gold), var(--accent-purple));
-        }
-        .premium-icon {
-            width: 44px; height: 44px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; margin-bottom: 14px;
-        }
-        .premium-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
-        .premium-desc { font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.5; }
-        .premium-btn {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 8px 16px;
-            background: linear-gradient(135deg, var(--accent-gold), #d97706);
-            border: none; border-radius: var(--radius-sm);
-            color: #000; font-weight: 700; font-size: 0.75rem;
-            cursor: pointer; transition: all 0.2s;
-        }
-        .premium-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(245,158,11,0.4); }
-        .premium-btn.outline {
-            background: transparent;
-            border: 1px solid var(--accent-gold);
-            color: var(--accent-gold);
-        }
-        .premium-btn.outline:hover { background: rgba(245,158,11,0.1); }
-
-        /* PORTFOLIO */
-        .portfolio-item {
-            display: flex; align-items: center;
+        .mover-item {
+            display: flex;
+            align-items: center;
             justify-content: space-between;
-            padding: 12px 16px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-sm);
-            margin-bottom: 8px;
-        }
-        .portfolio-info { display: flex; align-items: center; gap: 12px; }
-        .portfolio-symbol { font-weight: 700; }
-        .portfolio-lots { font-size: 0.7rem; color: var(--text-muted); }
-        .portfolio-value { text-align: right; }
-        .portfolio-price { font-weight: 700; }
-        .portfolio-pnl { font-size: 0.7rem; }
-        .portfolio-pnl.up { color: var(--accent-green); }
-        .portfolio-pnl.down { color: var(--accent-red); }
-
-        /* CALCULATOR */
-        .calculator-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-        .calc-tab {
-            padding: 8px 16px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            color: var(--text-secondary);
-            font-size: 0.75rem; cursor: pointer; transition: all 0.2s;
-        }
-        .calc-tab.active { background: var(--accent-blue); border-color: var(--accent-blue); color: white; }
-        .calc-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        @media (max-width: 768px) { .calc-form { grid-template-columns: 1fr; } }
-        .form-group { display: flex; flex-direction: column; gap: 6px; }
-        .form-group label { font-size: 0.75rem; color: var(--text-secondary); font-weight: 500; }
-        .form-group input, .form-group select {
             padding: 10px 14px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            color: var(--text-primary);
-            font-size: 0.85rem; outline: none;
-            transition: border-color 0.2s;
+            background: #111827;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            transition: all 0.2s;
+            cursor: pointer;
         }
-        .form-group input:focus, .form-group select:focus { border-color: var(--accent-blue); }
-        .calc-result {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            padding: 16px; margin-top: 16px; text-align: center;
+        .mover-item:hover { background: #243044; }
+        .mover-info { display: flex; align-items: center; gap: 10px; }
+        .mover-avatar {
+            width: 32px; height: 32px;
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            background: #1a2332;
         }
-        .calc-result-label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; }
-        .calc-result-value { font-size: 1.7rem; font-weight: 800; color: var(--accent-green); }
+        .mover-symbol { font-weight: 700; font-size: 0.85rem; }
+        .mover-name { font-size: 0.7rem; color: #6b7280; }
+        .mover-change { font-weight: 700; font-size: 0.85rem; }
+        .mover-change.up { color: #10b981; }
+        .mover-change.down { color: #ef4444; }
 
-        /* ALERT */
-        .alert-item {
-            display: flex; align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-sm);
-            margin-bottom: 8px;
-            border-left: 3px solid var(--accent-gold);
+        /* ============ TABLE ============ */
+        .stock-table-wrap {
+            background: #1a2332;
+            border: 1px solid #2d3748;
+            border-radius: 10px;
+            overflow: hidden;
         }
-        .alert-symbol { font-weight: 700; }
-        .alert-condition { font-size: 0.7rem; color: var(--text-muted); }
-        .alert-status {
-            font-size: 0.65rem; padding: 4px 10px;
-            border-radius: 12px;
-            background: rgba(16,185,129,0.15);
-            color: var(--accent-green); font-weight: 700;
+        .stock-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .stock-table th {
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 0.7rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #2d3748;
+            font-weight: 600;
+        }
+        .stock-table td {
+            padding: 11px 14px;
+            border-bottom: 1px solid #2d3748;
+            font-size: 0.85rem;
+        }
+        .stock-table tr {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .stock-table tr:hover { background: #243044; }
+        .stock-symbol { font-weight: 700; }
+        .stock-name { font-size: 0.7rem; color: #6b7280; }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 9px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+        .badge.bullish { background: rgba(16,185,129,0.15); color: #10b981; }
+        .badge.bearish { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .badge.neutral { background: rgba(107,114,128,0.15); color: #9ca3af; }
+        .badge.very-bearish { background: rgba(239,68,68,0.25); color: #fca5a5; }
+
+        .confidence-bar {
+            width: 50px; height: 5px;
+            background: #111827;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .confidence-fill { height: 100%; border-radius: 3px; }
+        .confidence-fill.high { background: #10b981; }
+        .confidence-fill.medium { background: #f59e0b; }
+        .confidence-fill.low { background: #6b7280; }
+
+        /* ============ FILTERS ============ */
+        .filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 6px 14px;
+            background: #1a2332;
+            border: 1px solid #2d3748;
+            border-radius: 16px;
+            color: #9ca3af;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
         }
 
-        /* COMMAND PALETTE */
+        /* ============ COMMAND PALETTE ============ */
         .command-palette {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(8px);
-            z-index: 1000; display: none;
-            align-items: flex-start; justify-content: center;
+            z-index: 1000;
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
             padding-top: 15vh;
         }
         .command-palette.active { display: flex; }
         .command-box {
-            width: 100%; max-width: 600px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 550px;
+            background: #1a2332;
+            border: 1px solid #2d3748;
+            border-radius: 10px;
             overflow: hidden;
-            animation: slideDown 0.2s ease;
+            box-shadow: 0 20px 25px rgba(0,0,0,0.5);
         }
-        @keyframes slideDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
         .command-input {
-            width: 100%; padding: 16px 20px;
-            background: transparent; border: none;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-primary);
-            font-size: 1rem; outline: none;
+            width: 100%;
+            padding: 14px 18px;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #2d3748;
+            color: #f3f4f6;
+            font-size: 0.95rem;
+            outline: none;
         }
-        .command-input::placeholder { color: var(--text-muted); }
-        .command-results { max-height: 300px; overflow-y: auto; }
+        .command-input::placeholder { color: #6b7280; }
+        .command-results { max-height: 280px; overflow-y: auto; }
         .command-item {
-            display: flex; align-items: center; gap: 12px;
-            padding: 12px 20px; cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            cursor: pointer;
             transition: background 0.2s;
         }
-        .command-item:hover, .command-item.selected { background: var(--bg-hover); }
-        .command-item i { width: 20px; text-align: center; color: var(--text-muted); }
+        .command-item:hover { background: #243044; }
+        .command-item i { width: 18px; text-align: center; color: #6b7280; }
         .command-item span { font-size: 0.85rem; }
         .command-item kbd {
-            margin-left: auto; padding: 2px 8px;
-            background: var(--bg-secondary);
-            border-radius: 4px; font-size: 0.65rem;
-            border: 1px solid var(--border-color);
+            margin-left: auto;
+            padding: 2px 6px;
+            background: #111827;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            border: 1px solid #2d3748;
         }
 
-        /* TOAST */
+        /* ============ TOAST ============ */
         .toast-container {
-            position: fixed; bottom: 24px; right: 24px;
-            z-index: 1001; display: flex;
-            flex-direction: column; gap: 12px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         .toast {
-            display: flex; align-items: center; gap: 12px;
-            padding: 14px 20px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: #1a2332;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.4);
             animation: slideIn 0.3s ease;
-            min-width: 300px;
+            min-width: 280px;
         }
-        @keyframes slideIn { from{opacity:0;transform:translateX(100px)} to{opacity:1;transform:translateX(0)} }
-        .toast.success { border-left: 3px solid var(--accent-green); }
-        .toast.warning { border-left: 3px solid var(--accent-gold); }
-        .toast.error { border-left: 3px solid var(--accent-red); }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .toast.success { border-left: 3px solid #10b981; }
+        .toast.warning { border-left: 3px solid #f59e0b; }
+        .toast.error { border-left: 3px solid #ef4444; }
         .toast-icon {
-            width: 32px; height: 32px; border-radius: 8px;
+            width: 28px; height: 28px;
+            border-radius: 6px;
             display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem;
         }
-        .toast.success .toast-icon { background: rgba(16,185,129,0.15); color: var(--accent-green); }
-        .toast.warning .toast-icon { background: rgba(245,158,11,0.15); color: var(--accent-gold); }
-        .toast.error .toast-icon { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+        .toast.success .toast-icon { background: rgba(16,185,129,0.15); color: #10b981; }
+        .toast.warning .toast-icon { background: rgba(245,158,11,0.15); color: #f59e0b; }
+        .toast.error .toast-icon { background: rgba(239,68,68,0.15); color: #ef4444; }
         .toast-content { flex: 1; }
         .toast-title { font-size: 0.8rem; font-weight: 700; }
-        .toast-message { font-size: 0.7rem; color: var(--text-secondary); }
+        .toast-message { font-size: 0.7rem; color: #9ca3af; }
 
-        /* RESPONSIVE */
+        /* ============ PREMIUM SECTION ============ */
+        .premium-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 14px;
+        }
+        .premium-card {
+            background: #1a2332;
+            border: 1px solid #2d3748;
+            border-radius: 10px;
+            padding: 18px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .premium-card:hover {
+            border-color: #f59e0b;
+            box-shadow: 0 0 25px rgba(245,158,11,0.1);
+        }
+        .premium-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #f59e0b, #8b5cf6);
+        }
+        .premium-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+        .premium-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
+        .premium-desc {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        .premium-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-weight: 700;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .premium-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245,158,11,0.4);
+        }
+        .premium-btn.outline {
+            background: transparent;
+            border: 1px solid #f59e0b;
+            color: #f59e0b;
+        }
+        .premium-btn.outline:hover { background: rgba(245,158,11,0.1); }
+
+        /* ============ SIGNAL CARD ============ */
+        .signal-card {
+            background: #111827;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .signal-icon {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.95rem;
+        }
+        .signal-icon.buy { background: rgba(16,185,129,0.15); color: #10b981; }
+        .signal-icon.sell { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .signal-icon.hold { background: rgba(245,158,11,0.15); color: #f59e0b; }
+        .signal-info { flex: 1; }
+        .signal-title { font-weight: 700; font-size: 0.85rem; }
+        .signal-desc { font-size: 0.7rem; color: #6b7280; }
+        .signal-action {
+            padding: 5px 12px;
+            border-radius: 16px;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+        .signal-action.buy { background: rgba(16,185,129,0.15); color: #10b981; }
+        .signal-action.sell { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .signal-action.hold { background: rgba(245,158,11,0.15); color: #f59e0b; }
+
+        /* ============ PORTFOLIO ============ */
+        .portfolio-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: #111827;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+        .portfolio-info { display: flex; align-items: center; gap: 10px; }
+        .portfolio-symbol { font-weight: 700; font-size: 0.85rem; }
+        .portfolio-lots { font-size: 0.7rem; color: #6b7280; }
+        .portfolio-value { text-align: right; }
+        .portfolio-price { font-weight: 700; font-size: 0.85rem; }
+        .portfolio-pnl { font-size: 0.7rem; }
+        .portfolio-pnl.up { color: #10b981; }
+        .portfolio-pnl.down { color: #ef4444; }
+
+        /* ============ ALERT ============ */
+        .alert-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: #111827;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            border-left: 3px solid #f59e0b;
+        }
+        .alert-symbol { font-weight: 700; font-size: 0.85rem; }
+        .alert-condition { font-size: 0.7rem; color: #6b7280; }
+        .alert-status {
+            font-size: 0.65rem;
+            padding: 3px 9px;
+            border-radius: 10px;
+            background: rgba(16,185,129,0.15);
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        /* ============ CALCULATOR ============ */
+        .calc-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .calc-tab {
+            padding: 7px 14px;
+            background: #111827;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            color: #9ca3af;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .calc-tab.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+        .calc-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
         @media (max-width: 768px) {
-            .header-inner { padding: 0 16px; }
-            .main { padding: 16px; }
-            .dashboard-grid { grid-template-columns: 1fr; }
+            .calc-form { grid-template-columns: 1fr; }
+        }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .form-group label {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+        .form-group input, .form-group select {
+            padding: 9px 12px;
+            background: #111827;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            color: #f3f4f6;
+            font-size: 0.85rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #3b82f6;
+        }
+        .calc-result {
+            background: #111827;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 14px;
+            margin-top: 14px;
+            text-align: center;
+        }
+        .calc-result-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-bottom: 3px;
+        }
+        .calc-result-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #10b981;
+        }
+
+        /* ============ TABS ============ */
+        .tab-nav {
+            display: flex;
+            gap: 4px;
+            background: #111827;
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 9px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 7px;
+            color: #9ca3af;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .tab-btn:hover { color: #f3f4f6; }
+        .tab-btn.active {
+            background: #1a2332;
+            color: #f3f4f6;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .header-inner { padding: 0 14px; }
+            .main { padding: 14px; }
             .header-status, .search-btn kbd { display: none; }
             .sector-grid { grid-template-columns: repeat(2, 1fr); }
             .stock-table th:nth-child(4), .stock-table td:nth-child(4),
-            .stock-table th:nth-child(5), .stock-table td:nth-child(5) { display: none; }
+            .stock-table th:nth-child(5), .stock-table td:nth-child(5) {
+                display: none;
+            }
         }
 
-        /* Sparkline */
-        .sparkline { width: 60px; height: 24px; }
-
-        /* Loading */
-        .loading {
-            display: flex; align-items: center;
-            justify-content: center; padding: 40px;
-            color: var(--text-muted);
-        }
-        .loading i { animation: spin 1s linear infinite; margin-right: 10px; }
-        @keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
-
-        /* Glow */
-        .glow-green { box-shadow: 0 0 20px rgba(16,185,129,0.15); }
-        .glow-red { box-shadow: 0 0 20px rgba(239,68,68,0.15); }
-
-        /* Signal Card */
-        .signal-card {
-            background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            padding: 16px;
-            display: flex; align-items: center; gap: 14px;
-            margin-bottom: 10px;
-        }
-        .signal-icon {
-            width: 42px; height: 42px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem;
-        }
-        .signal-icon.buy { background: rgba(16,185,129,0.15); color: var(--accent-green); }
-        .signal-icon.sell { background: rgba(239,68,68,0.15); color: var(--accent-red); }
-        .signal-icon.hold { background: rgba(245,158,11,0.15); color: var(--accent-gold); }
-        .signal-info { flex: 1; }
-        .signal-title { font-weight: 700; font-size: 0.9rem; }
-        .signal-desc { font-size: 0.7rem; color: var(--text-muted); }
-        .signal-action {
-            padding: 6px 14px; border-radius: 20px;
-            font-size: 0.7rem; font-weight: 700;
-        }
-        .signal-action.buy { background: rgba(16,185,129,0.15); color: var(--accent-green); }
-        .signal-action.sell { background: rgba(239,68,68,0.15); color: var(--accent-red); }
-        .signal-action.hold { background: rgba(245,158,11,0.15); color: var(--accent-gold); }
+        /* ============ SCROLLBAR ============ */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #111827; }
+        ::-webkit-scrollbar-thumb { background: #2d3748; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
     </style>
 </head>
 <body>
 
-<!-- HEADER -->
+<!-- ============ HEADER ============ -->
 <header class="header">
     <div class="header-inner">
         <div class="logo">
@@ -596,24 +738,23 @@
         <div class="header-actions">
             <button class="search-btn" onclick="openCommandPalette()">
                 <i class="fas fa-search"></i>
-                <span>Cari saham...</span>
+                <span>Cari...</span>
                 <kbd>Ctrl+K</kbd>
             </button>
-            <div class="premium-badge" onclick="showToast('Premium','Fitur premium aktif!','success')">
-                <i class="fas fa-crown"></i>
-                <span>Premium</span>
-            </div>
         </div>
     </div>
 </header>
 
-<!-- COMMAND PALETTE -->
+<!-- ============ COMMAND PALETTE ============ -->
 <div class="command-palette" id="commandPalette">
     <div class="command-box">
         <input type="text" class="command-input" id="commandInput" placeholder="Ketik perintah atau nama saham..." autofocus>
         <div class="command-results" id="commandResults">
             <div class="command-item" onclick="executeCommand('dashboard')">
                 <i class="fas fa-chart-line"></i><span>Dashboard</span><kbd>D</kbd>
+            </div>
+            <div class="command-item" onclick="executeCommand('signals')">
+                <i class="fas fa-brain"></i><span>AI Signals</span><kbd>S</kbd>
             </div>
             <div class="command-item" onclick="executeCommand('portfolio')">
                 <i class="fas fa-briefcase"></i><span>Portfolio Saya</span><kbd>P</kbd>
@@ -622,22 +763,22 @@
                 <i class="fas fa-bell"></i><span>Price Alerts</span><kbd>A</kbd>
             </div>
             <div class="command-item" onclick="executeCommand('screener')">
-                <i class="fas fa-filter"></i><span>Screener Saham</span><kbd>S</kbd>
+                <i class="fas fa-filter"></i><span>Screener Saham</span><kbd>F</kbd>
             </div>
             <div class="command-item" onclick="executeCommand('calculator')">
                 <i class="fas fa-calculator"></i><span>Kalkulator Investasi</span><kbd>C</kbd>
             </div>
             <div class="command-item" onclick="executeCommand('premium')">
-                <i class="fas fa-crown"></i><span>Fitur Premium</span><kbd>F</kbd>
+                <i class="fas fa-crown"></i><span>Fitur Premium</span><kbd>X</kbd>
             </div>
         </div>
     </div>
 </div>
 
-<!-- TOAST CONTAINER -->
+<!-- ============ TOAST ============ -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- MAIN -->
+<!-- ============ MAIN ============ -->
 <main class="main">
 
     <!-- TICKER -->
@@ -647,57 +788,72 @@
 
     <!-- TAB NAV -->
     <div class="tab-nav">
-        <button class="tab-btn active" onclick="switchTab('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</button>
-        <button class="tab-btn" onclick="switchTab('signals')"><i class="fas fa-brain"></i> AI Signals</button>
-        <button class="tab-btn" onclick="switchTab('portfolio')"><i class="fas fa-briefcase"></i> Portfolio</button>
-        <button class="tab-btn" onclick="switchTab('alerts')"><i class="fas fa-bell"></i> Alerts</button>
-        <button class="tab-btn" onclick="switchTab('screener')"><i class="fas fa-filter"></i> Screener</button>
-        <button class="tab-btn" onclick="switchTab('calculator')"><i class="fas fa-calculator"></i> Kalkulator</button>
-        <button class="tab-btn" onclick="switchTab('premium')"><i class="fas fa-crown"></i> Premium</button>
+        <button class="tab-btn active" onclick="switchTab('dashboard', this)">
+            <i class="fas fa-chart-line"></i> Dashboard
+        </button>
+        <button class="tab-btn" onclick="switchTab('signals', this)">
+            <i class="fas fa-brain"></i> AI Signals
+        </button>
+        <button class="tab-btn" onclick="switchTab('portfolio', this)">
+            <i class="fas fa-briefcase"></i> Portfolio
+        </button>
+        <button class="tab-btn" onclick="switchTab('alerts', this)">
+            <i class="fas fa-bell"></i> Alerts
+        </button>
+        <button class="tab-btn" onclick="switchTab('screener', this)">
+            <i class="fas fa-filter"></i> Screener
+        </button>
+        <button class="tab-btn" onclick="switchTab('calculator', this)">
+            <i class="fas fa-calculator"></i> Kalkulator
+        </button>
+        <button class="tab-btn" onclick="switchTab('premium', this)">
+            <i class="fas fa-crown"></i> Premium
+        </button>
     </div>
 
-    <!-- DASHBOARD TAB -->
+    <!-- ============ DASHBOARD ============ -->
     <div class="tab-content active" id="tab-dashboard">
-        <div class="dashboard-grid">
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">Total Saham</span>
-                    <div class="card-icon blue"><i class="fas fa-database"></i></div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Total Saham</span>
+                    <div class="stat-card-icon blue"><i class="fas fa-database"></i></div>
                 </div>
-                <div class="stat-value" id="totalStocks">239</div>
-                <div class="stat-label">Saham terdaftar di IDX</div>
+                <div class="stat-card-value" id="totalStocks">239</div>
+                <div class="stat-card-label">Saham terdaftar di IDX</div>
             </div>
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">Bullish</span>
-                    <div class="card-icon green"><i class="fas fa-arrow-trend-up"></i></div>
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Bullish</span>
+                    <div class="stat-card-icon green"><i class="fas fa-arrow-trend-up"></i></div>
                 </div>
-                <div class="stat-value" style="color:var(--accent-green)" id="bullishCount">75</div>
-                <div class="stat-label">Saham dengan sinyal naik</div>
+                <div class="stat-card-value" style="color:#10b981" id="bullishCount">75</div>
+                <div class="stat-card-label">Sinyal naik</div>
             </div>
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">Bearish</span>
-                    <div class="card-icon red"><i class="fas fa-arrow-trend-down"></i></div>
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Bearish</span>
+                    <div class="stat-card-icon red"><i class="fas fa-arrow-trend-down"></i></div>
                 </div>
-                <div class="stat-value" style="color:var(--accent-red)" id="bearishCount">116</div>
-                <div class="stat-label">Saham dengan sinyal turun</div>
+                <div class="stat-card-value" style="color:#ef4444" id="bearishCount">116</div>
+                <div class="stat-card-label">Sinyal turun</div>
             </div>
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">Alert Aktif</span>
-                    <div class="card-icon gold"><i class="fas fa-bell"></i></div>
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Alert Aktif</span>
+                    <div class="stat-card-icon gold"><i class="fas fa-bell"></i></div>
                 </div>
-                <div class="stat-value" style="color:var(--accent-gold)" id="alertCount">50</div>
-                <div class="stat-label">Price alert terpasang</div>
+                <div class="stat-card-value" style="color:#f59e0b" id="alertCount">50</div>
+                <div class="stat-card-label">Price alert</div>
             </div>
         </div>
 
-        <!-- Market Sentiment -->
+        <!-- SENTIMENT -->
         <div class="section">
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">Market Sentiment</span>
+            <div class="sentiment-card">
+                <div class="section-header" style="margin-bottom:10px">
+                    <span class="section-title" style="font-size:0.9rem">Market Sentiment</span>
                     <span class="badge bearish" id="sentimentBadge">BEARISH BIAS</span>
                 </div>
                 <div class="sentiment-bar">
@@ -711,7 +867,7 @@
             </div>
         </div>
 
-        <!-- Sector Heatmap -->
+        <!-- SECTOR -->
         <div class="section">
             <div class="section-header">
                 <span class="section-title"><i class="fas fa-th"></i> Performa Sektor</span>
@@ -719,34 +875,36 @@
             <div class="sector-grid" id="sectorGrid"></div>
         </div>
 
-        <!-- Top Movers -->
+        <!-- MOVERS -->
         <div class="section">
             <div class="section-header">
                 <span class="section-title"><i class="fas fa-fire"></i> Top Movers</span>
             </div>
             <div class="movers-grid">
                 <div>
-                    <div class="card-header" style="margin-bottom:12px">
-                        <span class="card-title" style="color:var(--accent-green)">🚀 Top Naik</span>
-                    </div>
+                    <div style="font-size:0.75rem;color:#10b981;font-weight:700;margin-bottom:8px">🚀 Top Naik</div>
                     <div id="topGainers"></div>
                 </div>
                 <div>
-                    <div class="card-header" style="margin-bottom:12px">
-                        <span class="card-title" style="color:var(--accent-red)">📉 Top Turun</span>
-                    </div>
+                    <div style="font-size:0.75rem;color:#ef4444;font-weight:700;margin-bottom:8px">📉 Top Turun</div>
                     <div id="topLosers"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Stock Table -->
+        <!-- STOCK TABLE -->
         <div class="section">
             <div class="section-header">
                 <span class="section-title"><i class="fas fa-list"></i> Semua Saham</span>
                 <span class="badge neutral" id="stockCountBadge">239 / 239</span>
             </div>
-            <div class="card" style="padding:0;overflow:hidden">
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterStocks('all', this)">Semua</button>
+                <button class="filter-btn" onclick="filterStocks('bullish', this)">Bullish</button>
+                <button class="filter-btn" onclick="filterStocks('bearish', this)">Bearish</button>
+                <button class="filter-btn" onclick="filterStocks('neutral', this)">Netral</button>
+            </div>
+            <div class="stock-table-wrap">
                 <table class="stock-table">
                     <thead>
                         <tr>
@@ -764,103 +922,95 @@
         </div>
     </div>
 
-    <!-- AI SIGNALS TAB -->
+    <!-- ============ AI SIGNALS ============ -->
     <div class="tab-content" id="tab-signals">
+        <div class="stats-grid" style="margin-bottom:16px">
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Akurasi Sinyal</span>
+                    <div class="stat-card-icon purple"><i class="fas fa-bullseye"></i></div>
+                </div>
+                <div class="stat-card-value" style="color:#8b5cf6">87.3%</div>
+                <div class="stat-card-label">30 hari terakhir</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Sinyal Hari Ini</span>
+                    <div class="stat-card-icon blue"><i class="fas fa-signal"></i></div>
+                </div>
+                <div class="stat-card-value" style="color:#3b82f6">12</div>
+                <div class="stat-card-label">3 Buy · 5 Sell · 4 Hold</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Win Rate</span>
+                    <div class="stat-card-icon green"><i class="fas fa-trophy"></i></div>
+                </div>
+                <div class="stat-card-value" style="color:#10b981">72%</div>
+                <div class="stat-card-label">50 sinyal terakhir</div>
+            </div>
+        </div>
         <div class="section">
             <div class="section-header">
                 <span class="section-title"><i class="fas fa-brain"></i> Trading Signals AI</span>
-                <span class="badge premium"><i class="fas fa-crown"></i> PREMIUM</span>
-            </div>
-            <div class="dashboard-grid" style="margin-bottom:20px">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Akurasi Sinyal</span>
-                        <div class="card-icon purple"><i class="fas fa-bullseye"></i></div>
-                    </div>
-                    <div class="stat-value" style="color:var(--accent-purple)">87.3%</div>
-                    <div class="stat-label">30 hari terakhir</div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Sinyal Hari Ini</span>
-                        <div class="card-icon cyan"><i class="fas fa-signal"></i></div>
-                    </div>
-                    <div class="stat-value" style="color:var(--accent-cyan)">12</div>
-                    <div class="stat-label">3 Buy · 5 Sell · 4 Hold</div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Win Rate</span>
-                        <div class="card-icon green"><i class="fas fa-trophy"></i></div>
-                    </div>
-                    <div class="stat-value" style="color:var(--accent-green)">72%</div>
-                    <div class="stat-label">Dari 50 sinyal terakhir</div>
-                </div>
             </div>
             <div id="signalList"></div>
         </div>
     </div>
 
-    <!-- PORTFOLIO TAB -->
+    <!-- ============ PORTFOLIO ============ -->
     <div class="tab-content" id="tab-portfolio">
-        <div class="dashboard-grid" style="margin-bottom:20px">
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">Total Nilai Portfolio</span>
-                    <div class="card-icon blue"><i class="fas fa-wallet"></i></div>
+        <div class="stats-grid" style="margin-bottom:16px">
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Total Nilai</span>
+                    <div class="stat-card-icon blue"><i class="fas fa-wallet"></i></div>
                 </div>
-                <div class="stat-value">Rp 45.250.000</div>
-                <div class="stat-change up"><i class="fas fa-arrow-up"></i> +12.5%</div>
+                <div class="stat-card-value">Rp 45.2jt</div>
+                <div class="stat-card-label" style="color:#10b981">+12.5%</div>
             </div>
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">Profit / Loss</span>
-                    <div class="card-icon green"><i class="fas fa-chart-pie"></i></div>
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Profit / Loss</span>
+                    <div class="stat-card-icon green"><i class="fas fa-chart-pie"></i></div>
                 </div>
-                <div class="stat-value" style="color:var(--accent-green)">+Rp 5.025.000</div>
-                <div class="stat-label">Sejak awal investasi</div>
+                <div class="stat-card-value" style="color:#10b981">+Rp 5jt</div>
+                <div class="stat-card-label">Sejak awal</div>
             </div>
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">Jumlah Saham</span>
-                    <div class="card-icon purple"><i class="fas fa-layer-group"></i></div>
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Jumlah Saham</span>
+                    <div class="stat-card-icon purple"><i class="fas fa-layer-group"></i></div>
                 </div>
-                <div class="stat-value">8</div>
-                <div class="stat-label">Emiten berbeda</div>
+                <div class="stat-card-value">8</div>
+                <div class="stat-card-label">Emiten</div>
             </div>
         </div>
         <div class="section">
             <div class="section-header">
                 <span class="section-title"><i class="fas fa-briefcase"></i> Daftar Kepemilikan</span>
-                <button class="premium-btn" onclick="showToast('Portfolio','Fitur tambah saham akan hadir!','warning')">
-                    <i class="fas fa-plus"></i> Tambah
-                </button>
             </div>
             <div id="portfolioList"></div>
         </div>
     </div>
 
-    <!-- ALERTS TAB -->
+    <!-- ============ ALERTS ============ -->
     <div class="tab-content" id="tab-alerts">
         <div class="section">
             <div class="section-header">
                 <span class="section-title"><i class="fas fa-bell"></i> Price Alerts</span>
-                <button class="premium-btn" onclick="showToast('Alert','Fitur buat alert akan hadir!','warning')">
-                    <i class="fas fa-plus"></i> Buat Alert
-                </button>
             </div>
             <div id="alertList"></div>
         </div>
     </div>
 
-    <!-- SCREENER TAB -->
+    <!-- ============ SCREENER ============ -->
     <div class="tab-content" id="tab-screener">
         <div class="section">
             <div class="section-header">
                 <span class="section-title"><i class="fas fa-filter"></i> Screener Saham</span>
-                <span class="badge premium"><i class="fas fa-crown"></i> PREMIUM</span>
             </div>
-            <div class="card" style="margin-bottom:16px">
+            <div class="stat-card" style="margin-bottom:14px">
                 <div class="calc-form">
                     <div class="form-group">
                         <label>RSI Maksimal</label>
@@ -889,7 +1039,7 @@
                         </select>
                     </div>
                 </div>
-                <button class="premium-btn" style="margin-top:16px" onclick="runScreener()">
+                <button class="premium-btn" style="margin-top:14px" onclick="runScreener()">
                     <i class="fas fa-search"></i> Jalankan Screener
                 </button>
             </div>
@@ -897,19 +1047,19 @@
         </div>
     </div>
 
-    <!-- CALCULATOR TAB -->
+    <!-- ============ CALCULATOR ============ -->
     <div class="tab-content" id="tab-calculator">
         <div class="section">
             <div class="section-header">
                 <span class="section-title"><i class="fas fa-calculator"></i> Kalkulator Investasi</span>
             </div>
-            <div class="calculator-tabs">
-                <button class="calc-tab active" onclick="switchCalc('compound', this)">💰 Compound Interest</button>
+            <div class="calc-tabs">
+                <button class="calc-tab active" onclick="switchCalc('compound', this)">💰 Compound</button>
                 <button class="calc-tab" onclick="switchCalc('averagedown', this)">📉 Average Down</button>
                 <button class="calc-tab" onclick="switchCalc('position', this)">🎯 Position Sizing</button>
                 <button class="calc-tab" onclick="switchCalc('target', this)">💵 Target Profit</button>
             </div>
-            <div class="card">
+            <div class="stat-card">
                 <div id="calcCompound">
                     <div class="calc-form">
                         <div class="form-group">
@@ -929,7 +1079,7 @@
                             <input type="number" value="10" id="ciYears">
                         </div>
                     </div>
-                    <button class="premium-btn" style="margin-top:16px" onclick="calcCompound()">
+                    <button class="premium-btn" style="margin-top:14px" onclick="calcCompound()">
                         <i class="fas fa-calculator"></i> Hitung
                     </button>
                     <div class="calc-result">
@@ -957,7 +1107,7 @@
                             <input type="number" value="10" id="adLot2">
                         </div>
                     </div>
-                    <button class="premium-btn" style="margin-top:16px" onclick="calcAvgDown()">
+                    <button class="premium-btn" style="margin-top:14px" onclick="calcAvgDown()">
                         <i class="fas fa-calculator"></i> Hitung
                     </button>
                     <div class="calc-result">
@@ -985,7 +1135,7 @@
                             <input type="number" value="950" id="psStop">
                         </div>
                     </div>
-                    <button class="premium-btn" style="margin-top:16px" onclick="calcPosition()">
+                    <button class="premium-btn" style="margin-top:14px" onclick="calcPosition()">
                         <i class="fas fa-calculator"></i> Hitung
                     </button>
                     <div class="calc-result">
@@ -1013,7 +1163,7 @@
                             <input type="number" value="0.3" id="tpFee">
                         </div>
                     </div>
-                    <button class="premium-btn" style="margin-top:16px" onclick="calcTarget()">
+                    <button class="premium-btn" style="margin-top:14px" onclick="calcTarget()">
                         <i class="fas fa-calculator"></i> Hitung
                     </button>
                     <div class="calc-result">
@@ -1025,46 +1175,45 @@
         </div>
     </div>
 
-    <!-- PREMIUM TAB -->
+    <!-- ============ PREMIUM ============ -->
     <div class="tab-content" id="tab-premium">
         <div class="section">
             <div class="section-header">
                 <span class="section-title"><i class="fas fa-crown"></i> Fitur Premium</span>
-                <span class="badge premium"><i class="fas fa-star"></i> UPGRADE</span>
             </div>
             <div class="premium-grid">
                 <div class="premium-card">
-                    <div class="premium-icon" style="background:rgba(16,185,129,0.15);color:var(--accent-green)">
+                    <div class="premium-icon" style="background:rgba(16,185,129,0.15);color:#10b981">
                         <i class="fas fa-brain"></i>
                     </div>
                     <div class="premium-title">Trading Signals AI</div>
-                    <div class="premium-desc">Sinyal beli/jual otomatis dengan analisis teknikal dan fundamental menggunakan AI.</div>
+                    <div class="premium-desc">Sinyal beli/jual otomatis dengan analisis teknikal dan fundamental.</div>
                     <button class="premium-btn" onclick="showToast('Premium','Fitur AI Signals aktif!','success')">
                         <i class="fas fa-unlock"></i> Aktifkan
                     </button>
                 </div>
                 <div class="premium-card">
-                    <div class="premium-icon" style="background:rgba(59,130,246,0.15);color:var(--accent-blue)">
+                    <div class="premium-icon" style="background:rgba(59,130,246,0.15);color:#3b82f6">
                         <i class="fas fa-shield-halved"></i>
                     </div>
                     <div class="premium-title">Risk Assessment</div>
-                    <div class="premium-desc">Analisis risiko portofolio dengan VaR, drawdown, dan rasio Sharpe.</div>
+                    <div class="premium-desc">Analisis risiko portofolio dengan VaR dan rasio Sharpe.</div>
                     <button class="premium-btn outline" onclick="showToast('Premium','Fitur Risk Assessment aktif!','success')">
                         <i class="fas fa-lock"></i> Buka
                     </button>
                 </div>
                 <div class="premium-card">
-                    <div class="premium-icon" style="background:rgba(245,158,11,0.15);color:var(--accent-gold)">
+                    <div class="premium-icon" style="background:rgba(245,158,11,0.15);color:#f59e0b">
                         <i class="fas fa-arrows-spin"></i>
                     </div>
-                    <div class="premium-title">Sector Rotation Radar</div>
+                    <div class="premium-title">Sector Rotation</div>
                     <div class="premium-desc">Deteksi rotasi sektor untuk optimasi alokasi aset.</div>
                     <button class="premium-btn outline" onclick="showToast('Premium','Fitur Sector Rotation aktif!','success')">
                         <i class="fas fa-lock"></i> Buka
                     </button>
                 </div>
                 <div class="premium-card">
-                    <div class="premium-icon" style="background:rgba(139,92,246,0.15);color:var(--accent-purple)">
+                    <div class="premium-icon" style="background:rgba(139,92,246,0.15);color:#8b5cf6">
                         <i class="fas fa-filter"></i>
                     </div>
                     <div class="premium-title">Advanced Screener</div>
@@ -1074,7 +1223,7 @@
                     </button>
                 </div>
                 <div class="premium-card">
-                    <div class="premium-icon" style="background:rgba(6,182,212,0.15);color:var(--accent-cyan)">
+                    <div class="premium-icon" style="background:rgba(6,182,212,0.15);color:#06b6d4">
                         <i class="fas fa-calendar"></i>
                     </div>
                     <div class="premium-title">Earnings Calendar</div>
@@ -1084,7 +1233,7 @@
                     </button>
                 </div>
                 <div class="premium-card">
-                    <div class="premium-icon" style="background:rgba(16,185,129,0.15);color:var(--accent-green)">
+                    <div class="premium-icon" style="background:rgba(16,185,129,0.15);color:#10b981">
                         <i class="fas fa-coins"></i>
                     </div>
                     <div class="premium-title">Dividend Tracker</div>
@@ -1101,7 +1250,7 @@
 
 <script>
 // ============================================================
-// DATA SAHAM (Sesuai dengan data.json yang sudah ada)
+// DATA SAHAM
 // ============================================================
 const stockData = [
     {symbol:"MAYA", name:"MAYA", price:198, change:0, sector:"Perbankan", signal:"BULLISH", confidence:40, ma20:201, ma50:200, rsi:26.9},
@@ -1370,7 +1519,7 @@ const sectorData = [
 ];
 
 // ============================================================
-// INITIALIZATION
+// INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
     initTicker();
@@ -1385,9 +1534,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateSentiment();
 });
 
-// ============================================================
-// TICKER
-// ============================================================
 function initTicker() {
     const ticker = document.getElementById('ticker');
     const items = stockData.slice(0, 50).map(s => `
@@ -1399,16 +1545,11 @@ function initTicker() {
             </span>
         </div>
     `).join('');
-    // Duplicate for seamless loop
     ticker.innerHTML = items + items;
 }
 
-// ============================================================
-// SECTOR GRID
-// ============================================================
 function initSectorGrid() {
-    const grid = document.getElementById('sectorGrid');
-    grid.innerHTML = sectorData.map(s => `
+    document.getElementById('sectorGrid').innerHTML = sectorData.map(s => `
         <div class="sector-item" onclick="showToast('Sektor','${s.name}: ${s.change >= 0 ? '+' : ''}${s.change}%','${s.change >= 0 ? 'success' : 'error'}')">
             <div class="sector-name">${s.icon} ${s.name}</div>
             <div class="sector-value ${s.change >= 0 ? 'up' : 'down'}">
@@ -1419,9 +1560,6 @@ function initSectorGrid() {
     `).join('');
 }
 
-// ============================================================
-// MOVERS
-// ============================================================
 function initMovers() {
     const sorted = [...stockData].sort((a,b) => b.change - a.change);
     const gainers = sorted.slice(0, 5);
@@ -1454,38 +1592,35 @@ function initMovers() {
     `).join('');
 }
 
-// ============================================================
-// STOCK TABLE
-// ============================================================
 function initStockTable() {
     const tbody = document.getElementById('stockTableBody');
-    tbody.innerHTML = stockData.slice(0, 50).map(s => {
+    tbody.innerHTML = stockData.slice(0, 60).map(s => {
         const signalClass = getSignalClass(s.signal);
         const confClass = s.confidence >= 80 ? 'high' : s.confidence >= 40 ? 'medium' : 'low';
         return `
             <tr onclick="showStockDetail('${s.symbol}')">
                 <td>
                     <div class="stock-symbol">${s.symbol}</div>
-                    <div class="stock-sector">${s.name}</div>
+                    <div class="stock-name">${s.name}</div>
                 </td>
-                <td><span style="font-size:0.75rem;color:var(--text-muted)">${s.sector}</span></td>
+                <td><span style="font-size:0.7rem;color:#6b7280">${s.sector}</span></td>
                 <td>
                     <div style="font-weight:600">Rp ${formatPrice(s.price)}</div>
-                    <div style="font-size:0.7rem;color:${s.change >= 0 ? 'var(--accent-green)' : 'var(--accent-red)'}">
+                    <div style="font-size:0.7rem;color:${s.change >= 0 ? '#10b981' : '#ef4444'}">
                         ${s.change >= 0 ? '▲' : '▼'} ${Math.abs(s.change).toFixed(2)}%
                     </div>
                 </td>
                 <td><span class="badge ${signalClass}">${s.signal}</span></td>
                 <td>
-                    <div style="display:flex;align-items:center;gap:8px">
+                    <div style="display:flex;align-items:center;gap:6px">
                         <div class="confidence-bar">
                             <div class="confidence-fill ${confClass}" style="width:${s.confidence}%"></div>
                         </div>
-                        <span style="font-size:0.7rem;color:var(--text-muted)">${s.confidence}%</span>
+                        <span style="font-size:0.7rem;color:#6b7280">${s.confidence}%</span>
                     </div>
                 </td>
                 <td>
-                    <span style="font-weight:600;color:${s.rsi < 30 ? 'var(--accent-green)' : s.rsi > 70 ? 'var(--accent-red)' : 'var(--text-primary)'}">
+                    <span style="font-weight:600;color:${s.rsi < 30 ? '#10b981' : s.rsi > 70 ? '#ef4444' : '#f3f4f6'}">
                         ${s.rsi.toFixed(1)}
                     </span>
                 </td>
@@ -1494,9 +1629,54 @@ function initStockTable() {
     }).join('');
 }
 
-// ============================================================
-// SIGNALS
-// ============================================================
+function filterStocks(filter, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    let filtered = stockData;
+    if (filter === 'bullish') {
+        filtered = stockData.filter(s => s.signal.includes('BULLISH') || s.signal.includes('NAIK'));
+    } else if (filter === 'bearish') {
+        filtered = stockData.filter(s => s.signal.includes('BEARISH') || s.signal.includes('TURUN'));
+    } else if (filter === 'neutral') {
+        filtered = stockData.filter(s => s.signal === 'NETRAL');
+    }
+    
+    const tbody = document.getElementById('stockTableBody');
+    tbody.innerHTML = filtered.slice(0, 60).map(s => {
+        const signalClass = getSignalClass(s.signal);
+        const confClass = s.confidence >= 80 ? 'high' : s.confidence >= 40 ? 'medium' : 'low';
+        return `
+            <tr onclick="showStockDetail('${s.symbol}')">
+                <td><div class="stock-symbol">${s.symbol}</div><div class="stock-name">${s.name}</div></td>
+                <td><span style="font-size:0.7rem;color:#6b7280">${s.sector}</span></td>
+                <td>
+                    <div style="font-weight:600">Rp ${formatPrice(s.price)}</div>
+                    <div style="font-size:0.7rem;color:${s.change >= 0 ? '#10b981' : '#ef4444'}">
+                        ${s.change >= 0 ? '▲' : '▼'} ${Math.abs(s.change).toFixed(2)}%
+                    </div>
+                </td>
+                <td><span class="badge ${signalClass}">${s.signal}</span></td>
+                <td>
+                    <div style="display:flex;align-items:center;gap:6px">
+                        <div class="confidence-bar">
+                            <div class="confidence-fill ${confClass}" style="width:${s.confidence}%"></div>
+                        </div>
+                        <span style="font-size:0.7rem;color:#6b7280">${s.confidence}%</span>
+                    </div>
+                </td>
+                <td>
+                    <span style="font-weight:600;color:${s.rsi < 30 ? '#10b981' : s.rsi > 70 ? '#ef4444' : '#f3f4f6'}">
+                        ${s.rsi.toFixed(1)}
+                    </span>
+                </td>
+            </tr>
+        `;
+    }).join('');
+    
+    document.getElementById('stockCountBadge').textContent = `${filtered.length} / ${stockData.length}`;
+}
+
 function initSignals() {
     const signals = [
         {type:'buy', symbol:'BBRI', title:'BBRI — Buy Signal', desc:'RSI oversold + MA20 support', action:'BUY'},
@@ -1523,9 +1703,6 @@ function initSignals() {
     `).join('');
 }
 
-// ============================================================
-// PORTFOLIO
-// ============================================================
 function initPortfolio() {
     const portfolio = [
         {symbol:'BBRI', lots:10, buyPrice:4500, currentPrice:3100},
@@ -1560,9 +1737,6 @@ function initPortfolio() {
     }).join('');
 }
 
-// ============================================================
-// ALERTS
-// ============================================================
 function initAlerts() {
     const alerts = [
         {symbol:'BBRI', condition:'Harga > Rp 3.200', status:'Aktif'},
@@ -1583,9 +1757,6 @@ function initAlerts() {
     `).join('');
 }
 
-// ============================================================
-// STATS
-// ============================================================
 function updateStats() {
     const total = stockData.length;
     const bullish = stockData.filter(s => s.signal.includes('BULLISH') || s.signal.includes('NAIK')).length;
@@ -1619,9 +1790,6 @@ function updateSentiment() {
     }
 }
 
-// ============================================================
-// HELPERS
-// ============================================================
 function formatPrice(price) {
     return price.toLocaleString('id-ID');
 }
@@ -1645,12 +1813,12 @@ function showStockDetail(symbol) {
 // ============================================================
 // TABS
 // ============================================================
-function switchTab(tab) {
+function switchTab(tab, btn) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     
     document.getElementById('tab-' + tab).classList.add('active');
-    event.target.closest('.tab-btn').classList.add('active');
+    if (btn) btn.classList.add('active');
 }
 
 function switchCalc(type, btn) {
@@ -1658,9 +1826,11 @@ function switchCalc(type, btn) {
     btn.classList.add('active');
     
     ['compound','averagedown','position','target'].forEach(t => {
-        document.getElementById('calc' + t.charAt(0).toUpperCase() + t.slice(1)).style.display = 'none';
+        const el = document.getElementById('calc' + t.charAt(0).toUpperCase() + t.slice(1));
+        if (el) el.style.display = 'none';
     });
-    document.getElementById('calc' + type.charAt(0).toUpperCase() + type.slice(1)).style.display = 'block';
+    const target = document.getElementById('calc' + type.charAt(0).toUpperCase() + type.slice(1));
+    if (target) target.style.display = 'block';
 }
 
 // ============================================================
@@ -1678,17 +1848,17 @@ function closeCommandPalette() {
 function executeCommand(cmd) {
     closeCommandPalette();
     switch(cmd) {
-        case 'dashboard': switchTab('dashboard'); break;
-        case 'portfolio': switchTab('portfolio'); break;
-        case 'alerts': switchTab('alerts'); break;
-        case 'screener': switchTab('screener'); break;
-        case 'calculator': switchTab('calculator'); break;
-        case 'premium': switchTab('premium'); break;
+        case 'dashboard': switchTab('dashboard', document.querySelectorAll('.tab-btn')[0]); break;
+        case 'signals': switchTab('signals', document.querySelectorAll('.tab-btn')[1]); break;
+        case 'portfolio': switchTab('portfolio', document.querySelectorAll('.tab-btn')[2]); break;
+        case 'alerts': switchTab('alerts', document.querySelectorAll('.tab-btn')[3]); break;
+        case 'screener': switchTab('screener', document.querySelectorAll('.tab-btn')[4]); break;
+        case 'calculator': switchTab('calculator', document.querySelectorAll('.tab-btn')[5]); break;
+        case 'premium': switchTab('premium', document.querySelectorAll('.tab-btn')[6]); break;
     }
 }
 
 function initCommandPalette() {
-    const input = document.getElementById('commandInput');
     const palette = document.getElementById('commandPalette');
     
     document.addEventListener('keydown', (e) => {
@@ -1737,7 +1907,6 @@ function calcCompound() {
     for (let i = 0; i < y * 12; i++) {
         total = total * (1 + r/12) + m;
     }
-    
     document.getElementById('ciResult').textContent = 'Rp ' + Math.round(total).toLocaleString('id-ID');
 }
 
@@ -1749,7 +1918,6 @@ function calcAvgDown() {
     
     const totalLot = lot1 + lot2;
     const avg = ((buy1 * lot1) + (buy2 * lot2)) / totalLot;
-    
     document.getElementById('adResult').textContent = 'Rp ' + Math.round(avg).toLocaleString('id-ID');
 }
 
@@ -1763,7 +1931,6 @@ function calcPosition() {
     const maxLoss = capital * risk;
     const shares = Math.floor(maxLoss / riskPerShare);
     const lots = Math.floor(shares / 100);
-    
     document.getElementById('psResult').textContent = lots + ' lot';
 }
 
@@ -1774,7 +1941,6 @@ function calcTarget() {
     const fee = parseFloat(document.getElementById('tpFee').value) / 100;
     
     const target = buy * (1 + percent + (fee * 2));
-    
     document.getElementById('tpResult').textContent = 'Rp ' + Math.round(target).toLocaleString('id-ID');
 }
 
@@ -1811,7 +1977,7 @@ function runScreener() {
         </div>
     `).join('');
     
-    showToast('Screener', `Ditemukan ${results.length} saham yang sesuai kriteria`, 'success');
+    showToast('Screener', `Ditemukan ${results.length} saham yang sesuai`, 'success');
 }
 </script>
 
