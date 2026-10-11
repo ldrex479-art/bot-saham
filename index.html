@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard Saham IHSG</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   :root{
@@ -21,8 +22,7 @@
   .header{
     background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%);
     padding:30px 20px 25px;border-bottom:1px solid var(--line);
-    position:sticky;top:0;z-index:10;
-    backdrop-filter:blur(20px);
+    position:sticky;top:0;z-index:10;backdrop-filter:blur(20px);
   }
   .header-inner{max-width:1200px;margin:0 auto;}
   .title{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
@@ -41,13 +41,37 @@
   .stat .label{color:var(--muted);margin-bottom:4px;font-size:10px;text-transform:uppercase;letter-spacing:1px;}
   .stat .value{font-weight:600;font-size:15px;}
   .container{max-width:1200px;margin:0 auto;padding:25px 20px;}
+  .section-title{
+    font-size:14px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+    color:var(--muted);margin:30px 0 15px;display:flex;align-items:center;gap:10px;
+  }
+  .section-title::before{
+    content:'';width:3px;height:16px;background:var(--gold);border-radius:2px;
+  }
+  .movers-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:20px;
+  }
+  .movers-box{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:16px;
+  }
+  .movers-box h3{
+    font-size:11px;text-transform:uppercase;letter-spacing:1px;
+    color:var(--muted);margin-bottom:12px;font-weight:600;
+  }
+  .mover-item{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;
+  }
+  .mover-item:last-child{border-bottom:none;}
+  .mover-item .kode-mover{font-weight:700;letter-spacing:0.5px;}
+  .mover-item .val{font-weight:600;}
   .controls{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
   .search{
     flex:1;min-width:200px;
     background:var(--card);border:1px solid var(--line);
     border-radius:10px;padding:12px 16px;
-    color:var(--text);font-size:14px;
-    outline:none;transition:border-color 0.3s;
+    color:var(--text);font-size:14px;outline:none;transition:border-color 0.3s;
   }
   .search:focus{border-color:var(--gold);}
   .search::placeholder{color:var(--muted);}
@@ -61,9 +85,7 @@
   .filter:hover{border-color:var(--gold);}
   .filter.active{background:var(--gold);color:#000;border-color:var(--gold);}
   .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-    gap:15px;
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:15px;
   }
   .card{
     background:var(--card);border:1px solid var(--line);
@@ -71,8 +93,7 @@
     transition:all 0.3s;position:relative;overflow:hidden;
   }
   .card::before{
-    content:'';position:absolute;top:0;left:0;right:0;height:3px;
-    background:var(--muted);
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--muted);
   }
   .card.strong-bull::before{background:var(--green);}
   .card.bull::before{background:var(--green);}
@@ -82,16 +103,24 @@
   .card.bear::before{background:var(--red);}
   .card.strong-bear::before{background:var(--red);}
   .card:hover{transform:translateY(-3px);border-color:var(--gold);}
-  .card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+  .card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;position:relative;}
   .kode{font-size:18px;font-weight:700;letter-spacing:0.5px;}
   .harga{font-size:13px;color:var(--muted);margin-top:4px;}
   .harga span{font-weight:600;}
   .up{color:var(--green);}
   .down{color:var(--red);}
+  .star{
+    position:absolute;top:0;right:0;
+    font-size:20px;cursor:pointer;
+    color:var(--line);transition:all 0.2s;
+    background:none;border:none;padding:0;line-height:1;
+  }
+  .star:hover{color:var(--gold);transform:scale(1.2);}
+  .star.on{color:var(--gold);}
   .verdict{
     font-size:10px;font-weight:600;padding:5px 10px;
     border-radius:20px;letter-spacing:0.8px;text-transform:uppercase;
-    white-space:nowrap;
+    white-space:nowrap;display:inline-block;
   }
   .v-strong-bull{background:rgba(38,208,124,0.15);color:var(--green);}
   .v-bull{background:rgba(38,208,124,0.12);color:var(--green);}
@@ -100,9 +129,12 @@
   .v-mild-bear{background:rgba(255,152,0,0.15);color:var(--orange);}
   .v-bear{background:rgba(255,77,79,0.12);color:var(--red);}
   .v-strong-bear{background:rgba(255,77,79,0.18);color:var(--red);}
+  .chart-wrap{
+    height:60px;margin:14px 0 10px;position:relative;
+  }
   .metrics{
     display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;
-    padding-top:14px;border-top:1px solid var(--line);margin-top:14px;
+    padding-top:14px;border-top:1px solid var(--line);margin-top:10px;
   }
   .metric .label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;}
   .metric .val{font-size:13px;font-weight:600;}
@@ -121,6 +153,9 @@
   .footer{
     text-align:center;padding:30px 20px;color:var(--muted);
     font-size:11px;letter-spacing:0.5px;max-width:1200px;margin:0 auto;
+  }
+  @media (max-width:600px){
+    .movers-grid{grid-template-columns:1fr;}
   }
 </style>
 </head>
@@ -142,13 +177,28 @@
 </div>
 
 <div class="container">
+  <!-- TOP MOVERS -->
+  <div class="section-title">Top Movers Hari Ini</div>
+  <div class="movers-grid">
+    <div class="movers-box">
+      <h3>🚀 Top 5 Naik</h3>
+      <div id="top-naik"></div>
+    </div>
+    <div class="movers-box">
+      <h3>📉 Top 5 Turun</h3>
+      <div id="top-turun"></div>
+    </div>
+  </div>
+
+  <!-- SEMUA SAHAM -->
+  <div class="section-title">Semua Saham</div>
   <div class="controls">
     <input type="text" class="search" id="search" placeholder="Cari kode saham...">
     <div class="filters" id="filters">
       <button class="filter active" data-filter="all">Semua</button>
+      <button class="filter" data-filter="fav">⭐ Favorit</button>
       <button class="filter" data-filter="bull">Bullish</button>
       <button class="filter" data-filter="bear">Bearish</button>
-      <button class="filter" data-filter="neutral">Netral</button>
     </div>
   </div>
   <div class="grid" id="grid">
@@ -168,6 +218,16 @@
   let allData = [];
   let currentFilter = 'all';
   let currentSearch = '';
+  let favorites = JSON.parse(localStorage.getItem('saham_fav') || '[]');
+
+  function toggleFav(kode) {
+    const i = favorites.indexOf(kode);
+    if (i >= 0) favorites.splice(i, 1);
+    else favorites.push(kode);
+    localStorage.setItem('saham_fav', JSON.stringify(favorites));
+    render();
+  }
+  window.toggleFav = toggleFav;
 
   async function loadData() {
     try {
@@ -181,33 +241,55 @@
       document.getElementById('stat-total').textContent = allData.length;
       document.getElementById('stat-bull').textContent = bull;
       document.getElementById('stat-bear').textContent = bear;
+      
+      renderMovers(data.top_naik || [], data.top_turun || []);
       render();
     } catch (e) {
       document.getElementById('grid').innerHTML =
-        '<div class="empty">❌ Gagal memuat data.<br><br>' +
-        'File <code>data.json</code> belum ada.<br>' +
-        'Buka tab <b>Actions</b> di GitHub, klik <b>Run workflow</b>.</div>';
+        '<div class="empty">❌ Gagal memuat data.<br><br>Buka tab <b>Actions</b> di GitHub, klik <b>Run workflow</b>.</div>';
     }
+  }
+
+  function renderMovers(naik, turun) {
+    const naikEl = document.getElementById('top-naik');
+    const turunEl = document.getElementById('top-turun');
+    naikEl.innerHTML = naik.map(x =>
+      `<div class="mover-item">
+        <span class="kode-mover">${x.kode}</span>
+        <span class="val up">+${x.perubahan}%</span>
+      </div>`
+    ).join('') || '<div style="color:var(--muted);font-size:12px;">Belum ada data</div>';
+    turunEl.innerHTML = turun.map(x =>
+      `<div class="mover-item">
+        <span class="kode-mover">${x.kode}</span>
+        <span class="val down">${x.perubahan}%</span>
+      </div>`
+    ).join('') || '<div style="color:var(--muted);font-size:12px;">Belum ada data</div>';
   }
 
   function render() {
     const grid = document.getElementById('grid');
     let filtered = allData;
+
     if (currentFilter === 'bull') filtered = filtered.filter(x => x.skor >= 0.5);
     else if (currentFilter === 'bear') filtered = filtered.filter(x => x.skor <= -0.5);
-    else if (currentFilter === 'neutral') filtered = filtered.filter(x => x.skor > -0.5 && x.skor < 0.5);
+    else if (currentFilter === 'fav') filtered = filtered.filter(x => favorites.includes(x.kode));
+
     if (currentSearch) {
       filtered = filtered.filter(x => x.kode.toLowerCase().includes(currentSearch.toLowerCase()));
     }
+
     if (filtered.length === 0) {
       grid.innerHTML = '<div class="empty">Tidak ada saham yang cocok.</div>';
       return;
     }
-    grid.innerHTML = filtered.map(s => {
+
+    grid.innerHTML = filtered.map((s, i) => {
       const up = s.perubahan >= 0;
       const arrow = up ? '▲' : '▼';
       const cls = up ? 'up' : 'down';
       const sign = up ? '+' : '';
+      const isFav = favorites.includes(s.kode);
       const sinyalHtml = s.sinyal.length > 0
         ? '<div class="sinyal">' + s.sinyal.map(x => '<span class="sinyal-item">' + x + '</span>').join('') + '</div>'
         : '';
@@ -218,8 +300,10 @@
               <div class="kode">${s.kode}</div>
               <div class="harga">Rp <span>${s.harga.toLocaleString('id-ID')}</span> · <span class="${cls}">${arrow} ${sign}${s.perubahan}%</span></div>
             </div>
-            <div class="verdict v-${s.level}">${s.verdict}</div>
+            <button class="star ${isFav ? 'on' : ''}" onclick="event.stopPropagation();toggleFav('${s.kode}')">${isFav ? '★' : '☆'}</button>
           </div>
+          <div class="verdict v-${s.level}">${s.verdict}</div>
+          <div class="chart-wrap"><canvas id="chart-${i}"></canvas></div>
           <div class="metrics">
             <div class="metric"><div class="label">MA20</div><div class="val">${s.ma20.toLocaleString('id-ID')}</div></div>
             <div class="metric"><div class="label">MA50</div><div class="val">${s.ma50.toLocaleString('id-ID')}</div></div>
@@ -229,6 +313,48 @@
         </div>
       `;
     }).join('');
+
+    // Render charts
+    filtered.forEach((s, i) => {
+      if (!s.historis || s.historis.length === 0) return;
+      const ctx = document.getElementById('chart-' + i);
+      if (!ctx) return;
+      const labels = s.historis.map(h => h.tgl);
+      const data = s.historis.map(h => h.harga);
+      const up = s.perubahan >= 0;
+      const color = up ? '#26d07c' : '#ff4d4f';
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: data,
+            borderColor: color,
+            backgroundColor: color + '20',
+            borderWidth: 1.5,
+            fill: true,
+            tension: 0.35,
+            pointRadius: 0,
+            pointHoverRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {legend: {display: false}, tooltip: {
+            backgroundColor: '#161d2b',
+            borderColor: '#232c3d',
+            borderWidth: 1,
+            titleColor: '#e6edf3',
+            bodyColor: '#e6edf3',
+            displayColors: false,
+            callbacks: {label: (ctx) => 'Rp ' + ctx.parsed.y.toLocaleString('id-ID')}
+          }},
+          scales: {x: {display: false}, y: {display: false}},
+          interaction: {intersect: false, mode: 'index'}
+        }
+      });
+    });
   }
 
   document.getElementById('search').addEventListener('input', e => {
