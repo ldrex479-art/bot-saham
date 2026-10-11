@@ -1,4 +1,4 @@
-name: Bot Saham IHSG
+name: Update Dashboard Saham
 
 on:
   schedule:
@@ -6,8 +6,11 @@ on:
     - cron: '15 9 * * 1-5'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  jalankan-bot:
+  update-data:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout kode
@@ -21,8 +24,13 @@ jobs:
       - name: Install library
         run: pip install -r requirements.txt
 
-      - name: Jalankan bot
-        env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      - name: Generate data.json
         run: python bot.py
+
+      - name: Commit & push data.json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add data.json
+          git commit -m "Update data saham $(date +'%Y-%m-%d %H:%M')" || echo "No changes"
+          git push
