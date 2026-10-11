@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Saham IHSG</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#0a0e14;--bg2:#111720;--card:#161d2b;--line:#232c3d;
+    --text:#e6edf3;--muted:#7a8699;
+    --green:#26d07c;--red:#ff4d4f;--yellow:#ffc107;--orange:#ff9800;
+    --blue:#4a9eff;--gold:#d4a84b;
+  }
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    min-height:100vh;padding-bottom:40px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .header{
+    background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%);
+    padding:30px 20px 25px;border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:10;
+    backdrop-filter:blur(20px);
+  }
+  .header-inner{max-width:1200px;margin:0 auto;}
+  .title{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+  .title h1{font-size:22px;font-weight:600;letter-spacing:-0.5px;}
+  .title .dot{
+    width:10px;height:10px;border-radius:50%;background:var(--green);
+    box-shadow:0 0 10px var(--green);animation:pulse 2s infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
+  .updated{font-size:12px;color:var(--muted);letter-spacing:0.5px;}
+  .stats{display:flex;gap:15px;margin-top:20px;flex-wrap:wrap;}
+  .stat{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:10px;padding:10px 16px;font-size:12px;
+  }
+  .stat .label{color:var(--muted);margin-bottom:4px;font-size:10px;text-transform:uppercase;letter-spacing:1px;}
+  .stat .value{font-weight:600;font-size:15px;}
+  .container{max-width:1200px;margin:0 auto;padding:25px 20px;}
+  .controls{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+  .search{
+    flex:1;min-width:200px;
+    background:var(--card);border:1px solid var(--line);
+    border-radius:10px;padding:12px 16px;
+    color:var(--text);font-size:14px;
+    outline:none;transition:border-color 0.3s;
+  }
+  .search:focus{border-color:var(--gold);}
+  .search::placeholder{color:var(--muted);}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;}
+  .filter{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:8px;padding:10px 16px;
+    color:var(--text);font-size:12px;font-weight:500;
+    cursor:pointer;transition:all 0.3s;white-space:nowrap;
+  }
+  .filter:hover{border-color:var(--gold);}
+  .filter.active{background:var(--gold);color:#000;border-color:var(--gold);}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:15px;
+  }
+  .card{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:18px;
+    transition:all 0.3s;position:relative;overflow:hidden;
+  }
+  .card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;
+    background:var(--muted);
+  }
+  .card.strong-bull::before{background:var(--green);}
+  .card.bull::before{background:var(--green);}
+  .card.mild-bull::before{background:#8bc34a;}
+  .card.neutral::before{background:var(--muted);}
+  .card.mild-bear::before{background:var(--orange);}
+  .card.bear::before{background:var(--red);}
+  .card.strong-bear::before{background:var(--red);}
+  .card:hover{transform:translateY(-3px);border-color:var(--gold);}
+  .card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+  .kode{font-size:18px;font-weight:700;letter-spacing:0.5px;}
+  .harga{font-size:13px;color:var(--muted);margin-top:4px;}
+  .harga span{font-weight:600;}
+  .up{color:var(--green);}
+  .down{color:var(--red);}
+  .verdict{
+    font-size:10px;font-weight:600;padding:5px 10px;
+    border-radius:20px;letter-spacing:0.8px;text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .v-strong-bull{background:rgba(38,208,124,0.15);color:var(--green);}
+  .v-bull{background:rgba(38,208,124,0.12);color:var(--green);}
+  .v-mild-bull{background:rgba(139,195,74,0.15);color:#8bc34a;}
+  .v-neutral{background:rgba(122,134,153,0.15);color:var(--muted);}
+  .v-mild-bear{background:rgba(255,152,0,0.15);color:var(--orange);}
+  .v-bear{background:rgba(255,77,79,0.12);color:var(--red);}
+  .v-strong-bear{background:rgba(255,77,79,0.18);color:var(--red);}
+  .metrics{
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;
+    padding-top:14px;border-top:1px solid var(--line);margin-top:14px;
+  }
+  .metric .label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;}
+  .metric .val{font-size:13px;font-weight:600;}
+  .sinyal{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;}
+  .sinyal-item{
+    font-size:10px;padding:3px 8px;border-radius:4px;
+    background:rgba(255,255,255,0.05);color:var(--muted);letter-spacing:0.3px;
+  }
+  .loading,.empty{text-align:center;padding:60px 20px;color:var(--muted);grid-column:1/-1;}
+  .loader{
+    width:40px;height:40px;border:3px solid var(--line);
+    border-top-color:var(--gold);border-radius:50%;
+    margin:0 auto 15px;animation:spin 1s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .footer{
+    text-align:center;padding:30px 20px;color:var(--muted);
+    font-size:11px;letter-spacing:0.5px;max-width:1200px;margin:0 auto;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="title">
+      <div class="dot"></div>
+      <h1>Dashboard Saham IHSG</h1>
+    </div>
+    <div class="updated" id="updated">Memuat data...</div>
+    <div class="stats">
+      <div class="stat"><div class="label">Total</div><div class="value" id="stat-total">-</div></div>
+      <div class="stat"><div class="label">Bullish</div><div class="value" style="color:var(--green)" id="stat-bull">-</div></div>
+      <div class="stat"><div class="label">Bearish</div><div class="value" style="color:var(--red)" id="stat-bear">-</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="controls">
+    <input type="text" class="search" id="search" placeholder="Cari kode saham...">
+    <div class="filters" id="filters">
+      <button class="filter active" data-filter="all">Semua</button>
+      <button class="filter" data-filter="bull">Bullish</button>
+      <button class="filter" data-filter="bear">Bearish</button>
+      <button class="filter" data-filter="neutral">Netral</button>
+    </div>
+  </div>
+  <div class="grid" id="grid">
+    <div class="loading">
+      <div class="loader"></div>
+      Memuat data saham...
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  ⚠️ Bukan rekomendasi beli/jual. DYOR (Do Your Own Research).<br>
+  Data dari Yahoo Finance · Delay ~15 menit
+</div>
+
+<script>
+  let allData = [];
+  let currentFilter = 'all';
+  let currentSearch = '';
+
+  async function loadData() {
+    try {
+      const r = await fetch('data.json?v=' + Date.now());
+      if (!r.ok) throw new Error('data.json tidak ditemukan');
+      const data = await r.json();
+      allData = data.saham || [];
+      document.getElementById('updated').textContent = 'Update terakhir: ' + (data.updated || '-');
+      const bull = allData.filter(x => x.skor >= 0.5).length;
+      const bear = allData.filter(x => x.skor <= -0.5).length;
+      document.getElementById('stat-total').textContent = allData.length;
+      document.getElementById('stat-bull').textContent = bull;
+      document.getElementById('stat-bear').textContent = bear;
+      render();
+    } catch (e) {
+      document.getElementById('grid').innerHTML =
+        '<div class="empty">❌ Gagal memuat data.<br><br>' +
+        'File <code>data.json</code> belum ada.<br>' +
+        'Buka tab <b>Actions</b> di GitHub, klik <b>Run workflow</b>.</div>';
+    }
+  }
+
+  function render() {
+    const grid = document.getElementById('grid');
+    let filtered = allData;
+    if (currentFilter === 'bull') filtered = filtered.filter(x => x.skor >= 0.5);
+    else if (currentFilter === 'bear') filtered = filtered.filter(x => x.skor <= -0.5);
+    else if (currentFilter === 'neutral') filtered = filtered.filter(x => x.skor > -0.5 && x.skor < 0.5);
+    if (currentSearch) {
+      filtered = filtered.filter(x => x.kode.toLowerCase().includes(currentSearch.toLowerCase()));
+    }
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="empty">Tidak ada saham yang cocok.</div>';
+      return;
+    }
+    grid.innerHTML = filtered.map(s => {
+      const up = s.perubahan >= 0;
+      const arrow = up ? '▲' : '▼';
+      const cls = up ? 'up' : 'down';
+      const sign = up ? '+' : '';
+      const sinyalHtml = s.sinyal.length > 0
+        ? '<div class="sinyal">' + s.sinyal.map(x => '<span class="sinyal-item">' + x + '</span>').join('') + '</div>'
+        : '';
+      return `
+        <div class="card ${s.level}">
+          <div class="card-head">
+            <div>
+              <div class="kode">${s.kode}</div>
+              <div class="harga">Rp <span>${s.harga.toLocaleString('id-ID')}</span> · <span class="${cls}">${arrow} ${sign}${s.perubahan}%</span></div>
+            </div>
+            <div class="verdict v-${s.level}">${s.verdict}</div>
+          </div>
+          <div class="metrics">
+            <div class="metric"><div class="label">MA20</div><div class="val">${s.ma20.toLocaleString('id-ID')}</div></div>
+            <div class="metric"><div class="label">MA50</div><div class="val">${s.ma50.toLocaleString('id-ID')}</div></div>
+            <div class="metric"><div class="label">RSI</div><div class="val">${s.rsi}</div></div>
+          </div>
+          ${sinyalHtml}
+        </div>
+      `;
+    }).join('');
+  }
+
+  document.getElementById('search').addEventListener('input', e => {
+    currentSearch = e.target.value;
+    render();
+  });
+
+  document.querySelectorAll('.filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      render();
+    });
+  });
+
+  loadData();
+</script>
+
+</body>
+</html>
