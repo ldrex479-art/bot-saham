@@ -1,12 +1,7 @@
-import os
-import requests
+import json
 import yfinance as yf
 import pandas as pd
 from datetime import datetime
-
-# ===== AMBIL DARI GITHUB SECRETS =====
-TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "").strip()
-TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
 
 WATCHLIST = [
     "BBCA.JK", "BBRI.JK", "BMRI.JK", "BBNI.JK", "TLKM.JK",
@@ -16,38 +11,7 @@ WATCHLIST = [
 ]
 
 
-def kirim_telegram(pesan):
-    """Kirim pesan ke Telegram, print detail kalau gagal."""
-    if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
-        print("❌ ERROR: TELEGRAM_TOKEN atau TELEGRAM_CHAT_ID kosong!")
-        print(f"   Token panjang: {len(TELEGRAM_TOKEN)} karakter")
-        print(f"   Chat ID: '{TELEGRAM_CHAT_ID}'")
-        return False
-
-    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    data = {
-        "chat_id": TELEGRAM_CHAT_ID,
-        "text": pesan,
-        "parse_mode": "HTML",
-        "disable_web_page_preview": True
-    }
-
-    print(f"📡 Kirim ke: chat_id={TELEGRAM_CHAT_ID}")
-    print(f"   Token prefix: {TELEGRAM_TOKEN[:15]}...")
-    print(f"   Token panjang: {len(TELEGRAM_TOKEN)} karakter")
-
-    try:
-        r = requests.post(url, data=data, timeout=15)
-        print(f"   Status: {r.status_code}")
-        print(f"   Respon: {r.text[:300]}")
-        return r.status_code == 200
-    except Exception as e:
-        print(f"❌ Exception: {e}")
-        return False
-
-
 def analisis_saham(kode):
-    """Analisis satu saham."""
     try:
         df = yf.download(kode, period="6mo", interval="1d",
                          progress=False, auto_adjust=True)
@@ -69,6 +33,8 @@ def analisis_saham(kode):
         prev = df.iloc[-2]
 
         harga = float(last['Close'])
+        prev_harga = float(prev['Close'])
+        perubahan = ((harga - prev_harga) / prev_harga) * 100
         ma20 = float(last['MA20'])
         ma50 = float(last['MA50'])
         rsi = float(last['RSI'])
@@ -82,92 +48,79 @@ def analisis_saham(kode):
             skor -= 1
 
         if float(prev['MA20']) <= float(prev['MA50']) and ma20 > ma50:
-            sinyal.append("🟢 GOLDEN CROSS")
+            sinyal.append("GOLDEN CROSS")
             skor += 3
         elif float(prev['MA20']) >= float(prev['MA50']) and ma20 < ma50:
-            sinyal.append("🔴 DEATH CROSS")
+            sinyal.append("DEATH CROSS")
             skor -= 3
 
         if rsi >= 70:
-            sinyal.append(f"⚠️ OVERBOUGHT (RSI {rsi:.1f})")
+            sinyal.append(f"OVERBOUGHT (RSI {rsi:.1f})")
             skor -= 1
         elif rsi <= 30:
-            sinyal.append(f"💎 OVERSOLD (RSI {rsi:.1f})")
+            sinyal.append(f"OVERSOLD (RSI {rsi:.1f})")
             skor += 1
 
         if skor >= 3:
-            verdict = "🟢🟢 SANGAT BULLISH"
+            verdict = "SANGAT BULLISH"
+            level = "strong-bull"
         elif skor >= 2:
-            verdict = "🟢 BULLISH"
+            verdict = "BULLISH"
+            level = "bull"
         elif skor >= 0.5:
-            verdict = "🟡 CENDERUNG NAIK"
+            verdict = "CENDERUNG NAIK"
+            level = "mild-bull"
         elif skor <= -3:
-            verdict = "🔴🔴 SANGAT BEARISH"
+            verdict = "SANGAT BEARISH"
+            level = "strong-bear"
         elif skor <= -2:
-            verdict = "🔴 BEARISH"
+            verdict = "BEARISH"
+            level = "bear"
         elif skor <= -0.5:
-            verdict = "🟠 CENDERUNG TURUN"
+            verdict = "CENDERUNG TURUN"
+            level = "mild-bear"
         else:
-            verdict = "⚪ NETRAL"
+            verdict = "NETRAL"
+            level = "neutral"
 
         return {
             'kode': kode.replace('.JK', ''),
-            'harga': harga,
-            'ma20': ma20,
-            'ma50': ma50,
-            'rsi': rsi,
+            'harga': round(harga, 0),
+            'perubahan': round(perubahan, 2),
+            'ma20': round(ma20, 0),
+            'ma50': round(ma50, 0),
+            'rsi': round(rsi, 1),
             'verdict': verdict,
+            'level': level,
             'sinyal': sinyal,
             'skor': skor
         }
     except Exception as e:
-        print(f"   Error {kode}: {e}")
+        print(f"Error {kode}: {e}")
         return None
 
 
 def main():
-    print("=" * 50)
-    print(f"🤖 Bot Saham IHSG — {datetime.now().strftime('%d %b %Y %H:%M')}")
-    print("=" * 50)
-
-    print(f"\n🔍 Analisis {len(WATCHLIST)} saham...\n")
+    print(f"Analisis {len(WATCHLIST)} saham...")
     hasil = []
     for kode in WATCHLIST:
         h = analisis_saham(kode)
         if h:
             hasil.append(h)
-            print(f"   {h['kode']}: Rp {h['harga']:,.0f} | {h['verdict']}")
-
-    if not hasil:
-        print("\n❌ Tidak ada data saham. Cek koneksi / kode saham.")
-        return
+            print(f"  {h['kode']}: Rp {h['harga']:,.0f} | {h['verdict']}")
 
     hasil.sort(key=lambda x: x['skor'], reverse=True)
 
-    now = datetime.now().strftime("%d %b %Y %H:%M WIB")
-    pesan = f"📊 <b>LAPORAN SAHAM IHSG</b>\n<i>{now}</i>\n"
-    pesan += "━" * 20 + "\n\n"
+    output = {
+        'updated': datetime.now().strftime("%d %b %Y %H:%M WIB"),
+        'total': len(hasil),
+        'saham': hasil
+    }
 
-    for h in hasil:
-        pesan += f"<b>{h['kode']}</b> — Rp {h['harga']:,.0f}\n"
-        pesan += f"   MA20: {h['ma20']:,.0f} | MA50: {h['ma50']:,.0f} | RSI: {h['rsi']:.1f}\n"
-        pesan += f"   {h['verdict']}\n"
-        for s in h['sinyal']:
-            pesan += f"   • {s}\n"
-        pesan += "\n"
+    with open('data.json', 'w', encoding='utf-8') as f:
+        json.dump(output, f, ensure_ascii=False, indent=2)
 
-    pesan += "━" * 20 + "\n"
-    pesan += "⚠️ <i>Bukan rekomendasi. DYOR.</i>"
-
-    print("\n" + "=" * 50)
-    print("📤 Kirim ke Telegram...")
-    print("=" * 50)
-    ok = kirim_telegram(pesan)
-
-    if ok:
-        print("\n✅ SUKSES! Cek Telegram kamu.")
-    else:
-        print("\n❌ GAGAL kirim Telegram. Lihat detail di atas.")
+    print(f"\n✅ data.json tersimpan dengan {len(hasil)} saham.")
 
 
 if __name__ == "__main__":
