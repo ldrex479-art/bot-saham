@@ -19,9 +19,9 @@ WATCHLIST = [
     # Tambang
     ("ANTM.JK","Tambang"),("PTBA.JK","Tambang"),("ADRO.JK","Tambang"),("MDKA.JK","Tambang"),
     ("INCO.JK","Tambang"),("TINS.JK","Tambang"),("ITMG.JK","Tambang"),
-    # Semen & Material
+    # Semen
     ("SMGR.JK","Semen"),("INTP.JK","Semen"),("WSBP.JK","Semen"),
-    # Teknologi & Digital
+    # Teknologi
     ("GOTO.JK","Teknologi"),("BUKA.JK","Teknologi"),("EMTK.JK","Teknologi"),("DCII.JK","Teknologi"),
     # Energi
     ("PGAS.JK","Energi"),("MEDC.JK","Energi"),("BRPT.JK","Energi"),("TPIA.JK","Energi"),
@@ -43,9 +43,6 @@ def analisis_saham(kode, sektor):
         close = df['Close']
         df['MA20'] = close.rolling(20).mean()
         df['MA50'] = close.rolling(50).mean()
-        df['BB_std'] = close.rolling(20).std()
-        df['BB_upper'] = df['MA20'] + 2 * df['BB_std']
-        df['BB_lower'] = df['MA20'] - 2 * df['BB_std']
 
         delta = close.diff()
         gain = delta.where(delta > 0, 0).rolling(14).mean()
@@ -73,7 +70,7 @@ def analisis_saham(kode, sektor):
                 'volume': int(row['Volume']) if pd.notna(row['Volume']) else 0
             })
 
-        # Sparkline
+        # Sparkline 30 hari
         spark = [{'tgl': idx.strftime("%d/%m"), 'harga': round(float(row['Close']),0)}
                  for idx, row in df.tail(30).iterrows()]
 
